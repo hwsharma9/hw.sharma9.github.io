@@ -1,0 +1,20 @@
+/**********************************
+
+Name: cmxform Styles
+
+***********************************/
+
+form.cmxform label.error, label.error {
+	color: #FF0000;
+	display:flex;
+	font-size:11px;
+}
+
+div.error { 
+	display: none; 
+}
+
+input.error, select.error, textarea.error { 
+	border: 1px solid #FF0000 !important; 
+}
+

@@ -1,0 +1,63 @@
+<?php
+
+return [
+    'table_names' => [
+        // Tables Name
+        'users' => 'tbl_users',
+        'admins' => 'tbl_admins',
+        'admin_menus' => 'tbl_admin_menus',
+        'users' => 'tbl_users',
+        'verification_codes' => 'tbl_verification_codes',
+        'uploads' => 'tbl_uploads',
+        'media' => 'tbl_media',
+        'acl_controllers' => 'tbl_acl_controllers',
+        'acl_controller_routes' => 'tbl_acl_controller_routes',
+        'sliders' => 'tbl_sliders',
+        'verification_codes' => 'tbl_verification_codes',
+        'socials' => 'tbl_socials',
+        'pages' => 'tbl_pages',
+        'front_menu_modules' => 'tbl_front_menu_modules',
+        'assign_user_accesses' => 'tbl_assign_user_accesses',
+        'front_menus' => 'tbl_front_menus',
+        'office_onboardings' => 'tbl_office_onboardings',
+        'imp_links' => 'tbl_imp_links',
+
+        // Master Tables Name
+        'slider_categories' => 'm_slider_categories',
+        'logs' => 'm_logs',
+        'front_menu_types' => 'm_front_menu_types',
+        'm_departments' => 'm_departments',
+        'm_designations' => 'm_designations',
+        'm_offices' => 'm_offices',
+        'm_course_categories' => 'm_course_categories',
+    ],
+    'foreign_key' => [
+        'users' => 'fk_tbl_user_id',
+        'admins' => 'fk_tbl_admin_id',
+        'admin_menus' => 'fk_tbl_admin_menu_id',
+        'users' => 'fk_tbl_user_id',
+        'verification_codes' => 'fk_tbl_verification_code_id',
+        'uploads' => 'fk_tbl_upload_id',
+        'media' => 'fk_tbl_media_id',
+        'acl_controllers' => 'fk_controller_id',
+        'acl_controller_routes' => 'fk_controller_route_id',
+        'sliders' => 'fk_tbl_slider_id',
+        'verification_codes' => 'fk_tbl_verification_code_id',
+        'socials' => 'fk_tbl_social_id',
+        'pages' => 'fk_page_id',
+        'front_menu_modules' => 'fk_tbl_front_menu_module_id',
+        'assign_user_accesses' => 'fk_tbl_assign_user_accesse_id',
+        'roles' => 'fk_role_id',
+        'permissions' => 'fk_tbl_acl_permission_id',
+        'front_menus' => 'fk_tbl_front_menu_id',
+        'office_onboardings' => 'fk_office_onboarding_id',
+        'imp_links' => 'fk_tbl_imp_link_id',
+
+        'slider_categories' => 'fk_slider_category_id',
+        'logs' => 'fk_m_log_id',
+        'front_menu_types' => 'fk_menu_type_id',
+        'm_departments' => 'fk_department_id',
+        'm_offices' => 'fk_office_id',
+        'm_course_categories' => 'fk_course_category_id',
+    ]
+];
