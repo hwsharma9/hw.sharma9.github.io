@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             // Edit credentials if you want.
             SuperAdminSeeder::class,
 
-            // AdminUsersSeeder::class, // Comment this class call If don't want dummy admin users.
+            AdminUsersSeeder::class, // Comment this class call If don't want dummy admin users.
             // UserSeeder::class, // Comment this class call If don't want dummy frontend users.
 
             PageSeeder::class,

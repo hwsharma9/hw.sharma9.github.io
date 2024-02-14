@@ -27,41 +27,41 @@ class ProfileController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admin $admin): View
+    public function edit(User $user): View
     {
-        $mobile_verification_code = $admin->verificationCode()
+        $mobile_verification_code = $user->verificationCode()
             ->where('for', 'mobile_verification')
             ->latest('id')
             ->first();
-        $email_verification_code = $admin->verificationCode()
+        $email_verification_code = $user->verificationCode()
             ->where('for', 'email_verification')
             ->latest('id')
             ->first();
-        return view('admin.profile.profile', compact('admin', 'mobile_verification_code', 'email_verification_code'));
+        return view('user.profile.profile', compact('user', 'mobile_verification_code', 'email_verification_code'));
     }
 
-    public function sendOTP(Admin $admin, Request $request)
+    public function sendOTP(User $user, Request $request)
     {
         $otp = randomUniqueId();
         $message = '';
         if ($request->has('verifyotp')) {
             $for = $request->has('email') ? 'email_verification' : 'mobile_verification';
-            $verification_code = $admin->verificationCode()
+            $verification_code = $user->verificationCode()
                 ->where('for', $for)
                 ->latest('id')
                 ->first();
             if ($verification_code->otp == $request->otp) {
                 if ($request->has('email')) {
-                    $admin->email_verified_at = Carbon::now();
+                    $user->email_verified_at = Carbon::now();
                     $message = 'Email verified successfully';
                 } else {
-                    $admin->mobile_verified_at = Carbon::now();
+                    $user->mobile_verified_at = Carbon::now();
                     $message = 'Mobile number verified successfully';
                 }
-                $admin->save();
+                $user->save();
                 $verification_code->delete();
             }
             return redirect()->to(URL::previous() . "#otp_verification")
@@ -74,11 +74,11 @@ class ProfileController extends Controller
             } else {
                 $for = 'email_verification';
             };
-            $otp_exist = $admin->verificationCode()->where('for', $for);
+            $otp_exist = $user->verificationCode()->where('for', $for);
             if ($otp_exist->count()) {
                 $otp = $otp_exist->first()->otp;
             } else {
-                $admin->verificationCode()->create([
+                $user->verificationCode()->create([
                     'otp' => $otp,
                     'expire_at' => Carbon::now()->addMinutes(10),
                     'for' => $for
@@ -88,7 +88,7 @@ class ProfileController extends Controller
                 $message = 'OTP sent to your mobile number ' . $otp;
             } else {
                 $message = 'OTP sent to your email ' . $otp;
-                Mail::to($admin->email)
+                Mail::to($user->email)
                     ->send(new SendOTPToVerifyAccount($admin, $type, $otp));
             }
             return redirect()->to(URL::previous() . "#otp_verification")
@@ -100,30 +100,30 @@ class ProfileController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAdminProfileRequest $request, Admin $admin)
+    public function update(UpdateAdminProfileRequest $request, User $user)
     {
         $validated = $request->validated();
         $validated['is_profile_updated'] = true;
-        $admin->fill($validated);
-        $admin->save();
-        AdminUserDetail::where('fk_admin_id', $admin->id)->update(['employee_id' => $request->employee_id]);
+        $user->fill($validated);
+        $user->save();
+        AdminUserDetail::where('fk_admin_id', $user->id)->update(['employee_id' => $request->employee_id]);
         return back()->with('profile_updated', 'Profile updated Successfully');
     }
 
-    public function uploadProfileImage(UpdateProfileImageRequest $request, Admin $admin)
+    public function uploadProfileImage(UpdateProfileImageRequest $request, User $user)
     {
         // if file uploaded
         if ($request->hasFile('file')) {
-            $image = $admin->upload;
+            $image = $user->upload;
             if ($image) {
                 // delete the old image from storage and database.
                 $image->delete();
             }
 
-            $admin->uploadModelFile($admin);
+            $user->uploadModelFile($admin);
         }
         return back()->with('image_uploaded', 'Profile Image Uploaded Successfully');
     }

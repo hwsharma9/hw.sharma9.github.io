@@ -11,10 +11,13 @@ use App\Models\DbControllerRoute;
 Route::group(['middleware' => [Localization::class]], function () {
     Route::name(config('constents.resides_at.frontend') . '.')->group(
         function () {
-            Route::prefix('user/')->group(function () {
+            Route::prefix('user')->group(function () {
                 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
                 Route::get('profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
-                Route::patch('profile/{admin}/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+                Route::patch('profile/{user}/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+
+                Route::get('profile/{user}/edit', [ProfileController::class, 'edit'])->name('profile');
+                Route::patch('profile/{user}', [ProfileController::class, 'update'])->name('profile.update');
             });
             if (Schema::hasTable('tbl_acl_controller_routes')) {
                 // Fetch only routes created for the controller files resides at

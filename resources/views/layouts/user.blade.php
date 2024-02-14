@@ -97,7 +97,7 @@
                             class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('manage.home') }}" class="nav-link">{{ __('app.welcome') }}:
+                    <a href="{{ route('user.dashboard') }}" class="nav-link">{{ __('app.welcome') }}:
                         {{ auth('web')->user()->name }}</a>
                 </li>
             </ul>
@@ -146,7 +146,7 @@
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <a href="{{ route('manage.profile', encrypt(Auth::guard('admin')->id())) }}"
+                            <a href="{{ route('user.profile', encrypt(Auth::guard('web')->id())) }}"
                                 class="btn btn-default btn-flat">Profile</a>
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"

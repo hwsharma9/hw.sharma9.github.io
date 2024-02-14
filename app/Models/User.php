@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\Encryptable;
 use App\Http\Traits\Uploadable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasRoles;
     use Uploadable;
+    use Encryptable;
 
     protected $table = 'tbl_users';
     /**
@@ -94,6 +96,14 @@ class User extends Authenticatable
             return self::createUsername($user);
         }
         return $username;
+    }
+
+    /**
+     * Get the post's verificationCode.
+     */
+    public function verificationCode()
+    {
+        return $this->morphOne(VerificationCode::class, 'verifiable');
     }
 
     protected static function booted()

@@ -42,7 +42,7 @@
                     {{ session('profile_updated') }}
                 </div>
             @endif
-            <form method="POST" action="{{ route('manage.profile.update', ['admin' => $admin->id]) }}" id="quickForm">
+            <form method="POST" action="{{ route('user.profile.update', ['user' => $user->id]) }}" id="quickForm">
                 @method('PATCH')
                 @csrf
                 <div class="card-body">
@@ -50,20 +50,20 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <x-label for="role_id">Role <span class="text-danger">*</span></x-label>
-                                <input class="form-control" disabled value="{{ $admin->roles[0]->name }}" />
+                                <input class="form-control" disabled value="{{ $user->roles[0]->name }}" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <x-label for="role_id">Userame <span class="text-danger">*</span></x-label>
-                                <input class="form-control" disabled value="{{ $admin->username }}" />
+                                <input class="form-control" disabled value="{{ $user->username }}" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <x-label for="first_name">First Name <span class="text-danger">*</span></x-label>
                                 <input type="text" name="first_name" class="form-control" id="first_name"
-                                    placeholder="Enter First Name" value="{{ old('first_name', $admin->first_name) }}"
+                                    placeholder="Enter First Name" value="{{ old('first_name', $user->first_name) }}"
                                     style="width: 100%;" />
                                 <x-input-error name="first_name" />
                             </div>
@@ -72,7 +72,7 @@
                             <div class="form-group">
                                 <x-label for="last_name">Last Name <span class="text-danger">*</span></x-label>
                                 <input type="text" name="last_name" class="form-control" id="last_name"
-                                    placeholder="Enter Last Name" value="{{ old('last_name', $admin->last_name) }}"
+                                    placeholder="Enter Last Name" value="{{ old('last_name', $user->last_name) }}"
                                     style="width: 100%;" />
                                 <x-input-error name="last_name" />
                             </div>
@@ -80,14 +80,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <x-label for="designation">Designation <span class="text-danger">*</span></x-label>
-                                <input class="form-control" disabled value="{{ $admin->designation->name }}" />
+                                <input class="form-control" disabled value="{{ $user->designation->name }}" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <x-label for="email">Email <span class="text-danger">*</span></x-label>
                                 <input type="text" class="form-control" id="email" placeholder="Enter Email"
-                                    value="{{ old('email', $admin->email) }}" style="width: 100%;" disabled />
+                                    value="{{ old('email', $user->email) }}" style="width: 100%;" disabled />
                                 <x-input-error name="email" />
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                             <div class="form-group">
                                 <x-label for="mobile">Mobile Number <span class="text-danger">*</span></x-label>
                                 <input type="text" class="form-control" id="mobile"
-                                    placeholder="Enter Mobile Number" value="{{ old('mobile', $admin->mobile) }}"
+                                    placeholder="Enter Mobile Number" value="{{ old('mobile', $user->mobile) }}"
                                     style="width: 100%;" disabled />
                                 <x-input-error name="mobile" />
                             </div>
@@ -105,7 +105,7 @@
                                 <x-label for="employee_id">Employee ID <span class="text-danger">*</span></x-label>
                                 <input type="text" class="form-control" name="employee_id" id="employee_id"
                                     placeholder="Enter employee ID"
-                                    value="{{ old('employee_id', $admin->detail->employee_id) }}"
+                                    value="{{ old('employee_id', $user->detail->employee_id) }}"
                                     style="width: 100%;" />
                                 <x-input-error name="employee_id" />
                             </div>
@@ -150,15 +150,15 @@
                             <h3 class="card-title">UPDATE EMAIL ADDRESS OF</h3>
                         </div>
                         <form method="POST" class="form-horizontal"
-                            action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
+                            action="{{ route('manage.profile.verified-otp', ['admin' => $user->id]) }}">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group row">
                                     <x-label for="inputEmail3" class="col-sm-3 col-form-label">Email</x-label>
                                     <div class="col-sm-9">
                                         <div class="form-control">
-                                            {{ $admin->email }}
-                                            @if (is_null($admin->email_verified_at))
+                                            {{ $user->email }}
+                                            @if (is_null($user->email_verified_at))
                                                 <span class="badge badge-danger float-right">Not Verified</span>
                                             @else
                                                 <span class="badge badge-success float-right">Verified</span>
@@ -177,7 +177,7 @@
                                     </div>
                                 @endif
                             </div>
-                            @if (is_null($admin->email_verified_at))
+                            @if (is_null($user->email_verified_at))
                                 <div class="card-footer">
                                     @if ($email_verification_code)
                                         <button type="submit" class="btn btn-info" name="verifyotp"
@@ -202,15 +202,15 @@
                             <h3 class="card-title">UPDATE MOBILE NUMBER OF</h3>
                         </div>
                         <form method="POST" class="form-horizontal"
-                            action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
+                            action="{{ route('manage.profile.verified-otp', ['admin' => $user->id]) }}">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group row">
                                     <x-label for="inputEmail3" class="col-sm-3 col-form-label">Mobile Number</x-label>
                                     <div class="col-sm-9">
                                         <div class="form-control">
-                                            {{ $admin->mobile }}
-                                            @if (is_null($admin->mobile_verified_at))
+                                            {{ $user->mobile }}
+                                            @if (is_null($user->mobile_verified_at))
                                                 <span class="badge badge-danger float-right">Not Verified</span>
                                             @else
                                                 <span class="badge badge-success float-right">Verified</span>
@@ -229,7 +229,7 @@
                                     </div>
                                 @endif
                             </div>
-                            @if (is_null($admin->mobile_verified_at))
+                            @if (is_null($user->mobile_verified_at))
                                 <div class="card-footer">
                                     @if ($mobile_verification_code)
                                         <button type="submit" class="btn btn-info" name="verifyotp"
@@ -262,7 +262,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('manage.profile.image-upload', ['admin' => $admin->id]) }}"
+            <form method="POST" action="{{ route('manage.profile.image-upload', ['admin' => $user->id]) }}"
                 id="quickForm" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
