@@ -88,7 +88,7 @@ class AssignUserAccessSeeder extends Seeder
 
         // provide permission to Content Manager
         $content_manager = Role::backend()->where('id', '=', 4)->first();
-        $content_manager_controllers = DbController::with(['permissions'])->find([1, 19]);
+        $content_manager_controllers = DbController::with(['permissions'])->find([1, 19, 25, 26]);
         $content_manager_permissions = $content_manager_controllers->pluck('permissions.*.id')->collapse()->all(); //Permission::select(['id'])->where('id', 1)->get();
 
         foreach ($content_manager_controllers as $content_manager_controller) {

@@ -453,6 +453,25 @@
                     return !(file_box.length > 2);
                 }, "You can upload up to 2 files for each topic.");
 
+                function GetTextFromHtml(html) {
+                    var dv = document.createElement("DIV");
+                    dv.innerHTML = html;
+                    return dv.textContent || dv.innerText || "";
+                }
+                jQuery.validator.addMethod("ckrequired", function(value, element) {
+                    var idname = $(element).attr('id');
+                    var editor = CKEDITOR.instances[idname];
+                    var ckValue = GetTextFromHtml(editor.getData()).replace(/<[^>]*>/gi, '').trim();
+                    if (ckValue.length === 0) {
+                        //if empty or trimmed value then remove extra spacing to current control  
+                        $(element).val(ckValue);
+                    } else {
+                        //If not empty then leave the value as it is  
+                        $(element).val(editor.getData());
+                    }
+                    return $(element).val().length > 0;
+                }, "This field is required");
+
                 jQuery.validator.addMethod("validate_file_size", function(value, element) {
                     let is_fine = true;
                     let files = document.getElementById(element.id).files;
@@ -498,7 +517,7 @@
                                 // If any file is uploaded reload the page.
                                 // Issue is we will need to update course_video_id of each topic 
                                 // if (is_files_uploaded) {}
-                                location.reload();
+                                // location.reload();
                             } else {
                                 $("#quickForm").closest('.card-body').prepend(data
                                     .errors);
@@ -514,11 +533,9 @@
                 }
 
                 var validator = jQuery("#quickForm").validate({
-                    ignore: [],
-                    // debug: false,
                     rules: {
                         description: {
-                            required: true,
+                            ckrequired: true
                         },
                         captcha: {
                             required: false,
@@ -542,12 +559,10 @@
                             element.attr("name").includes('[course_doc][]')
                         ) {
                             error.insertAfter($(element).closest('.form-group'));
-                        }
-                        /*else if (element.prop('localName') === 'textarea') {
-                                                   console.log('here');
-                                                   error.insertAfter($('#cke_' + element.attr('id')));
-                                               }*/
-                        else {
+                        } else if (element.prop('localName') === 'textarea') {
+                            console.log('here');
+                            error.insertAfter($('#cke_' + element.attr('id')));
+                        } else {
                             error.insertAfter(element);
                         }
                     },
@@ -793,13 +808,6 @@
                                     if (validation != undefined) {
                                         // Convert the string into JSON
                                         validation = JSON.parse(validation);
-                                        // if (e.type === 'textarea') {
-                                        //     validation.required =
-                                        //         function() {
-                                        //             `CKEDITOR.instances.${input_id}.updateElement()`;
-                                        //         };
-                                        //     console.log('validation', validation);
-                                        // }
                                         // Add rule into jquery validator
                                         $(`#${input_id}`).rules("add", validation);
                                     }
@@ -807,7 +815,6 @@
                             }
                         }
                     }
-                    console.log(validator);
                 }
 
                 $(document).on("click", "#add_topic", function() {

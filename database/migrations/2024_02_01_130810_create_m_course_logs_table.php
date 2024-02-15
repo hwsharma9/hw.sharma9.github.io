@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('m_course_logs', function (Blueprint $table) {
             $table->unsignedInteger('id', true);
+            $table->unsignedInteger('fk_course_id')->index();
             $table->morphs('loggable');
             $table->string('remote_address', 100);
             $table->text('prev_data');

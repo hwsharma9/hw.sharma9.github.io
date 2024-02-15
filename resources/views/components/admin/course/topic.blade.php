@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label for="topic_summary">Topic Summary <span class="text-danger">*</span></label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['required' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
                                 placeholder="Enter Topic Summary" name="{{ 'topic[' . $loop->index . '][summary]' }}"
                                 id="{{ 'topic_' . $loop->index . '_summary' }}">{{ old('topic[' . $loop->index . '][summary]', $topic->update_summary ? $topic->update_summary : $topic->summary) }}</textarea>
                         </div>
@@ -347,7 +347,7 @@
                         <div class="form-group">
                             <label for="topic_summary">Topic Summary <span class="text-danger">*</span></label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['required' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
                                 placeholder="Enter Topic Summary">{{ old('summary') }}</textarea>
                         </div>
                     </div>

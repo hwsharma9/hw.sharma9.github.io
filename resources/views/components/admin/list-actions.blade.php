@@ -17,8 +17,8 @@
     @if (array_key_exists('edit', $actions))
         @if ($edit_permission)
             <a class="btn btn-primary" title="Edit Model"
-                href="{{ route($actions['edit'], isset($encrypt) && $encrypt == 1 ? encrypt($id) : $id) }}"><i
-                    class="fas fa-edit"></i></a>
+                href="{{ route($actions['edit'], isset($encrypt) && $encrypt == 1 ? encrypt($id) : $id) }}"
+                data-id="{{ $id }}"><i class="fas fa-edit"></i></a>
         @endif
     @endif
     @if (array_key_exists('show', $actions))

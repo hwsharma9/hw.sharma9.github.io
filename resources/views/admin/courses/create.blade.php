@@ -199,7 +199,10 @@
                 var validator = jQuery("#quickForm").validate({
                     rules: {
                         description: {
-                            required: true,
+                            required: function(e) {
+                                console.log(e.target);
+                                return true;
+                            },
                         },
                         captcha: {
                             required: false,

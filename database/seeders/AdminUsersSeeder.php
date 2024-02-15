@@ -67,18 +67,20 @@ class AdminUsersSeeder extends Seeder
                 'fk_office_onboarding_id' => $office_onboarding->first()->id,
             ]);
 
-            MAdminCourse::create([
-                'fk_admin_id' => $nodal_officer->id,
-                'fk_course_category_id' => 1,
-                'fk_course_category_courses_id' => 1
-            ]);
-
             $content_manager = $this->createAdmin([
                 'fk_designation_id' => 4, // Content Manager
                 'email' => 'content.manager@mp.gov.in',
                 'created_by' => $nodal_officer->id,
             ], [
                 'fk_office_onboarding_id' => $office_onboarding->first()->id,
+            ]);
+
+            MAdminCourse::create([
+                'fk_admin_id' => $content_manager->id,
+                'fk_course_category_id' => 1,
+                'fk_course_category_courses_id' => 1,
+                'status' => 1,
+                'created_by' => $nodal_officer->id,
             ]);
         });
     }
