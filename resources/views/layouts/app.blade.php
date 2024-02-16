@@ -459,7 +459,7 @@
                     <div id="hs_cos_wrapper_navigation-primary"
                         class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module"
                         data-hs-cos-general-type="widget" data-hs-cos-type="module">
-                        <x-front.menus />
+                        <x-Front.menus />
                         <div class="navbar-2">
                             <a href="#" class="navbar-brand d-flex align-items-center px-4 p-4">
                                 <img src="{{ asset('frontend/img/logo.png') }}" alt="" />

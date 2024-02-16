@@ -90,6 +90,16 @@ class Course extends Model
         return self::$check_diff;
     }
 
+    /**
+     * Get all of the enrollments for the Course
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class, 'fk_course_id', 'id');
+    }
+
     public function checkDiff($column = null)
     {
         // echo "<pre>";

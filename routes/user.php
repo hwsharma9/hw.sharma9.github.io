@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\user\HomeController;
+use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -32,7 +32,7 @@ Route::group(['middleware' => [Localization::class]], function () {
                     foreach ($db_controller_routes as $db_controller_route) {
                         // print_r($db_controller_route->dbController->resides_at);
                         // Create the controllers path
-                        $controller = trim("App\\Http\\Controllers\\user\\" . $db_controller_route->dbController->controller_name);
+                        $controller = trim("App\\Http\\Controllers\\User\\" . $db_controller_route->dbController->controller_name);
                         // Check if the controller exists in the app/Http/Controllers Folder
                         // If exists then create the route
                         // Else ignore the route

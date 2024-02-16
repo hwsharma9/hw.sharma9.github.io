@@ -6,6 +6,7 @@ use App\Http\Traits\Encryptable;
 use App\Http\Traits\Uploadable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -31,7 +32,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'mobile',
-        'designation',
+        'fk_designation_id',
         'status',
         'email',
         'password',
@@ -106,6 +107,16 @@ class User extends Authenticatable
         return $this->morphOne(VerificationCode::class, 'verifiable');
     }
 
+    /**
+     * Get the designation that owns the Admin
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function designation(): BelongsTo
+    {
+        return $this->belongsTo(MDesignation::class, 'fk_designation_id', 'id');
+    }
+
     protected static function booted()
     {
         // Runs the script just after the admin model is created
@@ -114,6 +125,17 @@ class User extends Authenticatable
             $user->username = self::createUsername($user);
             // and update the admin model
             $user->save();
+
+            AdminRole::insert([
+                'fk_user_id' => $user->id,
+                'fk_role_id' => 5,
+                'status' => 1,
+                'is_default' => 1,
+                'created_by' => 1,
+                'created_at' => now(),
+            ]);
+            // Assign role to admin created above
+            $user->assignRole(intval(5));
         });
     }
 }

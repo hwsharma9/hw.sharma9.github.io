@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('last_name', 100);
             $table->string('mobile', 10)->nullable();
             $table->string('email', 100)->unique();
-            $table->string('designation', 100)->nullable();
+            $table->unsignedInteger('fk_designation_id')->nullable()->index();
             $table->boolean('status')->default(false)->comment('0=Pending,1=Active,2=Inactive');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tbl_users');
     }
 };
