@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('remote_address', 100);
             $table->text('prev_data');
             $table->text('current_data');
+            $table->boolean('course_status')->default(false);
             $table->unsignedInteger('created_by')->nullable()->index();
             $table->dateTime('created_at')->nullable();
         });

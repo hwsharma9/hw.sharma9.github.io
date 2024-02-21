@@ -79,7 +79,7 @@ class CourseController extends Controller
                                         class="fas fa-eye"></i> <span class="badge bg-success">' . $row->requests->count() . '</span></a>';
                             // $action .= '<a class="btn btn-secondary" title="View Model">Publish</a>';
                             if ($row->course_status >= 2) {
-                                $action .= '<form method="POST" name="course_status_form" data-id="' . $row['id'] . '">
+                                $action .= '<form action="' . route('ajax.course.update-status', ['course' => $row->id]) . '" method="POST" name="course_status_form" data-id="' . $row['id'] . '">
                                     <input type="hidden" name="course_status" value="' . (in_array($row['course_status'], [2, 4]) ? 3 : 4) . '">
                                     <button class="btn ' . (in_array($row['course_status'], [2, 4]) ? 'btn-success' : 'btn-warning') . ' publish_course" title="View Model">' . (in_array($row['course_status'], [2, 4]) ? 'Publish' : 'Unpublish') . '</button>
                                 </form>';
@@ -156,7 +156,7 @@ class CourseController extends Controller
                 $request->all(),
                 [
                     'description' => 'required',
-                    // 'captcha' => 'required|captcha',
+                    'captcha' => 'required|captcha',
                 ],
                 [
                     'description.required' => 'Description is required',
@@ -260,13 +260,13 @@ class CourseController extends Controller
                     $query->whereNull('read_at');
                 }])->latest()->first();
             },
-            'logs' => function ($query) {
-                $query
-                    ->whereNotNull('prev_data')
-                    ->where('course_status', 2)
-                    ->latest()
-                    ->first();
-            }
+            // 'logs' => function ($query) {
+            //     $query
+            //         ->whereNotNull('prev_data')
+            //         ->where('course_status', 2)
+            //         ->latest()
+            //         ->first();
+            // }
         ]);
 
         return view('admin.courses.show', compact('course'));
@@ -332,7 +332,12 @@ class CourseController extends Controller
                 if ($request->filled('replaced_media_id')) {
                     $ids = explode(',', $request->replaced_media_id);
                     for ($i = 0; $i < count($ids); $i++) {
-                        CourseMedia::destroy(decrypt($ids[$i]));
+                        $course_media = CourseMedia::find(decrypt($ids[$i]));
+                        if ($course_media->course_status == 0) {
+                            $course_media->forceDelete();
+                        } else {
+                            $course_media->delete();
+                        }
                     }
                 }
                 // echo "<pre>";

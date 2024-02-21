@@ -616,7 +616,7 @@ class AdminMenuSeeder extends Seeder
             ],
             [
                 'id' => 43,
-                'menu_name' => 'Assigned Course',
+                'menu_name' => 'Course Approval Request',
                 'icon_class' => 'fa fa-hand-point-right',
                 'parent_id' => 39,
                 's_order' => 19,

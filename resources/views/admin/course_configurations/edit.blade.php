@@ -102,7 +102,7 @@
                                             <input type="checkbox" name="is_upload_pdf_required"
                                                 data-ischeck="{{ (int) $is_upload_pdf_required }}"
                                                 {{ (int) $is_upload_pdf_required == 1 ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>
@@ -116,7 +116,7 @@
                                             <input type="checkbox" name="is_upload_video_required"
                                                 data-ischeck="{{ (int) $is_upload_video_required }}"
                                                 {{ (int) $is_upload_video_required == 1 ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>
@@ -130,7 +130,7 @@
                                             <input type="checkbox" name="is_upload_ppt_required"
                                                 data-ischeck="{{ (int) $is_upload_ppt_required }}"
                                                 {{ (int) $is_upload_ppt_required == 1 ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>

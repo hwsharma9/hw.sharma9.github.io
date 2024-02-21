@@ -1,7 +1,7 @@
 <x-admin-layout>
     @push('styles')
         <link rel="stylesheet" href="{{ asset('webroot/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-        <link rel="stylesheet" href="http://localhost/lease_mng_sys/webroot//plugins/bootstrap-datepicker/css/datepicker.css">
+        <link rel="stylesheet" href="{{ asset('webroot/plugins/bootstrap-datepicker/css/datepicker.css') }}">
     @endpush
     <x-slot name="page_title">
         <div class="content-header">
@@ -93,7 +93,7 @@
                                         <span style="display:none">
                                             <input type="checkbox" name="is_upload_pdf_required"
                                                 {{ old('is_upload_pdf_required') && old('is_upload_pdf_required') == 'on' ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>
@@ -105,7 +105,7 @@
                                         <span style="display:none">
                                             <input type="checkbox" name="is_upload_video_required"
                                                 {{ old('is_upload_video_required') && old('is_upload_video_required') == 'on' ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>
@@ -117,7 +117,7 @@
                                         <span style="display:none">
                                             <input type="checkbox" name="is_upload_ppt_required"
                                                 {{ old('is_upload_ppt_required') && old('is_upload_ppt_required') == 'on' ? 'checked' : '' }} />
-                                            Mandatory
+                                            Is Mandatory
                                         </span>
                                     </span>
                                     <span>
@@ -249,7 +249,8 @@
         <script type="text/javascript" src="{{ asset('webroot/validation/dist/additional-methods.js') }}"></script>
         <script type="text/javascript" src="{{ asset('webroot/plugins/select2/js/select2.full.min.js') }}"></script>
         <script src="{{ asset('webroot/plugins/moment/moment.min.js') }}"></script>
-        <script type="text/javascript" src="webroot/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}">
+        </script>
         <script type="text/javascript">
             jQuery(function() {
                 jQuery.validator.addMethod("ValidateCourseActiveDuration", function(value, element) {
@@ -354,6 +355,7 @@
             });
 
             let course_categories = JSON.parse('<?php echo $course_categories; ?>');
+
             $("#course_category_id").on("change", function() {
                 loader.show();
                 setTimeout(() => {

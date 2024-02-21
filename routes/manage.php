@@ -17,6 +17,7 @@ use App\Http\Controllers\manage\AdminController;
 use App\Http\Controllers\manage\AdminRoleController;
 use App\Http\Controllers\manage\CourseCategoryController;
 use App\Http\Controllers\manage\CourseController;
+use App\Http\Controllers\manage\CourseMediaController;
 use App\Http\Controllers\manage\ErrorLogController;
 
 /*
@@ -47,7 +48,11 @@ Route::post('ajax/course/{course}/update-status', [CourseController::class, 'upd
  */
 
 Route::redirect('/manage', '/manage/login');
+
+
 Route::prefix('manage')->group(static function () {
+    Route::get('load-captcha', CaptchaController::class)->name('load-captcha');
+
     // Guest routes
     Route::middleware('guest:admin')->group(static function () {
         // Auth routes
@@ -83,8 +88,6 @@ Route::prefix('manage')->group(static function () {
         // Route::get('/home', [\App\Http\Controllers\manage\HomeController::class, 'index'])->name('manage.home');
         // Route::get('profile', [\App\Http\Controllers\manage\HomeController::class, 'profile'])->middleware('password.confirm.admin')->name('manage.profile');
 
-        Route::get('load-captcha', CaptchaController::class)->name('load-captcha');
-
         Route::name('manage.')->group(function () {
             // Route::resource('course.remark', CourseRemarkController::class);
             // Error Logs route
@@ -98,6 +101,8 @@ Route::prefix('manage')->group(static function () {
                 Route::patch('profile/{admin}', [ProfileController::class, 'update'])->name('profile.update');
                 Route::post('profile/{admin}/verified-otp', [ProfileController::class, 'sendOTP'])->name('profile.verified-otp');
                 Route::post('profile/{admin}/image-upload', [ProfileController::class, 'uploadProfileImage'])->name('profile.image-upload');
+
+                Route::get('download-media/{media}', CourseMediaController::class)->name('download-media');
 
                 Route::group(['middleware' => [Localization::class, RoutePermission::class]], function () {
                     $db_controller_routes = JsonService::getJson('admin_menu');

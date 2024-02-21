@@ -129,6 +129,9 @@
                 method: "GET",
                 success: function(captcha) {
                     $('.captcha-image').attr('src', captcha);
+                },
+                error: function(jqXHR, exception) {
+                    location.reload();
                 }
             })
         });

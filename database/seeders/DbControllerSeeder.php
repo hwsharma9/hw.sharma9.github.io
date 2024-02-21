@@ -1003,6 +1003,19 @@ class DbControllerSeeder extends Seeder
                         'created_at' => '2023-12-07 21:43:52',
                         'updated_at' => '2023-12-07 22:52:49'
                     ],
+                    [
+                        'id' => 75,
+                        'route' => 'courses/{course}/view',
+                        'named_route' => 'courses.show',
+                        'method' => 'get',
+                        'function_name' => 'show',
+                        'fk_controller_id' => 19,
+                        'status' => 0,
+                        'created_by' => 1,
+                        'updated_by' => NULL,
+                        'created_at' => '2024-01-12 11:26:57',
+                        'updated_at' => '1970-01-01 00:00:00'
+                    ],
                 ],
             ],
             [
@@ -1328,19 +1341,6 @@ class DbControllerSeeder extends Seeder
                 'created_at' => '2024-01-15 16:05:13',
                 'updated_at' => '2024-01-15 16:05:41',
                 'routes' => [
-                    [
-                        'id' => 75,
-                        'route' => 'courses/{course}/view',
-                        'named_route' => 'courses.show',
-                        'method' => 'get',
-                        'function_name' => 'show',
-                        'fk_controller_id' => 19,
-                        'status' => 0,
-                        'created_by' => 1,
-                        'updated_by' => NULL,
-                        'created_at' => '2024-01-12 11:26:57',
-                        'updated_at' => '1970-01-01 00:00:00'
-                    ],
                     [
                         'id' => 76,
                         'route' => 'course/{course}/request/create',

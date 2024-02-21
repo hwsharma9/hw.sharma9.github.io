@@ -68,7 +68,7 @@ class AssignUserAccessSeeder extends Seeder
 
         // provide permission to Nodal Officer
         $nodal_officer = Role::backend()->where('id', '=', 3)->first();
-        $nodal_controllers = DbController::with(['permissions'])->find([1, 7, 21, 22, 23, 24]);
+        $nodal_controllers = DbController::with(['permissions'])->find([1, 7, 19, 21, 22, 23, 24, 26]);
         $nodal_permissions = $nodal_controllers->pluck('permissions.*.id')->collapse()->all(); //Permission::select(['id'])->where('id', 1)->get();
 
         foreach ($nodal_controllers as $nodal_controller) {

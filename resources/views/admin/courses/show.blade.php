@@ -65,12 +65,16 @@
 
     <x-slot name="content">
         @php
-            $log = '';
-            if ($course->course_status == 2 && $course->is_edited == 1) {
-                $log = $course->logs()->whereNotNull('prev_data')->where('course_status', 2)->latest()->first();
-                // print_r($log);
-                // print_r($course->checkDiff($log));
-            }
+            $course_media = $course->uploads->whereNull('deleted_at')->first();
+            // echo '<pre>';
+            // print_r($course->uploads->whereNull('deleted_at')->first());
+            // echo '</pre>';
+            // $log = '';
+            // if ($course->course_status == 2 && $course->is_edited == 1) {
+            //     $log = $course->logs()->whereNotNull('prev_data')->where('course_status', 2)->latest()->first();
+            // print_r($log);
+            // print_r($course->checkDiff($log));
+            // }
         @endphp
         <x-admin.container-card>
             <x-slot name="title">
@@ -109,19 +113,22 @@
                 <div class="col-md-6 upload-file">
                     <div class="d-flex">
                         <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                            <legend>Course Thumbnail @if ($course->uploads->where('course_status', '!=', 2)->count())
+                            <legend>Course Thumbnail @if ($course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
                                     {!! $course->upload->checkCourseDiff($course->uploads, 'course_thumbnail') !!}
                                 @endif
                             </legend>
                             <div class="form-group">
-                                @if ($course->upload && !$course->upload->trashed())
+                                @if ($course_media)
                                     <div class="upload-row mp-1">
                                         <div class="upload__img-wrap">
                                             <div class="upload__img-box">
-                                                <div style="background-image: url({{ asset('storage/' . str_replace('\\', '/', $course->upload->file_path)) }})"
-                                                    data-toggle="tooltip" data-placement="top" title="profile-demo.png"
-                                                    class="img-bg">
-                                                </div>
+                                                <a
+                                                    href="{{ route('manage.download-media', ['media' => encrypt($course_media->id)]) }}">
+                                                    <div style="background-image: url({{ asset('storage/' . str_replace('\\', '/', $course_media->file_path)) }})"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="{{ $course_media->original_name }}" class="img-bg">
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -140,15 +147,6 @@
                             $course_docs = $topic->uploads->where('field_name', 'course_doc')->all();
                             $course_video = $topic->uploads->where('field_name', 'course_video')->first();
                         @endphp
-                        @php
-                            // $topic_log = '';
-                            // print_r($topic);
-                            // if ($topic->course_status == 2 && $topic->is_edited == 1) {
-                            //     $topic_log = $topic->logs()->whereNotNull('prev_data')->where('course_status', 2)->latest()->first();
-                            // print_r($topic_log);
-                            // print_r($topic->checkDiff($topic_log));
-                            // }
-                        @endphp
                         <div class="col-md-12 topic_html">
                             <div class="card card-primary">
                                 <div class="card-header">
@@ -159,7 +157,6 @@
                                         </button>
                                     </div>
                                 </div>
-
                                 <div class="card-body">
 
                                     <div class="row">
@@ -181,7 +178,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <fieldset class="col-md-12" style="border: solid; 1px;">
@@ -195,12 +191,11 @@
                                                 </div>
                                             </fieldset>
                                         </div>
-
-
                                         <div class="col-md-6">
                                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                                 <legend>Upload PDF @if (
                                                     $course_pdfs &&
+                                                        $topic->course_status == 2 &&
                                                         (collect($course_pdfs)->where('course_status', '!=', 2)->count() ||
                                                             collect($course_pdfs)->whereNotNull('deleted_at')->count()))
                                                         {!! $topic->upload->checkCourseDiff(collect($course_pdfs), 'course_pdf') !!}
@@ -213,12 +208,15 @@
                                                                 <div class="upload-row mp-1">
                                                                     <div class="upload__img-wrap">
                                                                         <div class="upload__img-box">
-                                                                            <div style="background-image: url({{ asset('dist/img/pdf.png') }})"
-                                                                                data-toggle="tooltip"
-                                                                                data-placement="top"
-                                                                                title="{{ $course_pdf->original_name }}"
-                                                                                class="img-bg">
-                                                                            </div>
+                                                                            <a
+                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_pdf->id)]) }}">
+                                                                                <div style="background-image: url({{ asset('dist/img/pdf.png') }})"
+                                                                                    data-toggle="tooltip"
+                                                                                    data-placement="top"
+                                                                                    title="{{ $course_pdf->original_name }}"
+                                                                                    class="img-bg">
+                                                                                </div>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -228,10 +226,13 @@
                                                 </div>
                                             </fieldset>
                                         </div>
+
+
                                         <div class="col-md-6">
                                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                                 <legend>Upload PPT @if (
                                                     $course_ppts &&
+                                                        $topic->course_status == 2 &&
                                                         (collect($course_ppts)->where('course_status', '!=', 2)->count() ||
                                                             collect($course_ppts)->whereNotNull('deleted_at')->count()))
                                                         {!! $topic->upload->checkCourseDiff(collect($course_ppts), 'course_ppt') !!}
@@ -244,12 +245,15 @@
                                                                 <div class="upload-row mp-1">
                                                                     <div class="upload__img-wrap">
                                                                         <div class="upload__img-box">
-                                                                            <div style="background-image: url({{ asset('dist/img/ppt.png') }})"
-                                                                                data-toggle="tooltip"
-                                                                                data-placement="top"
-                                                                                title="{{ $course_ppt->original_name }}"
-                                                                                class="img-bg">
-                                                                            </div>
+                                                                            <a
+                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_ppt->id)]) }}">
+                                                                                <div style="background-image: url({{ asset('dist/img/ppt.png') }})"
+                                                                                    data-toggle="tooltip"
+                                                                                    data-placement="top"
+                                                                                    title="{{ $course_ppt->original_name }}"
+                                                                                    class="img-bg">
+                                                                                </div>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                     </button>
@@ -260,11 +264,15 @@
                                                 </div>
                                             </fieldset>
                                         </div>
+
+
                                         <div class="col-md-6">
                                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                                 <legend>Upload DOC @if (
-                                                    ($course_docs && collect($course_docs)->where('course_status', '!=', 2)->count()) ||
-                                                        collect($course_docs)->whereNotNull('deleted_at')->count())
+                                                    $course_docs &&
+                                                        $topic->course_status == 2 &&
+                                                        (collect($course_docs)->where('course_status', '!=', 2)->count() ||
+                                                            collect($course_docs)->whereNotNull('deleted_at')->count()))
                                                         {!! $topic->upload->checkCourseDiff(collect($course_docs), 'course_doc') !!}
                                                     @endif
                                                 </legend>
@@ -275,12 +283,15 @@
                                                                 <div class="upload-row mp-1">
                                                                     <div class="upload__img-wrap">
                                                                         <div class="upload__img-box">
-                                                                            <div style="background-image: url({{ asset('dist/img/doc.png') }})"
-                                                                                data-toggle="tooltip"
-                                                                                data-placement="top"
-                                                                                title="{{ $course_doc->original_name }}"
-                                                                                class="img-bg">
-                                                                            </div>
+                                                                            <a
+                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_doc->id)]) }}">
+                                                                                <div style="background-image: url({{ asset('dist/img/doc.png') }})"
+                                                                                    data-toggle="tooltip"
+                                                                                    data-placement="top"
+                                                                                    title="{{ $course_doc->original_name }}"
+                                                                                    class="img-bg">
+                                                                                </div>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -290,6 +301,7 @@
                                                 </div>
                                             </fieldset>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -317,7 +329,7 @@
                                             <th>S. No.</th>
                                             <th>Course</th>
                                             <th>Status</th>
-                                            <th>Updated Topics</th>
+                                            {{-- <th>Updated Topics</th> --}}
                                             <th>Last Modified By</th>
                                             <th>Last Modified On</th>
                                             <th>Action</th>
@@ -331,8 +343,9 @@
                             <form
                                 action="{{ route('manage.course.request.edit', ['course' => $course->id, 'approval_request' => $course->requests[0]->id]) }}"
                                 data-action="{{ route('manage.course.request.edit', ['course' => $course->id, 'approval_request' => $course->requests[0]->id]) }}"
-                                method="POST" name="add-remark">
+                                method="POST" name="add-remark" id="addremarkform">
                                 @csrf
+                                <input type="hidden" name="status" value="{{ $course->requests[0]->status }}">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -342,18 +355,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" @if ($course->requests[0]->status == 2) style="display:none" @endif>
+                                {{-- <div class="row" @if ($course->requests[0]->status == 2) style="display:none" @endif>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <x-label for="status">Request Status <span
                                                     class="text-danger">*</span></x-label>
                                             <select name="status" class="form-control"
                                                 @if ($course->requests[0]->status == 2) disabled @endif>
-                                                {{-- @if ($course->requests[0]->status < 1)
-                                                    <option value="0"
-                                                        {{ $course->requests[0]->status == 0 ? 'selected' : '' }}>
-                                                        Submitted for Approval</option>
-                                                @endif --}}
                                                 <option value="1"
                                                     {{ in_array($course->requests[0]->status, [0, 1]) ? 'selected' : '' }}>
                                                     Send for
@@ -364,12 +372,16 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer justify-content-between">
-                                    <button type="button" class="btn btn-default"
+                                </div> --}}
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary set_status" data-val="1">Send for
+                                        Correction</button>
+                                    <button type="submit" class="btn btn-success set_status"
+                                        data-val="2">Approved</button>
+                                    {{-- <button type="button" class="btn btn-default"
                                         data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary"
-                                        @if ($course->requests[0]->status == 2) disabled @endif>Submit</button>
+                                        @if ($course->requests[0]->status == 2) disabled @endif>Submit</button> --}}
                                 </div>
                             </form>
                         @endif
@@ -424,6 +436,7 @@
         <script src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
         <script src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
         <script src="{{ asset('webroot/plugins/select2/js/select2.full.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/validation/dist/jquery.validate.js') }}"></script>
         @if (Gate::allows('check-auth', 'manage.course.request.index'))
             <script type="text/javascript">
                 $(function() {
@@ -463,10 +476,10 @@
                                 data: 'status',
                                 name: 'status'
                             },
-                            {
-                                data: 'updated_topics',
-                                name: 'updated_topics'
-                            },
+                            // {
+                            //     data: 'updated_topics',
+                            //     name: 'updated_topics'
+                            // },
                             {
                                 data: 'editor_name',
                                 name: 'editor.first_name',
@@ -483,53 +496,69 @@
                             },
                         ],
                     });
-                    $("#add-remark").on("click", function() {
-                        $("#remark-modal").modal("show");
-                        table.ajax.reload();
+
+                    $('#addremarkform button[type="submit"]').on("click", function(e) {
+                        e.preventDefault();
+                        $('#addremarkform input[name="status"]').val($(this).attr('data-val'));
+                        $('#addremarkform').submit();
+                    })
+
+                    var remark_validator = jQuery("#addremarkform").validate({
+                        rules: {
+                            remark: {
+                                required: true
+                            },
+                        },
+                        messages: {
+                            remark: {
+                                required: 'Remark is required.',
+                                maxlength: 250
+                            },
+                        },
+                        submitHandler: function(form) {
+                            $(document).ready(function() {
+                                let status_value = form.status.value;
+                                if (status_value == 2) {
+                                    let confirmation = confirm(
+                                        "Really want to approve this remark? After this you won't be able to edit the remark!"
+                                    );
+                                    if (!confirmation) {
+                                        return;
+                                    }
+                                } else {
+                                    $('#addremarkform button[type="submit"]').prop('disabled', true);
+                                }
+
+                                $.ajax({
+                                    url: $(form).attr('action'),
+                                    data: $(form).serialize(),
+                                    success: function(data) {
+                                        if (data.status == true) {
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: data.message
+                                            });
+                                            location.reload();
+                                        }
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                        location.reload();
+                                    },
+                                });
+                            });
+                        }
                     });
 
-                    $('form[name="add-remark"]').on("submit", function(e) {
-                        e.preventDefault();
-                        let remark = $('form[name="add-remark"] textarea[name="remark"]');
-                        let status = $('form[name="add-remark"] select[name="status"]');
-                        let status_value = status.val();
-                        if (status_value == 2) {
-                            let confirmation = confirm(
-                                "Really want to approve this remark? After this you won't be able to edit the remark!"
-                            );
-                            if (!confirmation) {
-                                return;
-                            }
+                    $("#add-remark").on("click", function() {
+                        $("#remark-modal").modal("show");
+                        const status = $('#addremarkform input[name="status"]').val();
+                        if (status == 0) {
+                            $('#addremarkform .modal-footer').show();
                         } else {
-                            status.closest(".row").show();
-                            status.prop("disabled", false);
+                            $('#addremarkform .modal-footer').hide();
                         }
-                        $.ajax({
-                            url: $(this).attr('action'),
-                            data: $(this).serialize(),
-                            success: function(data) {
-                                console.log(data);
-                                if (data.status == true) {
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: data.message
-                                    });
-                                    location.reload();
-                                    // table.ajax.reload();
-                                    // if (status_value == 1) {
-                                    //     remark.prop("disabled", true);
-                                    // } else if (status_value == 2) {
-                                    //     status.closest(".row").hide();
-                                    //     status.prop("disabled", true);
-                                    //     $('form[name="add-remark"] button[type="submit"]').prop(
-                                    //         "disabled", true);
-                                    // }
-                                }
-                            },
-                            error: function(error) {
-                                console.log(error);
-                            },
-                        });
+                        table.ajax.reload();
                     });
 
                     $(document).on("click", ".view-remark", function(e) {
@@ -537,9 +566,14 @@
                         const remark = $(this).attr('data-remark');
                         const status = $(this).attr('data-status');
                         $('form[name="add-remark"] textarea[name="remark"]').val(remark);
-                        $('form[name="add-remark"] select[name="status"]').closest(".row").hide();
-                        $('form[name="add-remark"] select[name="status"]').prop("disabled", true);
-                        $('form[name="add-remark"] button[type="submit"]').prop("disabled", true);
+                        // $('form[name="add-remark"] input[name="status"]').closest(".row").hide();
+                        // $('form[name="add-remark"] input[name="status"]').prop("disabled", true);
+                        if (status == 0) {
+                            $('form[name="add-remark"] .modal-footer').show();
+                        } else {
+                            $('form[name="add-remark"] .modal-footer').hide();
+                        }
+                        // $('form[name="add-remark"] button[type="submit"]').prop("disabled", true);
                         $('form[name="add-remark"] textarea[name="remark"]').prop("disabled", true);
                     });
                     $(document).on("click", ".edit-remark", function(e) {
@@ -548,37 +582,16 @@
                         const remark = $(this).attr('data-remark');
                         let status = $(this).attr('data-status');
                         console.log('status => ', status);
-                        if (status == 1) {
-                            $('form[name="add-remark"] textarea[name="remark"]').prop("disabled", true);
-                            $('form[name="add-remark"] select[name="status"]').closest(".row").show();
-                            $('form[name="add-remark"] select[name="status"]').prop("disabled", false);
-                            $('form[name="add-remark"] button[type="submit"]').prop("disabled", false);
-                            // if ($('select[name="status"] option[value=0]').length == 1) {
-                            //     $('select[name="status"] option[value=0]').remove();
-                            // }
-                        } else if (status == 2) {
-                            $('form[name="add-remark"] select[name="status"]').closest(".row").hide();
-                            $('form[name="add-remark"] select[name="status"]').prop("disabled", true);
-                            $('form[name="add-remark"] button[type="submit"]').prop("disabled", true);
-                            $('form[name="add-remark"] textarea[name="remark"]').prop("disabled", true);
-                            // if ($('select[name="status"] option[value=0]').length == 1) {
-                            //     $('select[name="status"] option[value=0]').remove();
-                            // }
+                        if (status == 0) {
+                            $('form[name="add-remark"] .modal-footer').show();
+                            $('form[name="add-remark"] textarea[name="remark"]').prop('disabled', false);
                         } else {
-                            console.log('edit');
-                            $('form[name="add-remark"] select[name="status"]').closest(".row").show();
-                            $('form[name="add-remark"] select[name="status"]').prop("disabled", false);
-                            $('form[name="add-remark"] button[type="submit"]').prop("disabled", false);
-                            $('form[name="add-remark"] textarea[name="remark"]').prop("disabled", false);
-                            // if ($('select[name="status"] option[value=0]').length == 0) {
-                            //     $('form[name="add-remark"] select[name="status"]').prepend(
-                            //         "<option value='0'>Submitted for Approval</option>");
-                            // }
-                            status = 1;
+                            $('form[name="add-remark"] .modal-footer').hide();
+                            $('form[name="add-remark"] textarea[name="remark"]').prop('disabled', true);
                         }
                         $('form[name="add-remark"]').attr('action', url);
                         $('form[name="add-remark"] textarea[name="remark"]').val(remark);
-                        $('form[name="add-remark"] select[name="status"]').val(status);
+                        $('form[name="add-remark"] input[name="status"]').val(status);
                     });
                 });
             </script>
@@ -605,14 +618,14 @@
 
             function image(files) {
                 let result = [];
-                console.log(files);
                 if (files.length) {
                     result = files.map(file => {
                         if (file) {
                             // let image = window.location.origin + '/storage/' + obj.file_path.replace(/\\/g, "/");
                             let image = ''
+                            let asset = '{{ asset('') }}';
                             if (file.file_mime_type.match('image.*')) {
-                                image = window.location.origin + '/storage/' + file
+                                image = asset + 'storage/' + file
                                     .file_path.replace(
                                         /\\/g, "/");
                             } else if (file.file_mime_type.match('application/pdf')) {
@@ -658,21 +671,15 @@
                 $("#approved-model").html('');
                 $("#changed-model").html('');
                 if (is_file) {
-                    console.log(is_file);
                     approved = approved ? JSON.parse(approved) : '';
                     approved_html = image(approved);
-                    console.log(approved_html);
                     changed = changed ? JSON.parse(changed) : [];
                     changed_html = image(changed);
-                    console.log(changed_html);
                     $("#approved-model").html(approved_html);
                     $("#changed-model").html(changed_html);
                 } else {
-                    console.log('here');
                     approved_html = convert(approved);
-                    console.log(approved_html);
                     changed_html = convert(changed);
-                    console.log(changed_html);
                     $("#approved-model").html(approved);
                     $("#changed-model").html(changed);
                 }

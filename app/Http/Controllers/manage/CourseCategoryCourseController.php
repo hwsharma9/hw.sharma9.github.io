@@ -26,7 +26,8 @@ class CourseCategoryCourseController extends Controller
                 ->with([
                     'courseCategory',
                     'editor:id,first_name,last_name,username',
-                    'creator:id,first_name,last_name,username'
+                    'creator:id,first_name,last_name,username',
+                    'configuration:id,fk_course_category_courses_id'
                 ])
                 ->when($department_id, function ($query) use ($department_id) {
                     $query->whereHas('courseCategory', function ($query) use ($department_id) {
@@ -36,6 +37,8 @@ class CourseCategoryCourseController extends Controller
                 ->filter();
             $actions = [
                 'edit' => 'manage.course_category_courses.edit',
+                'configuration_create' => 'manage.course_configurations.create',
+                'configuration_edit' => 'manage.course_configurations.edit'
             ];
             $permissions = GateAllow::forAll($actions);
             return DataTables::of($data)
@@ -48,6 +51,15 @@ class CourseCategoryCourseController extends Controller
                         'encrypt' => true
                     ]);
                     $action = $action->render();
+                    if ($row->configuration) {
+                        if ($permissions['configuration_edit']) {
+                            $action .= '<a href="' . route('manage.course_configurations.edit', ['course_configuration' => encrypt($row->id)]) . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
+                        }
+                    } else {
+                        if ($permissions['configuration_create']) {
+                            $action .= '<a href="' . route('manage.course_configurations.create') . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
+                        }
+                    }
 
                     return $action;
                 })

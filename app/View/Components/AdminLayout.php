@@ -16,7 +16,7 @@ class AdminLayout extends Component
     public function render()
     {
         $admin_roles = AdminRole::query()
-            ->without(['role'])
+            // ->without(['role'])
             ->where('fk_user_id', auth('admin')->id())
             ->where(function ($query) {
                 $query->where('to_date', null)
@@ -24,17 +24,11 @@ class AdminLayout extends Component
             })
             ->active()
             ->get();
-        $unread_notifications = auth()->user()
-            ->notifications()
-            ->whereNull('read_at')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->groupBy('type');
         // echo "<pre>";
         // print_r($unread_notifications->toArray());
         // echo "</pre>";
         // die;
         // $admin_roles = auth('admin')->user()->admin_roles()->where('status', 1)->get();
-        return view('layouts.admin', compact('admin_roles', 'unread_notifications'));
+        return view('layouts.admin', compact('admin_roles'));
     }
 }

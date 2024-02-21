@@ -42,7 +42,6 @@
                     <tr>
                         <th>S. No.</th>
                         <th>First Name</th>
-                        <th>Designation</th>
                         <th>Email</th>
                         <th>Mobile</th>
                         <th>User Privilege</th>
@@ -79,10 +78,6 @@
                             },
                             name: 'name',
                             searchable: false
-                        },
-                        {
-                            data: 'designation',
-                            name: 'designation'
                         },
                         {
                             data: 'email',

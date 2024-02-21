@@ -218,11 +218,11 @@
                         <x-admin.status-dropdown :selected="$course->status" />
                     </div>
                 </div> --}}
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-6">
                         <x-admin.captcha />
                     </div>
-                </div>
+                </div> --}}
                 <div class="card-footer d-flex justify-content-between">
                     <span>
                         {{-- <x-admin.form-actions :actions="[
@@ -517,7 +517,7 @@
                                 // If any file is uploaded reload the page.
                                 // Issue is we will need to update course_video_id of each topic 
                                 // if (is_files_uploaded) {}
-                                // location.reload();
+                                location.reload();
                             } else {
                                 $("#quickForm").closest('.card-body').prepend(data
                                     .errors);
@@ -537,18 +537,18 @@
                         description: {
                             ckrequired: true
                         },
-                        captcha: {
-                            required: false,
-                        },
+                        // captcha: {
+                        //     required: true,
+                        // },
                     },
                     messages: {
                         captcha: {
                             required: 'Description is required.',
                             maxlength: 250
                         },
-                        captcha: {
-                            required: 'Security Code is required.',
-                        },
+                        // captcha: {
+                        //     required: 'Security Code is required.',
+                        // },
                     },
                     errorPlacement: function(error, element) {
                         // console.log('element name => ', element.attr("name"));
@@ -624,7 +624,8 @@
 
                             let image = ''
                             if (file.file_mime_type.match('image.*')) {
-                                image = window.location.origin + '/storage/' + file
+                                let asset = '{{ asset('') }}';
+                                image = asset + 'storage/' + file
                                     .file_path.replace(
                                         /\\/g, "/");
                             } else if (file.file_mime_type.match('application/pdf')) {

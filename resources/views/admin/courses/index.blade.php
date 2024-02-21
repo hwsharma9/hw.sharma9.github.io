@@ -223,9 +223,9 @@
                     e.preventDefault();
                     let that = $(this);
                     that.find('button.publish_course').prop('disabled', true);
+                    let url = $(this).attr('action');
                     $.ajax({
-                        url: location.origin + '/ajax/course/' + $(this).attr('data-id') +
-                            '/update-status',
+                        url: url,
                         data: $(this).serialize(),
                         method: 'POST',
                         headers: {
