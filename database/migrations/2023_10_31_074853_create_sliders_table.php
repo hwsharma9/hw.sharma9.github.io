@@ -34,7 +34,7 @@ class CreateSlidersTable extends Migration
             $table->integer('menu_type')->default('1');
             $table->boolean('order_preference')->default(1);
             // $table->timestamp('published_at');
-            $table->boolean('status')->default(true)->comment('0=Pending,1=Active,2=Inactive');
+            $table->boolean('status')->default(false)->comment('0=Pending,1=Active,2=Inactive');
             $table->unsignedInteger('created_by')->nullable()->index();
             $table->unsignedInteger('updated_by')->nullable()->index();
             $table->dateTime('created_at')->nullable();

@@ -28,7 +28,11 @@ class SliderController extends Controller
         }
         if (request()->ajax()) {
             $data = Slider::query()
-                ->where('fk_slider_category_id', $fk_slider_category_id);
+                ->where('fk_slider_category_id', $fk_slider_category_id)
+                ->with([
+                    'editor',
+                    'creator',
+                ]);
             $actions = [
                 'edit' => 'manage.sliders.edit',
             ];
@@ -48,7 +52,13 @@ class SliderController extends Controller
                 ->editColumn('updated_at', function ($row) {
                     return $row['updated_at'] ? date('d-m-Y H:i:s', strtotime($row['updated_at'])) : date('d-m-Y H:i:s', strtotime($row['created_at']));;
                 })
-                ->rawColumns(['action'])
+                ->editColumn('status', function ($row) {
+                    return DisplayStatus($row['status']);
+                })
+                ->editColumn('editor_name', function ($row) {
+                    return $row['editor'] ? $row['editor']['name'] . ' (' . $row['editor']['username'] . ')' : ($row['creator'] ? $row['creator']['name'] . ' (' . $row['creator']['username'] . ')' : '');
+                })
+                ->rawColumns(['action', 'status'])
                 ->make(true);
         }
         return view('admin.sliders.index', compact('fk_slider_category_id', 'type'));
@@ -98,6 +108,10 @@ class SliderController extends Controller
             }
 
             $validated = $validator->validated();
+            // return [
+            //     $validated,
+            //     $request->file()
+            // ];
             if ($validated['menu_type'] == 1) {
                 $page_route = DbControllerRoute::where([
                     'named_route' => 'page.show',

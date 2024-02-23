@@ -9,6 +9,7 @@ use App\Models\FrontMenu;
 use App\Models\OfficeOnboarding;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {

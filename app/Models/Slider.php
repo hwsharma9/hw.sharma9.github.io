@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\Admined;
+use App\Http\Traits\HasStatus;
 use App\Http\Traits\Uploadable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Slider extends Model
     use HasFactory;
     use Admined;
     use Uploadable;
+    use HasStatus;
 
     protected $table = 'tbl_sliders';
 

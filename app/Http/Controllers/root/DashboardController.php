@@ -4,6 +4,7 @@ namespace App\Http\Controllers\root;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $page = Page::where('is_default', 1)
             ->where('status', 1)
             ->firstOrFail();
-        return view('root.index', compact('page'));
+        $sliders = Slider::active()->get();
+        return view('root.index', compact('page', 'sliders'));
     }
 }

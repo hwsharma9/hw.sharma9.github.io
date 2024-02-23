@@ -42,12 +42,11 @@
                         <th>S. No.</th>
                         <th>Title Hi</th>
                         <th>Title En</th>
-                        <th>Created By</th>
-                        <th>Updated By</th>
-                        <th>Status</th>
-                        <th>Order Preference</th>
+                        {{-- <th>Order Preference</th> --}}
                         {{-- <th>Published At</th> --}}
+                        <th>Last Modified By</th>
                         <th>Last Modified Date</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -85,28 +84,22 @@
                             data: 'title_en',
                             name: 'title_en'
                         },
+                        // {
+                        //     data: 'order_preference',
+                        //     name: 'order_preference'
+                        // },
+                        // {data: 'published_at', name: 'published_at'},
                         {
-                            data: 'created_by',
-                            name: 'created_by',
-                            searchable: false
+                            data: 'editor_name',
+                            name: 'editor.first_name'
                         },
                         {
-                            data: 'updated_by',
-                            name: 'updated_by',
-                            searchable: false
+                            data: 'updated_at',
+                            name: 'updated_at'
                         },
                         {
                             data: 'status',
                             name: 'status'
-                        },
-                        {
-                            data: 'order_preference',
-                            name: 'order_preference'
-                        },
-                        // {data: 'published_at', name: 'published_at'},
-                        {
-                            data: 'updated_at',
-                            name: 'updated_at'
                         },
                         {
                             data: 'action',

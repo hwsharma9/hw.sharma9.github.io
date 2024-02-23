@@ -5,7 +5,6 @@
         <link rel="stylesheet" href="{{ asset('webroot/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     @endpush
     <x-slot name="page_title">
-
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -24,7 +23,6 @@
                 </div>
             </div>
         </div>
-
     </x-slot>
 
     <x-slot name="content">
@@ -33,8 +31,8 @@
                 {{ __('EDIT ' . $slider_categories[$slider->fk_slider_category_id]) }}
             </x-slot>
             @php
-                $image_hi = isset($uploads['attachment_hindi']) ? Storage::url($uploads['attachment_hindi']) : asset('dist/img/no-image.png');
-                $image_en = isset($uploads['attachment_english']) ? Storage::url($uploads['attachment_english']) : asset('dist/img/no-image.png');
+                $image_hi = isset($uploads['attachment_hindi']) ? asset(Storage::url($uploads['attachment_hindi'])) : asset('dist/img/no-image.png');
+                $image_en = isset($uploads['attachment_english']) ? asset(Storage::url($uploads['attachment_english'])) : asset('dist/img/no-image.png');
             @endphp
             <form method="POST" action="{{ route('manage.sliders.edit', ['slider' => $slider->id]) }}"
                 enctype="multipart/form-data" id="quickForm">
@@ -50,7 +48,6 @@
                                     style="width: 100%;" />
                                 <x-input-error name="title_hi" />
                             </div>
-                            <x-admin.status-dropdown />
                             <div class="form-group">
                                 <x-label for="attachment_hindi">Attachment For Hindi <span
                                         class="text-danger">*</span></x-label>
@@ -84,12 +81,12 @@
                                     style="width: 100%;" />
                                 <x-input-error name="title_en" />
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <x-label for="type">Type <span class="text-danger">*</span></x-label>
                                 <input type="text" disabled class="form-control" placeholder="Type" id="type"
                                     value="{{ $slider_categories[$slider->fk_slider_category_id] }}" />
                                 <x-input-error name="type" />
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <x-label for="attachment_english">Attachment For English <span
                                         class="text-danger">*</span></x-label>
@@ -120,6 +117,11 @@
                         selected-customurl="{{ $slider->custom_url }}"
                         selected-route="{{ $slider->fk_controller_route_id }}"
                         selected-page="{{ $slider->fk_page_id }}" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-admin.status-dropdown :selected="old('status', $slider->status)" />
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <x-admin.form-actions :actions="[
@@ -156,7 +158,7 @@
 
                         reader.readAsDataURL(input.files[0]);
                     }
-                } //end readURL_photo function	
+                } //end readURL_photo function
 
 
                 jQuery.validator.addMethod("alphanumspace", function(value, element) {

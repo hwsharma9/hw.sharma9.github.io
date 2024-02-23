@@ -30,7 +30,7 @@
     <x-slot name="content">
         <x-admin.container-card>
             <x-slot name="title">
-                {{ __('ADD SLIDER') }}
+                {{ __('ADD ' . $type) }}
             </x-slot>
             <form method="POST" action="{{ route('manage.sliders.create') }}" enctype="multipart/form-data"
                 id="quickForm">
@@ -47,7 +47,7 @@
                                     style="width: 100%;" />
                                 <x-input-error name="title_hi" />
                             </div>
-                            <x-admin.status-dropdown />
+                            {{-- <x-admin.status-dropdown /> --}}
                             <div class="form-group">
                                 <x-label for="attachment_hindi">Attachment For Hindi <span
                                         class="text-danger">*</span></x-label>
@@ -81,12 +81,12 @@
                                     style="width: 100%;" />
                                 <x-input-error name="title_en" />
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <x-label for="type">Type <span class="text-danger">*</span></x-label>
                                 <input type="text" disabled class="form-control" placeholder="Type" id="type"
                                     value="{{ $type }}" />
                                 <x-input-error name="type" />
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <x-label for="attachment_english">Attachment For English <span
                                         class="text-danger">*</span></x-label>
@@ -147,7 +147,7 @@
 
                         reader.readAsDataURL(input.files[0]);
                     }
-                } //end readURL_photo function	
+                } //end readURL_photo function
 
 
                 jQuery.validator.addMethod("alphanumspace", function(value, element) {
