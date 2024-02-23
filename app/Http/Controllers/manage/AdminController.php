@@ -304,10 +304,10 @@ class AdminController extends Controller
                 $admin->save();
 
                 // If any change occure in role
-                if (count(array_diff($roles->pluck('id')->all(), $request->role_id)) > 0) {
-                    // Sync the roles in table
-                    $admin->syncRoles($request->role_id);
-                }
+                // if (count(array_diff($roles->pluck('id')->all(), $request->role_id)) > 0) {
+                // Sync the roles in table
+                // $admin->syncRoles($request->role_id);
+                // }
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -317,7 +317,7 @@ class AdminController extends Controller
                     'error' => $th->getMessage()
                 ]);
                 return
-                    redirect()->to($this->getRedirectUrl())
+                    redirect()->to(route('manage.admins.edit', $admin->id))
                     ->withInput($request->input())
                     ->with('error', __('app.went_wrong'));
             }

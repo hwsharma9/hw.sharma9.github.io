@@ -68,7 +68,7 @@ class CourseApprovalRequestController extends Controller
                     return $topics;
                 })
                 ->editColumn('status', function ($row) {
-                    return $row->status == 0 ? 'Submitted for Approval' : ($row->status == 1 ? 'Send for Correction' : 'Approved');
+                    return $row->status == 0 ? 'Submitted for Approval' : ($row->status == 1 ? 'Received for Correction' : 'Approved');
                 })
                 ->make(true);
         }

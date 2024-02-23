@@ -28,6 +28,9 @@
                     class="fas fa-eye"></i></a>
         @endif
     @endif
+    @isset($extra_html)
+        {!! $extra_html !!}
+    @endisset
     {{-- @if (array_key_exists('delete', $actions))
         @if ($delete_permission)
             <form action="{{route($actions['delete'], $id)}}" method="POST" class="delete-model">

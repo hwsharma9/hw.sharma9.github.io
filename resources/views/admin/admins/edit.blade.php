@@ -32,7 +32,8 @@
                 {{ __('EDIT ADMIN') }}
             </x-slot>
 
-            <form method="POST" action="{{ route('manage.admins.edit', ['admin' => $admin->id]) }}" id="quickForm">
+            <form method="POST" action="{{ route('manage.admins.edit', ['admin' => encrypt($admin->id)]) }}"
+                id="quickForm">
                 @csrf
                 <div class="card-body">
                     <div class="row">

@@ -114,9 +114,6 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="float-sm-right">
-                            @if ($course->requests->count())
-                                <button type="butotn" class="btn btn-secondary" id="show-remark">Show Remark</button>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -232,6 +229,9 @@
                             Approve</button>
                         <button type="submit" class="btn btn-primary" name="action" value="draft">Save as
                             Draft</button>
+                        @if ($course->requests->count())
+                            <button type="butotn" class="btn btn-secondary" id="show-remark">Action</button>
+                        @endif
                     </span>
                     <span>
                         <button type="button" class="btn btn-secondary" id="add_topic">Add More Topics</button>
@@ -463,10 +463,10 @@
                     var editor = CKEDITOR.instances[idname];
                     var ckValue = GetTextFromHtml(editor.getData()).replace(/<[^>]*>/gi, '').trim();
                     if (ckValue.length === 0) {
-                        //if empty or trimmed value then remove extra spacing to current control  
+                        //if empty or trimmed value then remove extra spacing to current control
                         $(element).val(ckValue);
                     } else {
-                        //If not empty then leave the value as it is  
+                        //If not empty then leave the value as it is
                         $(element).val(editor.getData());
                     }
                     return $(element).val().length > 0;
@@ -504,10 +504,10 @@
                         },
                         success: function(data) {
                             $(".ss-validation").remove();
-                            if (data.captcha) {
-                                $('input[name=captcha]').val('');
-                                $('.captcha-image').attr('src', data.captcha);
-                            }
+                            // if (data.captcha) {
+                            //     $('input[name=captcha]').val('');
+                            //     $('.captcha-image').attr('src', data.captcha);
+                            // }
                             if (data.status == true) {
                                 Toast.fire({
                                     icon: 'success',
@@ -515,7 +515,7 @@
                                 });
 
                                 // If any file is uploaded reload the page.
-                                // Issue is we will need to update course_video_id of each topic 
+                                // Issue is we will need to update course_video_id of each topic
                                 // if (is_files_uploaded) {}
                                 location.reload();
                             } else {
@@ -648,8 +648,8 @@
 
                             var html =
                                 `<div class='upload__img-box'>
-                                    <div style='background-image: url(${image})' 
-                                        data-toggle='tooltip' data-placement='top' 
+                                    <div style='background-image: url(${image})'
+                                        data-toggle='tooltip' data-placement='top'
                                         title='${file.original_name}' class='img-bg'>
                                     </div>
                                 </div>`;
@@ -712,8 +712,8 @@
                                     var html =
                                         `<div class="upload__img-wrap">
                                             <div class='upload__img-box'>
-                                                <div style='background-image: url(${image})' 
-                                                    data-toggle='tooltip' data-placement='top' 
+                                                <div style='background-image: url(${image})'
+                                                    data-toggle='tooltip' data-placement='top'
                                                     title='${file.name}' class='img-bg'>
                                                 </div>
                                             </div>
@@ -832,7 +832,7 @@
 
                     /*
                      * Remove rules from the jquery validator for the topic going to be removed from DOM
-                     * code start 
+                     * code start
                      */
                     let input_element = $(this).closest('.topic_html').find('input,textarea');
                     for (const key in input_element) {

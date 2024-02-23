@@ -49,11 +49,6 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="float-sm-right">
-                            @if (Gate::allows('check-auth', 'manage.course.request.index'))
-                                @if ($course->requests->count())
-                                    <button type="butotn" class="btn btn-secondary" id="add-remark">Add Remark</button>
-                                @endif
-                            @endif
                             {{-- <a href="{{ route('manage.course.remark.create', ['course' => $course->id]) }}"
                                 class="btn btn-primary"><i class="fa fa-plus"></i> Add Remark</a> --}}
                         </div>
@@ -309,6 +304,13 @@
                     @endforeach
                 @endif
             </div>
+            <div class="card-footer d-flex justify-content-between">
+                @if (Gate::allows('check-auth', 'manage.course.request.index'))
+                    @if ($course->requests->count())
+                        <button type="butotn" class="btn btn-secondary" id="add-remark">Action</button>
+                    @endif
+                @endif
+            </div>
         </x-admin.container-card>
         <div class="modal fade" id="remark-modal">
             <div class="modal-dialog modal-xl">
@@ -329,7 +331,7 @@
                                             <th>S. No.</th>
                                             <th>Course</th>
                                             <th>Status</th>
-                                            {{-- <th>Updated Topics</th> --}}
+                                            <th>Updated Topics</th>
                                             <th>Last Modified By</th>
                                             <th>Last Modified On</th>
                                             <th>Action</th>
@@ -476,10 +478,10 @@
                                 data: 'status',
                                 name: 'status'
                             },
-                            // {
-                            //     data: 'updated_topics',
-                            //     name: 'updated_topics'
-                            // },
+                            {
+                                data: 'updated_topics',
+                                name: 'updated_topics'
+                            },
                             {
                                 data: 'editor_name',
                                 name: 'editor.first_name',

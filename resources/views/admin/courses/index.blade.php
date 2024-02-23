@@ -22,10 +22,6 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="float-sm-right">
-                            @if (Gate::allows('check-auth', 'manage.courses.create'))
-                                <a href="{{ route('manage.courses.create') }}" class="btn btn-primary"><i
-                                        class="fa fa-plus"></i> Add</a>
-                            @endif
                         </div>
                     </div>
                 </div>

@@ -44,22 +44,24 @@ class CourseCategoryCourseController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn('id')
                 ->addColumn('action', function ($row) use ($actions, $permissions) {
+                    $extra_html = '';
+                    if ($row->configuration) {
+                        if ($permissions['configuration_edit']) {
+                            $extra_html .= '<a href="' . route('manage.course_configurations.edit', ['course_configuration' => encrypt($row->id)]) . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
+                        }
+                    } else {
+                        if ($permissions['configuration_create']) {
+                            $extra_html .= '<a href="' . route('manage.course_configurations.create') . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
+                        }
+                    }
                     $action = view('components.admin.list-actions', [
                         'actions' => $actions,
                         'model' => $row,
                         'permissions' => $permissions,
-                        'encrypt' => true
+                        'encrypt' => true,
+                        'extra_html' => $extra_html
                     ]);
                     $action = $action->render();
-                    if ($row->configuration) {
-                        if ($permissions['configuration_edit']) {
-                            $action .= '<a href="' . route('manage.course_configurations.edit', ['course_configuration' => encrypt($row->id)]) . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
-                        }
-                    } else {
-                        if ($permissions['configuration_create']) {
-                            $action .= '<a href="' . route('manage.course_configurations.create') . '" class="btn btn-secondary"><i class="fa fa-cog"></i></a>';
-                        }
-                    }
 
                     return $action;
                 })

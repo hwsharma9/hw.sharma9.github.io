@@ -156,7 +156,7 @@ class CourseController extends Controller
                 $request->all(),
                 [
                     'description' => 'required',
-                    'captcha' => 'required|captcha',
+                    // 'captcha' => 'required|captcha',
                 ],
                 [
                     'description.required' => 'Description is required',
@@ -280,10 +280,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course, Request $request)
     {
-        // return CourseMedia::where(['id' => 1])->first();
-        $captcha = Captcha::src('default');
-        $department_id = auth('admin')->user()->detail?->officeonboarding?->fk_department_id;
         if ($request->isMethod('post') || request()->ajax()) {
+            // $captcha = Captcha::src('default');
             // return [$request->all(), $request->file()];
             $validator = Validator::make(
                 $request->all(),
@@ -295,7 +293,7 @@ class CourseController extends Controller
                 [
                     'description.required' => 'Description is required.',
                     // 'status.required' => 'Status is required.',
-                    'captcha.required' => 'Security Code is required.',
+                    // 'captcha.required' => 'Security Code is required.',
                 ]
             );
 
@@ -309,7 +307,7 @@ class CourseController extends Controller
                                 'errors' => $validator->errors()
                             ]
                         )->render(),
-                        'captcha' => $captcha
+                        // 'captcha' => $captcha
                     ];
                 } else {
                     return redirect()
@@ -345,7 +343,7 @@ class CourseController extends Controller
                 if ($request->has('topic')) {
                     foreach ($request->topic as $key => $value) {
                         $where = [];
-                        if (isset($value['id'])) {
+                        if (isset($value['id']) && !is_null($value['id'])) {
                             $where['id'] = $value['id'];
                         }
                         if ($where) {
@@ -396,14 +394,9 @@ class CourseController extends Controller
                             }
                             array_push($topics_to_approve, $topic->id);
                         }
-                        // print_r($where);
-                        // print_r($topic->toArray());
-                        // print_r($topics_to_approve);
-                        // die;
                         $where_video = [];
                         if (isset($value['course_video_id']) && !is_null($value['course_video_id'])) {
                             $where_video['id'] = $value['course_video_id'];
-                            // array_push($where_video, $value['course_video_id']);
                         }
                         $course_video = [
                             'file_mime_type' => 'application/video',
@@ -414,18 +407,7 @@ class CourseController extends Controller
                             $course_video['file_path'] = $value['course_video'];
                             $course_video['fk_course_id'] = $course->id;
                             if ($where_video) {
-                                // $upload = $topic->upload()->where($where_video)->update($course_video);
-                                // print_r($where_video);
-                                // DB::enableQueryLog();
                                 $upload = CourseMedia::find($value['course_video_id']);
-                                // print_r(DB::getQueryLog());
-                                // print_r($upload);
-                                // Log::info(DB::getQueryLog());
-                                // Log::info($upload->toArray());
-                                // if ($request->has('saved_as') && $request->saved_as == 'request' && $upload->course_status != 2) {
-                                //     $course_video['course_status'] = 1;
-                                // }
-                                // Log::info($course_video);
                                 $upload->fill($course_video);
                                 $upload->save();
                             } else {
@@ -438,7 +420,6 @@ class CourseController extends Controller
                                 $topic->upload()->where($where_video)->update($course_video);
                             }
                         }
-                        // print_r($where_video);
                     }
                 }
 
@@ -473,7 +454,7 @@ class CourseController extends Controller
                     return [
                         'status' => false,
                         'error' => __('app.went_wrong'),
-                        'captcha' => $captcha
+                        // 'captcha' => $captcha
                     ];
                 } else {
                     return
@@ -490,7 +471,7 @@ class CourseController extends Controller
                 return [
                     'status' => true,
                     'message' => 'Record saved as draft successfully!',
-                    'captcha' => $captcha,
+                    // 'captcha' => $captcha,
                 ];
             } else {
                 $redirect = redirect();
@@ -498,13 +479,19 @@ class CourseController extends Controller
                     ->with('success', __('app.record_updated'));
             }
         }
+        $department_id = auth('admin')->user()->detail?->officeonboarding?->fk_department_id;
         $course = $course->load([
-            'upload',
-            'topics.uploads',
+            'upload' => function ($query) {
+                $query->select(['id', 'file_path', 'file_mime_type', 'original_name', 'uploadable_id']);
+            },
+            'topics.uploads' => function ($query) {
+                $query->select(['id', 'file_path', 'file_mime_type', 'original_name', 'field_name', 'uploadable_id']);
+            },
             'requests' => function ($query) {
                 $query->where('status', '>', 0);
             }
         ]);
+
         if (request()->has('read_notification')) {
             if ($course->requests) {
                 foreach ($course->requests as $request) {
