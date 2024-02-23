@@ -152,8 +152,10 @@ class AdminMenuController extends Controller
     public function destroy(AdminMenu $menu)
     {
         $ids = $this->getChildNode($menu->child->toArray(), $menu->id);
-        $ids = explode(',', $ids);
-        AdminMenu::whereIn('id', $ids)->delete();
+        $ids = ($ids != "") ? explode(',', $ids) : [];
+        if ($ids) {
+            AdminMenu::whereIn('id', $ids)->delete();
+        }
         $menu->delete();
         return ['status' => true, 'message' => 'Menu deleted successfully.'];
     }

@@ -24,7 +24,8 @@
                         <i class=" fas fa-pencil-alt"></i>
                     </a>
                     @if ($menu->id != 1)
-                        <a class="del-button" id="{{ $menu->id }}"><i class="fas fa-trash"></i></a>
+                        <a class="del-button" data-route="{{ route('manage.menus.destroy', ['menu' => $menu->id]) }}"
+                            id="{{ $menu->id }}"><i class="fas fa-trash"></i></a>
                     @endif
                 </span>
             </div>

@@ -291,7 +291,7 @@
                     if (x) {
                         $.ajax({
                             type: "POST",
-                            url: 'menus/' + id,
+                            url: $(this).attr('data-route'),
                             dataType: "json",
                             cache: false,
                             headers: {
