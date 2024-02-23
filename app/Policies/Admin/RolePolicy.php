@@ -17,9 +17,7 @@ class RolePolicy
         $range = request()->range;
         // If user is super admin and trying to remove access of any acl menus for his self.
         if ((session('role_name') == 'Super Admin' && $role->name == 'Super Admin')
-            && (
-                !in_array(2, $range) // CMS Menu id
-                || !in_array(3, $range) // ACL Menu id
+            && (!in_array(3, $range) // ACL Menu id
                 || !in_array(4, $range) // Access List Menu id
                 || !in_array(5, $range) // Admin Menu Menu id
                 || !in_array(6, $range) // Role Management Menu id
