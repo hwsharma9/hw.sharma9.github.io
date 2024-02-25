@@ -33,7 +33,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        // info($request->all());
         # Generate An OTP
         $verificationCode = $this->generateOtp($request->email);
         // return $verificationCode->roles[0]->status;
@@ -47,10 +46,17 @@ class AuthenticatedSessionController extends Controller
                 ->withInput($request->only('email'))
                 ->withErrors(['email' => 'You are not an activated User. Contact Administrator.']);
         }
-        // $message = "Your OTP To Login is - " . $verificationCode->otp;
+        if (config('app.env') == 'production') {
+            $message = "Your OTP To Login is - " . $verificationCode->otp;
+            // $this->sendSMS($verificationCode->phone, $message);
+        } else {
+            $message = 'Your OTP sent to your mobile number.';
+        }
         # Return With OTP
 
-        return redirect()->route('manage.otp.verification', ['admin' => encrypt($verificationCode->id)]);
+        return redirect()->route('manage.otp.verification', [
+            'admin' => encrypt($verificationCode->id)
+        ])->with('success', $message);
         // $request->authenticate();
 
         // $request->session()->regenerate();

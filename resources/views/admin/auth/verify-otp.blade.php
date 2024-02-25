@@ -21,9 +21,17 @@
             @csrf
             <input type="hidden" name="email" value="{{ $admin->email }}" />
 
-            <div class="alert alert-success alert-dismissible">
-                Your OTP is <strong>{{ $admin->verificationCode->latest('id')->first()->otp }}</strong>
-            </div>
+            @if (config('app.env') == 'production')
+                @if (session()->has('success'))
+                    <div class="alert alert-success alert-dismissible">
+                        {{ session()->get('success') }}
+                    </div>
+                @endif
+            @else
+                <div class="alert alert-success alert-dismissible">
+                    Your OTP is <strong>{{ $admin->verificationCode->latest('id')->first()->otp }}</strong>
+                </div>
+            @endif
 
             <!-- OTP -->
             <div>
