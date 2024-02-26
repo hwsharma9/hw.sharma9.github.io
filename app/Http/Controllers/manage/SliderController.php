@@ -23,7 +23,7 @@ class SliderController extends Controller
     public function index($type = 'Top Slider')
     {
         $fk_slider_category_id = 2;
-        if ($type = 'Top Slider') {
+        if ($type == 'Top Slider') {
             $fk_slider_category_id = 1;
         }
         if (request()->ajax()) {
