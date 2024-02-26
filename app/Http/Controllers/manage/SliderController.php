@@ -163,12 +163,14 @@ class SliderController extends Controller
                 'title_hi' => 'required',
                 'title_en' => 'required',
                 'menu_type' => 'required',
-                'fk_page_id' => ['required']
+                'fk_page_id' => ['required'],
+                'status' => 'required',
             ];
             $message = [
                 'title_hi.required' => 'Title in Hindi is required',
                 'title_en.required' => 'Title in English is required',
                 'menu_type.required' => 'Menu Type is required',
+                'status.required' => 'Status is required',
             ];
             if ($request->has('menu_type') && $request->menu_type == 1) {
                 $message['fk_page_id.required'] = 'The Page is Required';
