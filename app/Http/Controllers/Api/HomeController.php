@@ -18,7 +18,7 @@ class HomeController extends Controller
     {
         $registered_users = User::count();
         $courses_enrolled = Course::active()->count();
-        $department_onboarded = OfficeOnboarding::with(['department'])->active()->get();
+        $department_onboarded = OfficeOnboarding::with(['department'])->active()->latest()->take(8)->get();
         $sliders = Slider::select([
             'id',
             'title_hi',
