@@ -23,6 +23,11 @@ class HomeController extends Controller
             'id',
             'title_hi',
             'title_en',
+            'fk_slider_category_id',
+            'fk_controller_route_id',
+            'fk_page_id',
+            'custom_url',
+            'menu_type'
         ])->active()->with(['upload'])->get();
         return response()->json([
             'status' => 200,
