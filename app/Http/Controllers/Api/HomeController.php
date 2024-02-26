@@ -7,6 +7,7 @@ use App\Http\Services\MenuTree;
 use App\Models\Course;
 use App\Models\FrontMenu;
 use App\Models\OfficeOnboarding;
+use App\Models\Slider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,15 +19,21 @@ class HomeController extends Controller
         $registered_users = User::count();
         $courses_enrolled = Course::active()->count();
         $department_onboarded = OfficeOnboarding::with(['department'])->active()->get();
-        return [
+        $sliders = Slider::select([
+            'id',
+            'title_hi',
+            'title_en',
+        ])->active()->with(['upload'])->get();
+        return response()->json([
             'status' => 200,
             'data' => [
                 'registered_users' => $registered_users,
                 'courses_enrolled' => $courses_enrolled,
                 'department_onboarded' => $department_onboarded->pluck('department'),
                 'department_onboarded_count' => $department_onboarded->count(),
+                'sliders' => $sliders,
             ]
-        ];
+        ]);
     }
 
     public function app()
