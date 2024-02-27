@@ -35,9 +35,8 @@
                 {{ __('Office Onboarding Search') }}
             </x-slot>
 
-            <form action="{{ route('manage.officeonboardings.index') }}" method="GET" id="search_form">
-                <fieldset class="col-md-12" style="border: solid; 1px;">
-                    <legend>Office Onboarding Search</legend>
+            <div class="card-body">
+                <form action="{{ route('manage.officeonboardings.index') }}" method="GET" id="search_form">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -46,7 +45,8 @@
                                     <option value="">Select Department</option>
                                     @if ($departments)
                                         @foreach ($departments as $department)
-                                            <option value="{{ $department->id }}">{{ $department->title_en }}</option>
+                                            <option value="{{ $department->id }}">{{ $department->title_en }}
+                                            </option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -88,11 +88,11 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <button class="btn btn-primary">Search</button>
-                            <button class="btn btn-primary" type="button" id="clear_form">Clear</button>
+                            <button class="btn btn-secondary" type="button" id="clear_form">Clear</button>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                </form>
+            </div>
 
         </x-admin.container-card>
         <x-admin.container-card>

@@ -37,17 +37,19 @@
                 {{ __('PERMISSIONS') }}
             </x-slot>
 
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>S. No.</th>
-                        <th>Name</th>
-                        <th>Panel</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card-body">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>Name</th>
+                            <th>Panel</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </x-admin.container-card>
     </x-slot>
     @push('scripts')

@@ -36,40 +36,42 @@
                     {{ __('Assigned Courses Search') }}
                 </x-slot>
 
-                <form action="" method="GET" id="search_form">
-                    <fieldset class="col-md-12" style="border: solid; 1px;">
-                        <legend>Course Category's Course Search</legend>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <x-label for="course_category_id">Category</x-label>
-                                    <select name="course_category_id" id="course_category_id" class="form-control">
-                                        <option value="">Select Category</option>
-                                    </select>
+                <div class="card-body">
+                    <form action="" method="GET" id="search_form">
+                        <fieldset class="col-md-12" style="border: solid; 1px;">
+                            <legend>Course Category's Course Search</legend>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <x-label for="course_category_id">Category</x-label>
+                                        <select name="course_category_id" id="course_category_id" class="form-control">
+                                            <option value="">Select Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <x-label for="course_category_courses_id">Course <span
+                                                class="text-danger">*</span></x-label>
+                                        <select name="course_category_courses_id" id="course_category_courses_id"
+                                            class="form-control" style="width: 100%;">
+                                            <option value="">Select Course</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <x-admin.status-dropdown :search="true" :required="false" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <x-label for="course_category_courses_id">Course <span
-                                            class="text-danger">*</span></x-label>
-                                    <select name="course_category_courses_id" id="course_category_courses_id"
-                                        class="form-control" style="width: 100%;">
-                                        <option value="">Select Course</option>
-                                    </select>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary">Search</button>
+                                    <button class="btn btn-secondary" type="button" id="clear_form">Clear</button>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <x-admin.status-dropdown :search="true" :required="false" />
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <button class="btn btn-primary">Search</button>
-                                <button class="btn btn-primary" type="button" id="clear_form">Clear</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
+                        </fieldset>
+                    </form>
+                </div>
             </x-admin.container-card>
         @endif
         <x-admin.container-card>
@@ -77,21 +79,23 @@
                 {{ __('Assigned Courses List') }}
             </x-slot>
 
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>S. No.</th>
-                        <th>Category</th>
-                        <th>Course Name</th>
-                        <th>Assigned By</th>
-                        <th>Assigned At</th>
-                        <th>Course Status</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card-body">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>Category</th>
+                            <th>Course Name</th>
+                            <th>Assigned By</th>
+                            <th>Assigned At</th>
+                            <th>Course Status</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </x-admin.container-card>
     </x-slot>
     @push('scripts')

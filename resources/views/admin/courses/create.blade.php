@@ -124,46 +124,49 @@
                 action="{{ route('manage.courses.create', ['fk_course_category_courses_id' => encrypt($alloted_admin->fk_course_category_courses_id)]) }}"
                 id="quickForm" enctype="multipart/form-data">
                 @csrf
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label>Category</x-label>
-                            <input class="form-control" disabled
-                                value="{{ $alloted_admin->courseCategory->category_name_en }}" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label>Course</x-label>
-                            <input class="form-control" disabled
-                                value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="description">Course Description <span class="text-danger">*</span></x-label>
-                            <textarea type="text" name="description" class="form-control" id="description"
-                                placeholder="Enter Course Description">{{ old('description') }}</textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-6 upload-file">
-                        <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                            <legend>Course Thumbnail</legend>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <div class="upload-row mp-1">
-                                    <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                        id="course_thumbnail" accept="image/png, image/jpeg" />
-                                </div>
+                                <x-label>Category</x-label>
+                                <input class="form-control" disabled
+                                    value="{{ $alloted_admin->courseCategory->category_name_en }}" />
                             </div>
-                        </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label>Course</x-label>
+                                <input class="form-control" disabled
+                                    value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row" id="topics_container"></div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.captcha />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="description">Course Description <span
+                                        class="text-danger">*</span></x-label>
+                                <textarea type="text" name="description" class="form-control" id="description"
+                                    placeholder="Enter Course Description">{{ old('description') }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 upload-file">
+                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
+                                <legend>Course Thumbnail</legend>
+                                <div class="form-group">
+                                    <div class="upload-row mp-1">
+                                        <input type="file" name="course_thumbnail" class="course_thumbnail"
+                                            id="course_thumbnail" accept="image/png, image/jpeg" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row" id="topics_container"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-admin.captcha />
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

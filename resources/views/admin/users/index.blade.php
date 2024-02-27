@@ -37,21 +37,23 @@
                 {{ __('USERS LIST') }}
             </x-slot>
 
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>S. No.</th>
-                        <th>First Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>User Privilege</th>
-                        <th>Last Modified Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card-body">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>User Privilege</th>
+                            <th>Last Modified Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </x-admin.container-card>
     </x-slot>
     @push('scripts')

@@ -13,6 +13,7 @@ use App\Models\ErrorLog;
 use App\Models\MAdminCourse;
 use App\Models\MCourseCategory;
 use App\Notifications\Admin\RequestToApproveCourse;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
@@ -440,7 +441,7 @@ class CourseController extends Controller
                         }
                     }
                 }
-                // dd('wait');
+
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollback();

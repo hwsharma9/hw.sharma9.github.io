@@ -3,6 +3,21 @@
     @push('styles')
         <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
         <link rel="stylesheet" href="{{ asset('webroot/plugins/jqtree/jquery.tree.min.css') }}" type="text/css">
+
+        <style>
+            .ui-widget-content {
+                border: 1px solid #f0f0f0;
+                background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
+                color: #222222
+                /*{fcContent}*/
+                ;
+                padding: 25px;
+            }
+
+            .ui-widget ul {
+                padding: 10px 25px
+            }
+        </style>
     @endpush
     <x-slot name="page_title">
 
@@ -42,14 +57,14 @@
                     </div>
                     <div class="form-group">
                         <x-label for="description">Role Description <span class="text-danger">*</span></x-label>
-                        <textarea name="description" id="description" cols="10" rows="4" style="width: 100%;">{{ old('description') }}</textarea>
+                        <textarea class="form-control" name="description" id="description" cols="10" rows="4" style="width: 100%;">{{ old('description') }}</textarea>
                         <x-input-error name="description" />
                     </div>
                     <div class="form-group">
                         <x-label for="previleg">Privilege <span class="text-danger">*</span></x-label>
-                        <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
+                        <button type="button" class="btn btn-info btn-block" data-toggle="modal"
                             data-target="#modal-default">
-                            Choose Menu Privileg
+                            Choose Menu Privilege
                         </button>
                         <x-input-error name="range" />
                     </div>
@@ -103,9 +118,10 @@
                             </div>
                             <div class="modal-body">
                                 <div class="row mb-5 justify-content-between">
-                                    <button type="button" class="btn btn-success active" id="example-5-checkAll">Check
+                                    <button type="button" class="btn btn-primary active" id="example-5-checkAll">Check
                                         all nodes</button>
-                                    <button type="button" class="btn btn-danger" id="example-5-uncheckAll">Uncheck all
+                                    <button type="button" class="btn btn-secondary" id="example-5-uncheckAll">Uncheck
+                                        all
                                         nodes</button>
                                 </div>
                                 <div id="tree">

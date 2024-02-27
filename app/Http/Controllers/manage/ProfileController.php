@@ -82,10 +82,11 @@ class ProfileController extends Controller
                     'for' => $for
                 ]);
             }
+            $message = '';
             if ($request->has('getmobileotp')) {
-                $message = 'OTP sent to your mobile number ' . $otp;
+                $message = 'OTP sent to your mobile number. ' . ((config('app.env') == 'production') ? '' : $otp);
             } else {
-                $message = 'OTP sent to your email ' . $otp;
+                $message = 'OTP sent to your email. ' . ((config('app.env') == 'production') ? '' : $otp);
                 Mail::to($admin->email)
                     ->send(new SendOTPToVerifyAccount($admin, $type, $otp));
             }

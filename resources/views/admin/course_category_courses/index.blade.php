@@ -35,9 +35,8 @@
                 {{ __('Course Category\'s Course Search') }}
             </x-slot>
 
-            <form action="" method="GET" id="search_form">
-                <fieldset class="col-md-12" style="border: solid; 1px;">
-                    <legend>Course Category's Course Search</legend>
+            <div class="card-body">
+                <form action="" method="GET" id="search_form">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -68,32 +67,33 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <button class="btn btn-primary">Search</button>
-                            <button class="btn btn-primary" type="button" id="clear_form">Clear</button>
+                            <button class="btn btn-secondary" type="button" id="clear_form">Clear</button>
                         </div>
-                    </div>
-                </fieldset>
-            </form>
+                </form>
+            </div>
         </x-admin.container-card>
         <x-admin.container-card>
             <x-slot name="title">
                 {{ __('Course Category\'s Course List') }}
             </x-slot>
 
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>S. No.</th>
-                        <th>Category Name</th>
-                        <th>Course Name (English)</th>
-                        <th>Course Name (Hindi)</th>
-                        <th>Last Modified By</th>
-                        <th>Last Modified On</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card-body">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>Category Name</th>
+                            <th>Course Name (English)</th>
+                            <th>Course Name (Hindi)</th>
+                            <th>Last Modified By</th>
+                            <th>Last Modified On</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </x-admin.container-card>
     </x-slot>
     @push('scripts')

@@ -2,5 +2,7 @@
     <x-slot name="title">
         {{ __(session('role_name') . ' Dashboard') }}
     </x-slot>
-    Welcome To {{ session('role_name') }} Dashboard
+    <div class="card-body">
+        Welcome To {{ session('role_name') }} Dashboard
+    </div>
 </x-admin.container-card>

@@ -166,7 +166,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
+
                 <div class="card-footer">
                     <x-admin.form-actions :actions="[
                         'create' => true,

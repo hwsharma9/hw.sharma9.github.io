@@ -33,60 +33,67 @@
             <x-slot name="title">
                 {{ __('Create Menu') }}
             </x-slot>
-            <input type="hidden" id="nestable-output">
-            <form action="{{ route('manage.menus.create') }}" method="POST" id="frmMenu">
-                <input type="hidden" id="id" name="id" value="" />
-                @csrf
-                <!-- /.card-header -->
-                <div class="card-body" id="create-menu">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <x-label>Menu Name</x-label>
-                                <input type="text" name="menu_name" id="menu_name" class="form-control"
-                                    placeholder="Enter Menu Name" style="width: 100%;" value="{{ old('menu_name') }}" />
-                                @error('menu_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+            <div class="card-body">
+                <input type="hidden" id="nestable-output">
+                <form action="{{ route('manage.menus.create') }}" method="POST" id="frmMenu">
+                    <input type="hidden" id="id" name="id" value="" />
+                    @csrf
+                    <!-- /.card-header -->
+                    <div class="" id="create-menu">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
                             </div>
-                            <div class="form-group">
-                                <x-label>Controller Name</x-label>
-                                <select name="fk_tbl_acl_permission_id" id="fk_tbl_acl_permission_id"
-                                    class="form-control select2" placeholder="Enter Icon class Name"
-                                    style="width: 100%;">
-                                    <option value="">Select Permission</option>
-                                    @foreach ($db_controller as $db_controller)
-                                        @foreach ($db_controller->dbControllerRoute as $dbControllerRoute)
-                                            <option value="{{ $dbControllerRoute->permission->id }}"
-                                                data-route="{{ $dbControllerRoute->route }}">
-                                                {{ $db_controller->title }} ({{ $db_controller->controller_name }})
-                                            </option>
+                        @endif
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <x-label>Menu Name</x-label>
+                                    <input type="text" name="menu_name" id="menu_name" class="form-control"
+                                        placeholder="Enter Menu Name" style="width: 100%;"
+                                        value="{{ old('menu_name') }}" />
+                                    @error('menu_name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <x-label>Controller Name</x-label>
+                                    <select name="fk_tbl_acl_permission_id" id="fk_tbl_acl_permission_id"
+                                        class="form-control select2" placeholder="Enter Icon class Name"
+                                        style="width: 100%;">
+                                        <option value="">Select Permission</option>
+                                        @foreach ($db_controller as $db_controller)
+                                            @foreach ($db_controller->dbControllerRoute as $dbControllerRoute)
+                                                <option value="{{ $dbControllerRoute->permission->id }}"
+                                                    data-route="{{ $dbControllerRoute->route }}">
+                                                    {{ $db_controller->title }}
+                                                    ({{ $db_controller->controller_name }})
+                                                </option>
+                                            @endforeach
                                         @endforeach
-                                    @endforeach
-                                </select>
-                                @error('fk_tbl_acl_permission_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                    </select>
+                                    @error('fk_tbl_acl_permission_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <x-label>Icon class Name</x-label>
-                                <select name="icon_class" id="icon_class" class="form-control">
-                                    <option value="fa fa-hand-point-right">fa fa-hand-point-right</option>
-                                    <option value="fas fa-folder-open">fas fa-folder-open</option>
-                                </select>
-                                @error('icon_class')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <x-label>Icon class Name</x-label>
+                                    <select name="icon_class" id="icon_class" class="form-control">
+                                        <option value="fa fa-hand-point-right">fa fa-hand-point-right</option>
+                                        <option value="fas fa-folder-open">fas fa-folder-open</option>
+                                    </select>
+                                    @error('icon_class')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        {{-- <div class="col-md-6">
+
+                            {{-- <div class="col-md-6">
                     <div class="form-group">
                         <x-label>Minimal</x-label>
                         <select class="form-control select2" style="width: 100%;">
@@ -100,35 +107,48 @@
                         </select>
                     </div>
                 </div> --}}
+                        </div>
+                        <div class="row" id="params"></div>
                     </div>
-                    <div class="row" id="params"></div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
+
                     <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                     <button type="button" id="reset" class="btn btn-secondary"
                         data-action="{{ route('manage.menus.create') }}">New</button>
-                </div>
-            </form>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <menu id="nestable-menu">
-                        <button class="btn btn-danger" type="button" data-action="expand-all"><i
-                                class="fa fa-plus-circle"></i> Expand All</button>
-                        <button class="btn btn-warning" type="button" data-action="collapse-all"><i
-                                class="fa fa-minus-circle"></i> Collapse All</button>
-                    </menu>
-                </div>
-                <!--End column-->
-            </div>
-            <!--End row-->
-            <div class="cf nestable-items">
-                <div class="dd" id="nestable">
-                    <x-admin.admin-menu-tree :menus="$menus" class="dd-list" />
-                </div>
+                </form>
             </div>
         </x-admin.container-card>
+        <x-admin.container-card>
+            <x-slot name="title">
+                Menu List
+            </x-slot>
+            <div class="card-body">
+
+                <div class="row ">
+                    <div class="col-md-12" style="text-align: right">
+                        <menu id="nestable-menu">
+                            <button class="btn btn-danger" type="button" data-action="expand-all"><i
+                                    class="fa fa-plus-circle"></i> Expand All</button>
+                            <button class="btn btn-warning" type="button" data-action="collapse-all"><i
+                                    class="fa fa-minus-circle"></i> Collapse All</button>
+                        </menu>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="cf nestable-items">
+                            <div class="dd" id="nestable">
+                                <x-admin.admin-menu-tree :menus="$menus" class="dd-list" />
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!--End column-->
+                </div>
+                <!--End row-->
+            </div>
+
+
+            </x-container-card>
     </x-slot>
     @push('scripts')
         <script type="text/javascript" src="{{ asset('webroot/validation/dist/jquery.validate.js') }}"></script>

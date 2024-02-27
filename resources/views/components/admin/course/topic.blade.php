@@ -22,12 +22,10 @@
         <div class="card-body">
             @if ($topic)
                 @php
-                    // echo '<pre>';
                     $course_pdfs = $topic->uploads->where('field_name', 'course_pdf')->all();
                     $course_ppts = $topic->uploads->where('field_name', 'course_ppt')->all();
                     $course_docs = $topic->uploads->where('field_name', 'course_doc')->all();
                     $course_video = $topic->uploads->where('field_name', 'course_video')->first();
-                    // print_r($course_video);
                 @endphp
                 <div class="row">
                     <div class="col-md-6">
@@ -46,7 +44,7 @@
                         <div class="form-group">
                             <label for="topic_summary">Topic Summary <span class="text-danger">*</span></label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control editor"
                                 placeholder="Enter Topic Summary" name="{{ 'topic[' . $loop->index . '][summary]' }}"
                                 id="{{ 'topic_' . $loop->index . '_summary' }}">{{ old('topic[' . $loop->index . '][summary]', $topic->update_summary ? $topic->update_summary : $topic->summary) }}</textarea>
                         </div>
@@ -76,7 +74,7 @@
                                 <div class="form-group">
                                     @if ($course_pdfs)
                                         @foreach ($course_pdfs as $course_pdf)
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_pdf" class="course_pdf"
                                                     name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
@@ -92,7 +90,7 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_pdf" class="course_pdf"
                                                 name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
                                                 id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
@@ -112,7 +110,7 @@
                                 <div class="form-group">
                                     @if ($course_ppts)
                                         @foreach ($course_ppts as $course_ppt)
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_ppt" class="course_ppt"
                                                     name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
@@ -128,7 +126,7 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_ppt" class="course_ppt"
                                                 name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
                                                 id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
@@ -148,7 +146,7 @@
                                 <div class="form-group">
                                     @if ($course_docs)
                                         @foreach ($course_docs as $course_doc)
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_doc" class="course_doc"
                                                     name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_doc' }}"
@@ -164,7 +162,7 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_doc" class="course_doc"
                                                 name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
                                                 id="{{ 'topic_' . $loop->index . '_course_doc' }}"
@@ -213,7 +211,7 @@
                                     <div class="form-group">
                                         @if ($course_pdfs)
                                             @foreach ($course_pdfs as $course_pdf)
-                                                <div class="upload-row mp-1">
+                                                <div class="upload-row mp-1 flex-wrap">
                                                     <input type="file" data-name="course_pdf"
                                                         name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
@@ -230,7 +228,7 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_pdf"
                                                     name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
@@ -256,7 +254,7 @@
                                     <div class="form-group">
                                         @if ($course_ppts)
                                             @foreach ($course_ppts as $course_ppt)
-                                                <div class="upload-row mp-1">
+                                                <div class="upload-row mp-1 flex-wrap">
                                                     <input type="file" data-name="course_ppt"
                                                         name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
@@ -272,7 +270,7 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_ppt"
                                                     name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
@@ -298,7 +296,7 @@
                                     <div class="form-group">
                                         @if ($course_docs)
                                             @foreach ($course_docs as $course_doc)
-                                                <div class="upload-row mp-1">
+                                                <div class="upload-row mp-1 flex-wrap">
                                                     <input type="file" data-name="course_doc"
                                                         name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_doc' }}"
@@ -314,7 +312,7 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <div class="upload-row mp-1">
+                                            <div class="upload-row mp-1 flex-wrap">
                                                 <input type="file" data-name="course_doc"
                                                     name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
                                                     id="{{ 'topic_' . $loop->index . '_course_doc' }}"
@@ -347,7 +345,7 @@
                         <div class="form-group">
                             <label for="topic_summary">Topic Summary <span class="text-danger">*</span></label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control ckeditor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control editor"
                                 placeholder="Enter Topic Summary">{{ old('summary') }}</textarea>
                         </div>
                     </div>
@@ -369,7 +367,7 @@
                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                 <legend>Upload PDF</legend>
                                 <div class="form-group">
-                                    <div class="upload-row mp-1">
+                                    <div class="upload-row mp-1 flex-wrap">
                                         <input type="file" data-name="course_pdf" class="course_pdf"
                                             data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                             accept="application/pdf" />
@@ -383,7 +381,7 @@
                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                 <legend>Upload PPT</legend>
                                 <div class="form-group">
-                                    <div class="upload-row mp-1">
+                                    <div class="upload-row mp-1 flex-wrap">
                                         <input type="file" data-name="course_ppt" class="course_ppt"
                                             data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                             accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
@@ -397,7 +395,7 @@
                             <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
                                 <legend>Upload DOC</legend>
                                 <div class="form-group">
-                                    <div class="upload-row mp-1">
+                                    <div class="upload-row mp-1 flex-wrap">
                                         <input type="file" data-name="course_doc" class="course_doc"
                                             data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                             accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
@@ -434,7 +432,7 @@
                                         @endif
                                     </legend>
                                     <div class="form-group">
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_pdf" class="course_pdf"
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 ? true : false]) }}"
                                                 accept="application/pdf" />
@@ -453,7 +451,7 @@
                                         @endif
                                     </legend>
                                     <div class="form-group">
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_ppt" class="course_ppt"
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 ? true : false]) }}"
                                                 accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
@@ -472,7 +470,7 @@
                                         @endif
                                     </legend>
                                     <div class="form-group">
-                                        <div class="upload-row mp-1">
+                                        <div class="upload-row mp-1 flex-wrap">
                                             <input type="file" data-name="course_doc" class="course_doc"
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 ? true : false]) }}"
                                                 accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />

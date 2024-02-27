@@ -133,93 +133,96 @@
             <x-slot name="title">
                 {{ __('Edit Course') }}
             </x-slot>
-
             <form method="POST"
                 action="{{ route('manage.courses.edit', ['course' => encrypt($course->id), 'fk_course_category_courses_id' => encrypt($course->assignedAdmin->fk_course_category_courses_id)]) }}"
                 enctype="multipart/form-data" id="quickForm">
                 @csrf
                 <input type="hidden" name="replaced_media_id">
                 <input type="hidden" name="saved_as">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label>Category <span class="text-danger">*</span></x-label>
-                            <input class="form-control" disabled
-                                value="{{ $alloted_admin->courseCategory->category_name_en }}" />
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label>Category <span class="text-danger">*</span></x-label>
+                                <input class="form-control" disabled
+                                    value="{{ $alloted_admin->courseCategory->category_name_en }}" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label>Course</x-label>
+                                <input class="form-control" disabled
+                                    value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label>Course</x-label>
-                            <input class="form-control" disabled
-                                value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="description">Course Description <span
+                                        class="text-danger">*</span></x-label>
+                                <textarea type="text" name="description" class="form-control editor" id="course_description"
+                                    placeholder="Enter Course Description">{{ old('description', $course->update_description ? $course->update_description : $course->description) }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 upload-file">
+                            <div class="d-flex">
+                                <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
+                                    <legend>Course Thumbnail</legend>
+                                    <div class="form-group">
+                                        @if ($course->upload)
+                                            <div class="upload-row mp-1 flex-wrap">
+                                                <input type="file" name="course_thumbnail" class="course_thumbnail"
+                                                    id="course_thumbnail" data-files="{{ $course->upload }}"
+                                                    data-id="{{ encrypt($course->upload->id) }}"
+                                                    accept="image/png, image/jpeg" />
+                                                <div class="upload__img-wrap"></div>
+                                                <button type="button" class="btn btn-danger delete_upload_row"
+                                                    data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="upload-row mp-1 flex-wrap">
+                                                <input type="file" name="course_thumbnail" class="course_thumbnail"
+                                                    id="course_thumbnail" accept="image/png, image/jpeg" />
+                                            </div>
+                                        @endif
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="description">Course Description <span class="text-danger">*</span></x-label>
-                            <textarea type="text" name="description" class="form-control ckeditor" id="course_description"
-                                placeholder="Enter Course Description">{{ old('description', $course->update_description ? $course->update_description : $course->description) }}</textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-6 upload-file">
-                        <div class="d-flex">
-                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                <legend>Course Thumbnail</legend>
-                                <div class="form-group">
-                                    @if ($course->upload)
-                                        <div class="upload-row mp-1">
-                                            <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                                id="course_thumbnail" data-files="{{ $course->upload }}"
-                                                data-id="{{ encrypt($course->upload->id) }}"
-                                                accept="image/png, image/jpeg" />
-                                            <div class="upload__img-wrap"></div>
-                                            <button type="button" class="btn btn-danger delete_upload_row"
-                                                data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    @else
-                                        <div class="upload-row mp-1">
-                                            <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                                id="course_thumbnail" accept="image/png, image/jpeg" />
-                                        </div>
-                                    @endif
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" id="topics_container">
-                    @if ($course->topics->count())
-                        @foreach ($course->topics as $topic)
+                    <div class="row" id="topics_container">
+                        @if ($course->topics->count())
+                            @foreach ($course->topics as $topic)
+                                @php
+                                    $html = view('components.admin.course.topic', [
+                                        'configuration' => $configuration ?? null,
+                                        'topic' => $topic,
+                                        'loop' => $loop,
+                                    ])->render();
+                                    echo $html;
+                                @endphp
+                            @endforeach
+                        @else
                             @php
-                                $html = view('components.admin.course.topic', [
-                                    'configuration' => $configuration ?? null,
-                                    'topic' => $topic,
-                                    'loop' => $loop,
-                                ])->render();
-                                echo $html;
+                                echo $action;
                             @endphp
-                        @endforeach
-                    @else
-                        @php
-                            echo $action;
-                        @endphp
-                    @endif
-                </div>
-                {{-- <div class="row">
+                        @endif
+                    </div>
+                    {{-- <div class="row">
                     <div class="col-md-6">
                         <x-admin.status-dropdown :selected="$course->status" />
                     </div>
                 </div> --}}
-                {{-- <div class="row">
+                    {{-- <div class="row">
                     <div class="col-md-6">
                         <x-admin.captcha />
                     </div>
                 </div> --}}
+                </div>
                 <div class="card-footer d-flex justify-content-between">
                     <span>
                         {{-- <x-admin.form-actions :actions="[
@@ -282,30 +285,25 @@
     </x-slot>
 
     @push('scripts')
-        <script src="{{ asset('webroot/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/select2/js/select2.full.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/validation/dist/jquery.validate.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/validation/dist/additional-methods.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
+        </script>
+        <script type="text/javascript"
+            src="{{ asset('webroot/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+        <script type="text/javascript"
+            src="{{ asset('webroot/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}">
+        </script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}">
+        </script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('webroot/plugins/select2/js/select2.full.min.js') }}"></script>
 
         <script type="text/javascript" src="{{ asset('webroot/ckeditor/ckeditor.js') }}"></script>
         <script type="text/javascript">
-            function reinitCKIntances() {
-                $("textarea.ckeditor").each((e, a) => {
-                    var instance = CKEDITOR.instances[a.id];
-                    if (instance) {
-                        CKEDITOR.remove(instance);
-                        instance.destroy(true);
-                        instance = null;
-                    }
-                    initCK(a.id);
-                });
-            }
-
             function initCK(id) {
                 CKEDITOR.replace(id, {
                     toolbar: [{
@@ -346,20 +344,32 @@
                 });
             }
 
-            function loadEditors() {
-                var $editors = $("textarea.ckeditor");
-                if ($editors.length) {
-                    $editors.each(function() {
-                        var editorID = $(this).attr("id");
-                        var instance = CKEDITOR.instances[editorID];
-                        if (instance) {
-                            console.log('destroy');
-                            instance.destroy(true);
-                        }
-
-                    });
-                }
+            function reinitCKIntances() {
+                $("textarea.editor").each((e, a) => {
+                    var instance = CKEDITOR.instances[a.id];
+                    if (instance) {
+                        CKEDITOR.remove(instance);
+                        instance.destroy(true);
+                        instance = null;
+                    }
+                    initCK(a.id);
+                });
             }
+
+            // function loadEditors() {
+            //     var $editors = $("textarea.ckeditor");
+            //     if ($editors.length) {
+            //         $editors.each(function() {
+            //             var editorID = $(this).attr("id");
+            //             var instance = CKEDITOR.instances[editorID];
+            //             if (instance) {
+            //                 console.log('destroy');
+            //                 instance.destroy(true);
+            //             }
+
+            //         });
+            //     }
+            // }
 
             $(function() {
                 var Toast = Swal.mixin({
@@ -424,21 +434,7 @@
                     $("#remark").closest('.row').show();
                     $("#remark").val($(this).attr('data-remark'));
                 });
-            });
-        </script>
-    @endpush
-    @push('scripts')
-        <script type="text/javascript" src="{{ asset('webroot/validation/dist/jquery.validate.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('webroot/validation/dist/additional-methods.js') }}"></script>
-        <script src="{{ asset('webroot/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script type="text/javascript">
-            jQuery(function() {
-                var Toast = Swal.mixin({
-                    toast: true,
-                    position: 'bottom-end',
-                    showConfirmButton: false,
-                    timer: 5000
-                });
+
 
                 function countUploadRows(element) {
                     let file_box = $(element).closest('.form-group').find('.upload-row');
@@ -519,7 +515,7 @@
                                 // if (is_files_uploaded) {}
                                 location.reload();
                             } else {
-                                $("#quickForm").closest('.card-body').prepend(data
+                                $("#quickForm .card-body:first").prepend(data
                                     .errors);
                                 $("html, body").animate({
                                     scrollTop: 0
@@ -542,8 +538,8 @@
                         // },
                     },
                     messages: {
-                        captcha: {
-                            required: 'Description is required.',
+                        description: {
+                            ckrequired: 'Description is required.',
                             maxlength: 250
                         },
                         // captcha: {
@@ -560,7 +556,7 @@
                         ) {
                             error.insertAfter($(element).closest('.form-group'));
                         } else if (element.prop('localName') === 'textarea') {
-                            console.log('here');
+                            console.log('textarea => ', element.attr('id'));
                             error.insertAfter($('#cke_' + element.attr('id')));
                         } else {
                             error.insertAfter(element);
@@ -860,10 +856,15 @@
                 $(document).on("click", ".add-file", function() {
                     let html = $(this).closest(".upload-file")
                         .find('div.upload-row:eq(0) input[type=file]').clone();
+                    // console.log(html[0].id);
+                    // console.log(validator.element(`#${html[0].id}`));
+                    if (validator.element(`#${html[0].id}`) === false) {
+                        return;
+                    }
                     html.removeAttr('data-files data-id name');
                     var el = html[0];
                     let upload_row =
-                        `<div class="upload-row mp-1">
+                        `<div class="upload-row mp-1 flex-wrap">
                             ${el.outerHTML}
                             <button type="button" class="btn btn-danger remove_upload_row">
                                 <i class="fas fa-times"></i>
@@ -912,24 +913,23 @@
                         let upload_row_html = '';
                         if (that.find('.upload-row').length == 1) {
                             let input_file = that.find('.upload-row input[type=file]')
-                                .removeAttr('data-files');
+                                .removeAttr('data-files').removeClass('valid').removeClass('error');
                             let html = document.getElementById($(input_file[0]).attr(
                                 'id')).outerHTML;
                             upload_row_html =
-                                `<div class="upload-row mp-1">${html}</div>`;
+                                `<div class="upload-row mp-1 flex-wrap">${html}</div>`;
                         }
 
-                        $(this).closest('.upload-row').remove();
+                        element.closest('.upload-row').remove();
                         // $("#quickForm").data('validator').element('#' + id);
                         if (countUploadRows(first_input_field)) {
                             $(first_input_field).closest('.upload-file').find('label.error').remove();
                         }
                         disableEnableAddFileButton($(that));
-
                         if (upload_row_html != '') {
                             that.prepend(upload_row_html);
                         }
-                        $(that).closest('.upload-file').find('.error').remove();
+                        $(that).closest('.upload-file').find('label.error').remove();
                     }
                 });
 
@@ -966,7 +966,7 @@
                                             .attr(
                                                 'id')).outerHTML;
                                         upload_row_html =
-                                            `<div class="upload-row mp-1">${html}</div>`;
+                                            `<div class="upload-row mp-1 flex-wrap">${html}</div>`;
                                     }
                                     image_box.remove();
                                     disableEnableAddFileButton(that);

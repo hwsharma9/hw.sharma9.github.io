@@ -12,13 +12,12 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body">
-                    @if ($showmessage)
-                        <x-flash-message />
-                        <x-auth-validation-errors />
-                    @endif
-                    {{ $slot }}
-                </div>
+
+                @if ($showmessage)
+                    <x-flash-message />
+                    <x-auth-validation-errors />
+                @endif
+                {{ $slot }}
             </div>
         </div>
     </div>

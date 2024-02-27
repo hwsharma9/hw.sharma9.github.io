@@ -7,7 +7,7 @@
                 placeholder="Enter Security Code" value="" style="width: 100%;" />
             <x-input-error name="captcha" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="margin-top:30px;">
             <img src="{{ Captcha::src('default') }}" class="captcha-image"> <a href="javascript:void(0)"
                 class="refresh-captcha"><i class="fas fa-sync-alt"></i></a>
         </div>

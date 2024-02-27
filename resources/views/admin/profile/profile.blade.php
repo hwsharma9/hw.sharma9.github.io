@@ -117,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
+
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
@@ -128,124 +128,128 @@
             <x-slot name="title">
                 {{ __('EMAIL AND MOBILE VERIFICATION') }}
             </x-slot>
-
-            @if (session('otp_verification'))
-                <div class="alert alert-warning alert-block" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    {{ session('otp_verification') }}
-                </div>
-            @endif
-
-            @if (session('otp_verified'))
-                <div class="alert alert-success alert-block" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    {{ session('otp_verified') }}
-                </div>
-            @endif
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">UPDATE EMAIL ADDRESS OF</h3>
-                        </div>
-                        <form method="POST" class="form-horizontal"
-                            action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
-                            @csrf
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <x-label for="inputEmail3" class="col-sm-3 col-form-label">Email</x-label>
-                                    <div class="col-sm-9">
-                                        <div class="form-control">
-                                            {{ $admin->email }}
-                                            @if (is_null($admin->email_verified_at))
-                                                <span class="badge badge-danger float-right">Not Verified</span>
-                                            @else
-                                                <span class="badge badge-success float-right">Verified</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                @if ($email_verification_code)
-                                    <div class="form-group row">
-                                        <x-label for="inputEmail3" class="col-sm-3 col-form-label">Enter OTP</x-label>
-                                        <div class="col-sm-9">
-                                            <input type="hidden" name="email" value="1">
-                                            <input type="text" class="form-control" name="otp"
-                                                placeholder="Enter Email OTP">
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                            @if (is_null($admin->email_verified_at))
-                                <div class="card-footer">
-                                    @if ($email_verification_code)
-                                        <button type="submit" class="btn btn-info" name="verifyotp"
-                                            value="verifyotp">Verify</button>
-                                    @endif
-                                    <button type="submit" class="btn btn-default float-right" name="getemailotp"
-                                        value="getemailotp">
-                                        @if (!$email_verification_code)
-                                            Get OTP
-                                        @else
-                                            Resend OTP
-                                        @endif
-                                    </button>
-                                </div>
-                            @endif
-                        </form>
+            <div class="card-body">
+                @if (session()->has('otp_verification'))
+                    <div class="alert alert-warning alert-block" role="alert">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        {{ session()->get('otp_verification') }}
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">UPDATE MOBILE NUMBER OF</h3>
-                        </div>
-                        <form method="POST" class="form-horizontal"
-                            action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
-                            @csrf
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <x-label for="inputEmail3" class="col-sm-3 col-form-label">Mobile Number</x-label>
-                                    <div class="col-sm-9">
-                                        <div class="form-control">
-                                            {{ $admin->mobile }}
-                                            @if (is_null($admin->mobile_verified_at))
-                                                <span class="badge badge-danger float-right">Not Verified</span>
-                                            @else
-                                                <span class="badge badge-success float-right">Verified</span>
-                                            @endif
+                @endif
+
+                @if (session()->has('otp_verified'))
+                    <div class="alert alert-success alert-block" role="alert">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        {{ session('otp_verified') }}
+                    </div>
+                @endif
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">UPDATE EMAIL ADDRESS OF</h3>
+                            </div>
+                            <form method="POST" class="form-horizontal"
+                                action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <x-label for="inputEmail3" class="col-sm-3 col-form-label">Email</x-label>
+                                        <div class="col-sm-9">
+                                            <div class="form-control">
+                                                {{ $admin->email }}
+                                                @if (is_null($admin->email_verified_at))
+                                                    <span class="badge badge-danger float-right">Not Verified</span>
+                                                @else
+                                                    <span class="badge badge-success float-right">Verified</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                @if ($mobile_verification_code)
-                                    <div class="form-group row">
-                                        <x-label for="inputEmail3" class="col-sm-3 col-form-label">Enter OTP</x-label>
-                                        <div class="col-sm-9">
-                                            <input type="hidden" name="mobile" value="1">
-                                            <input type="text" class="form-control" name="otp"
-                                                placeholder="Enter Mobile OTP">
+                                    @if ($email_verification_code)
+                                        <div class="form-group row">
+                                            <x-label for="inputEmail3" class="col-sm-3 col-form-label">Enter
+                                                OTP</x-label>
+                                            <div class="col-sm-9">
+                                                <input type="hidden" name="email" value="1">
+                                                <input type="text" class="form-control" name="otp"
+                                                    placeholder="Enter Email OTP">
+                                            </div>
                                         </div>
+                                    @endif
+                                </div>
+                                @if (is_null($admin->email_verified_at))
+                                    <div class="card-footer">
+                                        @if ($email_verification_code)
+                                            <button type="submit" class="btn btn-info" name="verifyotp"
+                                                value="verifyotp">Verify</button>
+                                        @endif
+                                        <button type="submit" class="btn btn-default float-right" name="getemailotp"
+                                            value="getemailotp">
+                                            @if (!$email_verification_code)
+                                                Get OTP
+                                            @else
+                                                Resend OTP
+                                            @endif
+                                        </button>
                                     </div>
                                 @endif
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">UPDATE MOBILE NUMBER OF</h3>
                             </div>
-                            @if (is_null($admin->mobile_verified_at))
-                                <div class="card-footer">
+                            <form method="POST" class="form-horizontal"
+                                action="{{ route('manage.profile.verified-otp', ['admin' => $admin->id]) }}">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <x-label for="inputEmail3" class="col-sm-3 col-form-label">Mobile
+                                            Number</x-label>
+                                        <div class="col-sm-9">
+                                            <div class="form-control">
+                                                {{ $admin->mobile }}
+                                                @if (is_null($admin->mobile_verified_at))
+                                                    <span class="badge badge-danger float-right">Not Verified</span>
+                                                @else
+                                                    <span class="badge badge-success float-right">Verified</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                     @if ($mobile_verification_code)
-                                        <button type="submit" class="btn btn-info" name="verifyotp"
-                                            value="verifyotp">Verify</button>
+                                        <div class="form-group row">
+                                            <x-label for="inputEmail3" class="col-sm-3 col-form-label">Enter
+                                                OTP</x-label>
+                                            <div class="col-sm-9">
+                                                <input type="hidden" name="mobile" value="1">
+                                                <input type="text" class="form-control" name="otp"
+                                                    placeholder="Enter Mobile OTP">
+                                            </div>
+                                        </div>
                                     @endif
-                                    <button type="submit" class="btn btn-default float-right" name="getmobileotp"
-                                        value="getmobileotp">
-                                        @if (!$mobile_verification_code)
-                                            Get OTP
-                                        @else
-                                            Resend OTP
-                                        @endif
-                                    </button>
                                 </div>
-                            @endif
-                        </form>
+                                @if (is_null($admin->mobile_verified_at))
+                                    <div class="card-footer">
+                                        @if ($mobile_verification_code)
+                                            <button type="submit" class="btn btn-info" name="verifyotp"
+                                                value="verifyotp">Verify</button>
+                                        @endif
+                                        <button type="submit" class="btn btn-default float-right"
+                                            name="getmobileotp" value="getmobileotp">
+                                            @if (!$mobile_verification_code)
+                                                Get OTP
+                                            @else
+                                                Resend OTP
+                                            @endif
+                                        </button>
+                                    </div>
+                                @endif
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -307,7 +311,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
+
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Upload</button>
                 </div>

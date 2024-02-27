@@ -182,7 +182,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card-body -->
+
                 <div class="card-footer">
                     <x-admin.form-actions :actions="[
                         'update' => true,

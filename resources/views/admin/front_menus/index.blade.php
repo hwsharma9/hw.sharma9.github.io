@@ -36,20 +36,22 @@
             <x-slot name="title">
                 {{ __($title . ' List') }}
             </x-slot>
-            <input type="hidden" id="nestable-output">
-            <div class="row">
-                <div class="col-sm-12">
-                    <menu id="nestable-menu">
-                        <button class="btn btn-danger" type="button" data-action="expand-all"><i
-                                class="fa fa-plus-circle"></i> Expand All</button>
-                        <button class="btn btn-warning" type="button" data-action="collapse-all"><i
-                                class="fa fa-minus-circle"></i> Collapse All</button>
-                    </menu>
+            <div class="card-body">
+                <input type="hidden" id="nestable-output">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <menu id="nestable-menu">
+                            <button class="btn btn-danger" type="button" data-action="expand-all"><i
+                                    class="fa fa-plus-circle"></i> Expand All</button>
+                            <button class="btn btn-warning" type="button" data-action="collapse-all"><i
+                                    class="fa fa-minus-circle"></i> Collapse All</button>
+                        </menu>
+                    </div>
                 </div>
-            </div>
-            <div class="cf nestable-items">
-                <div class="dd" id="nestable">
-                    <x-admin.front-menu-tree :menus="$menus" class="dd-list" />
+                <div class="cf nestable-items">
+                    <div class="dd" id="nestable">
+                        <x-admin.front-menu-tree :menus="$menus" class="dd-list" />
+                    </div>
                 </div>
             </div>
         </x-admin.container-card>

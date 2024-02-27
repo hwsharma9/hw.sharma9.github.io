@@ -36,17 +36,19 @@
             <x-slot name="title">
                 {{ __('MEDIA') }}
             </x-slot>
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>S. No.</th>
-                        <th>File</th>
-                        <th>Created By</th>
-                        <th>Updated By</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card-body">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>File</th>
+                            <th>Created By</th>
+                            <th>Updated By</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </x-admin.container-card>
     </x-slot>
     @push('scripts')

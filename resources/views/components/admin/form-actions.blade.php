@@ -16,7 +16,7 @@
 <button type="reset" class="btn btn-secondary">Clear</button>
 @endif --}}
 @if (array_key_exists('back', $actions))
-    <a href="{{ $actions['back'] }}" class="btn btn-light">Back</a>
+    <a href="{{ $actions['back'] }}" class="btn btn-secondary">Back</a>
 @endif
 {{-- @if (array_key_exists('extra', $actions))
     @if (is_array($actions['extra']))
