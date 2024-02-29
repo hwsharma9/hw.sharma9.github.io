@@ -50,7 +50,6 @@
             .upload__img-box {
                 width: 70px;
                 padding: 0 10px;
-                margin-bottom: 10px;
             }
 
             .upload__img-close {
@@ -85,10 +84,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border: 1px solid gray;
-                margin-top: 1px;
-                padding-left: 2px;
-                padding-right: 2px;
+                border: 1px solid #ced4da;
+                margin-bottom: 10px;
+                padding: 22px 10px;
             }
         </style>
     @endpush
@@ -151,15 +149,15 @@
                             </div>
                         </div>
                         <div class="col-md-6 upload-file">
-                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                <legend>Course Thumbnail</legend>
+                            <div class="col-md-12 upload-file">
+                                <label>Course Thumbnail</label>
                                 <div class="form-group">
                                     <div class="upload-row mp-1">
                                         <input type="file" name="course_thumbnail" class="course_thumbnail"
                                             id="course_thumbnail" accept="image/png, image/jpeg" />
                                     </div>
                                 </div>
-                            </fieldset>
+                            </div>
                         </div>
                     </div>
                     <div class="row" id="topics_container"></div>
@@ -204,10 +202,10 @@
                     var editor = CKEDITOR.instances[idname];
                     var ckValue = GetTextFromHtml(editor.getData()).replace(/<[^>]*>/gi, '').trim();
                     if (ckValue.length === 0) {
-                        //if empty or trimmed value then remove extra spacing to current control  
+                        //if empty or trimmed value then remove extra spacing to current control
                         $(element).val(ckValue);
                     } else {
-                        //If not empty then leave the value as it is  
+                        //If not empty then leave the value as it is
                         $(element).val(editor.getData());
                     }
                     return $(element).val().length > 0;
@@ -290,7 +288,7 @@
                         ],
                         language: "en",
                         width: "100%",
-                        height: "200px",
+                        height: "60px",
                     });
                 }
 
@@ -352,8 +350,8 @@
                                         var html =
                                             `<div class="upload__img-wrap">
                                             <div class='upload__img-box'>
-                                                <div style='background-image: url(${image})' 
-                                                    data-toggle='tooltip' data-placement='top' 
+                                                <div style='background-image: url(${image})'
+                                                    data-toggle='tooltip' data-placement='top'
                                                     title='${f.name}' class='img-bg'>
                                                 </div>
                                             </div>

@@ -49,9 +49,8 @@
             }
 
             .upload__img-box {
-                width: 70px;
+                width: 50px;
                 padding: 0 10px;
-                margin-bottom: 10px;
             }
 
             .upload__img-close,
@@ -91,10 +90,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border: 1px solid gray;
-                margin-top: 1px;
-                padding-left: 2px;
-                padding-right: 2px;
+                border: 1px solid #ced4da;
+                margin-bottom: 10px;
+                padding: 10px 10px;
             }
         </style>
     @endpush
@@ -120,127 +118,135 @@
             </div>
         </div>
     </x-slot>
-
     @php
-        $action = view('components.admin.course.topic', [
-            'configuration' => $configuration ?? null,
-            'topic' => null,
-            'loop' => null,
-        ])->render();
+        // $action = view('components.admin.course.topic', [
+        //     'configuration' => $configuration,
+        //     'topic' => null,
+        //     'loop' => null,
+        // ])->render();
     @endphp
     <x-slot name="content">
         <x-admin.container-card>
             <x-slot name="title">
                 {{ __('Edit Course') }}
             </x-slot>
-            <form method="POST"
-                action="{{ route('manage.courses.edit', ['course' => encrypt($course->id), 'fk_course_category_courses_id' => encrypt($course->assignedAdmin->fk_course_category_courses_id)]) }}"
-                enctype="multipart/form-data" id="quickForm">
-                @csrf
-                <input type="hidden" name="replaced_media_id">
-                <input type="hidden" name="saved_as">
+            <div class="card-body p-0">
+                <form method="POST"
+                    action="{{ route('manage.courses.edit', ['course' => encrypt($course->id), 'fk_course_category_courses_id' => encrypt($course->assignedAdmin->fk_course_category_courses_id)]) }}"
+                    enctype="multipart/form-data" id="quickForm">
+                    @csrf
+                    <div style="padding: 1.25rem;">
+                        <input type="hidden" name="replaced_media_id">
+                        <input type="hidden" name="saved_as">
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <x-label>Category <span class="text-danger">*</span></x-label>
-                                <input class="form-control" disabled
-                                    value="{{ $alloted_admin->courseCategory->category_name_en }}" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <x-label>Category <span class="text-danger">*</span></x-label>
+                                    <input class="form-control" disabled
+                                        value="{{ $alloted_admin->courseCategory->category_name_en }}" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <x-label>Course</x-label>
+                                    <input class="form-control" disabled
+                                        value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <x-label>Course</x-label>
-                                <input class="form-control" disabled
-                                    value="{{ $alloted_admin->categoryCourse->course_name_en }}" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <x-label for="description">Course Description <span
+                                            class="text-danger">*</span></x-label>
+                                    <textarea type="text" name="description" class="form-control editor" id="course_description"
+                                        placeholder="Enter Course Description">{{ old('description', $course->update_description ? $course->update_description : $course->description) }}</textarea>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <x-label for="description">Course Description <span
-                                        class="text-danger">*</span></x-label>
-                                <textarea type="text" name="description" class="form-control editor" id="course_description"
-                                    placeholder="Enter Course Description">{{ old('description', $course->update_description ? $course->update_description : $course->description) }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6 upload-file">
-                            <div class="d-flex">
-                                <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                    <legend>Course Thumbnail</legend>
-                                    <div class="form-group">
-                                        @if ($course->upload)
-                                            <div class="upload-row mp-1 flex-wrap">
-                                                <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                                    id="course_thumbnail" data-files="{{ $course->upload }}"
-                                                    data-id="{{ encrypt($course->upload->id) }}"
-                                                    accept="image/png, image/jpeg" />
-                                                <div class="upload__img-wrap"></div>
-                                                <button type="button" class="btn btn-danger delete_upload_row"
-                                                    data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        @else
-                                            <div class="upload-row mp-1 flex-wrap">
-                                                <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                                    id="course_thumbnail" accept="image/png, image/jpeg" />
-                                            </div>
-                                        @endif
+                            <div class="col-md-6 upload-file">
+                                <div class="d-flex">
+                                    <div class="col-md-12 upload-file">
+                                        <label>Course Thumbnail</label>
+                                        <div class="form-group">
+                                            @if ($course->upload)
+                                                <div class="upload-row mp-1 flex-wrap">
+                                                    <input type="file" name="course_thumbnail"
+                                                        class="course_thumbnail" id="course_thumbnail"
+                                                        data-files="{{ $course->upload }}"
+                                                        data-id="{{ encrypt($course->upload->id) }}"
+                                                        accept="image/png, image/jpeg" />
+                                                    <div class="upload__img-wrap"></div>
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-sm delete_upload_row"
+                                                        data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="upload-row mp-1 flex-wrap">
+                                                    <input type="file" name="course_thumbnail"
+                                                        class="course_thumbnail" id="course_thumbnail"
+                                                        accept="image/png, image/jpeg" />
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-                                </fieldset>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" id="topics_container">
-                        @if ($course->topics->count())
-                            @foreach ($course->topics as $topic)
-                                @php
+                        <div class="row" id="topics_container">
+                            @if ($course->topics->count())
+                                @foreach ($course->topics as $topic)
+                                    <x-admin.course.topic :configuration="$configuration" :topic="$topic" :loop="$loop" />
+                                    {{-- @php
                                     $html = view('components.admin.course.topic', [
                                         'configuration' => $configuration ?? null,
                                         'topic' => $topic,
                                         'loop' => $loop,
                                     ])->render();
                                     echo $html;
+                                @endphp --}}
+                                @endforeach
+                            @else
+                                @php
+                                    echo $action;
                                 @endphp
-                            @endforeach
-                        @else
-                            @php
-                                echo $action;
-                            @endphp
-                        @endif
+                            @endif
+                        </div>
+                        {{-- <div class="row">
+                            <div class="col-md-6">
+                                <x-admin.status-dropdown :selected="$course->status" />
+                            </div>
+                        </div> --}}
+                        {{-- <div class="row">
+                            <div class="col-md-6">
+                                <x-admin.captcha />
+                            </div>
+                        </div> --}}
                     </div>
-                    {{-- <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.status-dropdown :selected="$course->status" />
+                    <div class="card-footer ">
+                        <div class="row">
+                            <div class="col-md-6 mb-2 mt-2">
+
+                                <button type="submit" class="btn btn-success" name="action" value="request">Request to
+                                    Approve</button>
+                                <button type="submit" class="btn btn-primary" name="action" value="draft">Save as
+                                    Draft</button>
+                                @if ($course->requests->count())
+                                    <button type="button" class="btn btn-secondary"
+                                        id="show-remark-modal">Action</button>
+                                @endif
+                            </div>
+                            <div class="col-md-6 mb-2 mt-2" style="text-align: right">
+                                <button type="button" class="btn btn-secondary" id="add_topic"><i
+                                        class="fas fa-plus"></i>
+                                    Add More Topics</button>
+                            </div>
+                        </div>
                     </div>
-                </div> --}}
-                    {{-- <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.captcha />
-                    </div>
-                </div> --}}
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <span>
-                        {{-- <x-admin.form-actions :actions="[
-                            'update' => true,
-                        ]" /> --}}
-                        <button type="submit" class="btn btn-success" name="action" value="request">Request to
-                            Approve</button>
-                        <button type="submit" class="btn btn-primary" name="action" value="draft">Save as
-                            Draft</button>
-                        @if ($course->requests->count())
-                            <button type="butotn" class="btn btn-secondary" id="show-remark">Action</button>
-                        @endif
-                    </span>
-                    <span>
-                        <button type="button" class="btn btn-secondary" id="add_topic">Add More Topics</button>
-                    </span>
-                </div>
-            </form>
+                </form>
+            </div>
         </x-admin.container-card>
         <div class="modal fade" id="remark-modal">
             <div class="modal-dialog modal-xl">
@@ -340,7 +346,7 @@
                     ],
                     language: "en",
                     width: "100%",
-                    height: "200px",
+                    height: "60px",
                 });
             }
 
@@ -378,6 +384,8 @@
                     showConfirmButton: false,
                     timer: 5000
                 });
+
+                // Data table for requests and remarks
                 var table = $('#dataTable').DataTable({
                     processing: true,
                     serverSide: false,
@@ -424,17 +432,20 @@
                         },
                     ],
                 });
-                $("#show-remark").on("click", function() {
+
+                // Opens Remark Modal
+                $("#show-remark-modal").on("click", function() {
                     $("#remark-modal").modal("show");
                     $("#remark").closest('.row').hide();
                     $("#remark").val('');
                     table.ajax.reload();
                 });
+
+                // Show remark on textarea element
                 $(document).on("click", ".view-remark", function() {
                     $("#remark").closest('.row').show();
                     $("#remark").val($(this).attr('data-remark'));
                 });
-
 
                 function countUploadRows(element) {
                     let file_box = $(element).closest('.form-group').find('.upload-row');
@@ -484,49 +495,6 @@
                     return is_fine;
                 }, "File size must be up to 2 MB.");
 
-                function formSubmit(route, data, is_files_uploaded) {
-
-                    $.ajax({
-                        type: "POST",
-                        url: route,
-                        data: data,
-                        cache: false,
-                        dataType: 'json',
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                'content')
-                        },
-                        success: function(data) {
-                            $(".ss-validation").remove();
-                            // if (data.captcha) {
-                            //     $('input[name=captcha]').val('');
-                            //     $('.captcha-image').attr('src', data.captcha);
-                            // }
-                            if (data.status == true) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: data.message
-                                });
-
-                                // If any file is uploaded reload the page.
-                                // Issue is we will need to update course_video_id of each topic
-                                // if (is_files_uploaded) {}
-                                location.reload();
-                            } else {
-                                $("#quickForm .card-body:first").prepend(data
-                                    .errors);
-                                $("html, body").animate({
-                                    scrollTop: 0
-                                }, 500);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.log(error);
-                        }
-                    });
-                }
 
                 var validator = jQuery("#quickForm").validate({
                     rules: {
@@ -547,8 +515,6 @@
                         // },
                     },
                     errorPlacement: function(error, element) {
-                        // console.log('element name => ', element.attr("name"));
-                        console.log('element => ', element.prop('localName'));
                         if (
                             element.attr("name").includes('[course_pdf][]') ||
                             element.attr("name").includes('[course_ppt][]') ||
@@ -556,7 +522,6 @@
                         ) {
                             error.insertAfter($(element).closest('.form-group'));
                         } else if (element.prop('localName') === 'textarea') {
-                            console.log('textarea => ', element.attr('id'));
                             error.insertAfter($('#cke_' + element.attr('id')));
                         } else {
                             error.insertAfter(element);
@@ -565,21 +530,66 @@
                     submitHandler: function(form) {
                         $(document).ready(function() {
                             if ($('input[name="saved_as"]').attr('value') == 'draft') {
-                                let route = $(form).attr('action');
                                 let data = $(form).serializeArray();
-                                var fd = new FormData();
-                                data.forEach(d => fd.append(d.name, d.value))
-                                let is_files_uploaded = false;
-                                $('input[type="file"]').each(function(e) {
-                                    let file = document.getElementById($(this).attr('id'))
-                                        .files;
-                                    if (file.length) {
-                                        fd.append($(this).attr('name'), file[0]);
-                                        is_files_uploaded = true;
+                                var form_data = new FormData();
+                                data.forEach(d => form_data.append(d.name, d.value))
+
+                                // Append All uploaded files into FormData
+                                $('input[type="file"]').each(function(index, target) {
+                                    if (target.files.length > 0) {
+                                        let file = target.files;
+                                        if (file[0] != undefined) {
+                                            form_data.append(target.name, file[0]);
+                                        }
                                     }
                                 });
-                                formSubmit(route, fd, is_files_uploaded);
+
+                                // Save all data by ajax
+                                $.ajax({
+                                    type: "POST",
+                                    url: $(form).attr('action'),
+                                    data: form_data,
+                                    cache: false,
+                                    dataType: 'json',
+                                    processData: false,
+                                    contentType: false,
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                            'content')
+                                    },
+                                    success: function(data) {
+                                        // Hide the server side validation errors
+                                        $(".ss-validation").remove();
+                                        // if (data.captcha) {
+                                        //     $('input[name=captcha]').val('');
+                                        //     $('.captcha-image').attr('src', data.captcha);
+                                        // }
+                                        if (data.status == true) {
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: data.message
+                                            });
+
+                                            // If any file is uploaded reload the page.
+                                            // Issue is we will need to update course_video_id of each topic
+                                            location.reload();
+                                        } else {
+                                            // Show server side validation errors
+                                            $("#quickForm .card-body:first")
+                                                .prepend(data.errors);
+
+                                            // Scroll the page on top
+                                            $("html, body").animate({
+                                                scrollTop: 0
+                                            }, 500);
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.log(error);
+                                    }
+                                });
                             } else {
+                                // Take confirmation before submit course content for approval to Nodal Officer
                                 let confirmation = confirm(
                                     "Really want to submit this course to be approved?");
                                 if (confirmation) {
@@ -595,6 +605,8 @@
                     $('input[name="saved_as"]').val($(this).attr('value'));
                 });
 
+                // If any media replaced
+                // Store the id of media into input filed comma saperated
                 function AddRemoveReplacedMediaId(id) {
                     id = String(id);
                     let replaced_media_id = $('input[name="replaced_media_id"]');
@@ -608,60 +620,89 @@
                     replaced_media_id.val(input_ids.join(','))
                 }
 
-                $(document).ready(function() {
-                    updateTopicCount();
-                    $('input[type="file"]').each(function(e) {
-                        let target = $(this)[0];
-                        let input_id = $(target).attr('id');
-                        let img_wrap = $(target).siblings('.upload__img-wrap');
-                        if ($(target).attr('data-files')) {
-                            let file = JSON.parse($(target).attr('data-files'));
-                            // console.log(file);
 
-                            let image = ''
-                            if (file.file_mime_type.match('image.*')) {
-                                let asset = '{{ asset('') }}';
-                                image = asset + 'storage/' + file
-                                    .file_path.replace(
-                                        /\\/g, "/");
-                            } else if (file.file_mime_type.match('application/pdf')) {
-                                image =
-                                    "{{ asset('dist/img/pdf.png') }}";
-                            } else if (file.file_mime_type.match('video.*')) {
-                                image =
-                                    "{{ asset('dist/img/video.png') }}";
-                            } else if (['application/vnd.ms-powerpoint',
-                                    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-                                ].includes(file.file_mime_type)) {
-                                image =
-                                    "{{ asset('dist/img/ppt.png') }}";
-                            } else if (['application/msword',
-                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                                ].includes(file.file_mime_type)) {
-                                image =
-                                    "{{ asset('dist/img/doc.png') }}";
-                            }
-
-                            var html =
-                                `<div class='upload__img-box'>
+                // Create image preview
+                function imagePreview(image, name) {
+                    return `<div class='upload__img-box'>
                                     <div style='background-image: url(${image})'
                                         data-toggle='tooltip' data-placement='top'
-                                        title='${file.original_name}' class='img-bg'>
+                                        title='${name}' class='img-bg'>
                                     </div>
                                 </div>`;
-                            img_wrap.append(html);
+                }
+
+                // Return image path fetch from DB Object or recent Uploaded file
+                function getImageByMimeType(file, e) {
+                    let image = '';
+                    let mime_type = file.hasOwnProperty('file_mime_type') ? file.file_mime_type : file.type;
+                    let asset = '{{ asset('') }}';
+                    if (mime_type.match('image.*')) {
+                        if (file.hasOwnProperty('file_mime_type')) {
+                            image = asset + 'storage/' + file
+                                .file_path.replace(
+                                    /\\/g, "/");
+                        } else {
+                            image = e.target.result;
                         }
-                        let validation = $(target).attr('data-validations');
-                        if (validation) {
-                            validation = JSON.parse(validation);
-                            $(`#${input_id}`).rules("add", validation);
-                        }
-                    });
+                    } else if (mime_type.match('application/pdf')) {
+                        image = asset + 'dist/img/pdf.png';
+                    } else if (mime_type.match('video.*')) {
+                        image = asset + 'dist/img/video.png';
+                    } else if (['application/vnd.ms-powerpoint',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                        ].includes(mime_type)) {
+                        image = asset + 'dist/img/ppt.png';
+                    } else if (['application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                        ].includes(mime_type)) {
+                        image = asset + 'dist/img/doc.png';
+                    }
+                    return image;
+                }
+
+                // Add validation into validator
+                function addValidation(target) {
+                    let input_id = $(target).attr('id');
+
+                    // Get the validation JSON from element
+                    let validation = $(target).attr('data-validations');
+
+                    // If validation found
+                    if (validation != undefined) {
+                        // Convert the string into JSON
+                        validation = JSON.parse(validation);
+                        // Add rule into jquery validator
+                        $(`#${input_id}`).rules("add", validation);
+                    }
+                }
+
+                function parseFileData(target) {
+                    let data_files = target.getAttribute('data-files');
+                    return (data_files) ? JSON.parse(data_files) : null;
+                }
+
+                $(document).ready(function() {
+                    setTopicFieldsName();
+
                     ImgUpload();
 
                     function ImgUpload() {
                         var imgWrap = "";
                         var imgArray = [];
+
+                        // Read all input type=file and
+                        // Fetch image data to create image preview
+                        $('input[type="file"]').each(function(index, target) {
+                            let file = parseFileData(target);
+                            let img_wrap = $(target).siblings('.upload__img-wrap');
+                            if (file) {
+                                let image = getImageByMimeType(file, target);
+                                var html = imagePreview(image, file.original_name);
+
+                                img_wrap.append(html);
+                            }
+                        });
+
                         $(document).on('change', 'input[type="file"]', function(e) {
 
                             let check_id = $(this).attr('data-id');
@@ -682,71 +723,29 @@
                             var filesArr = Array.prototype.slice.call(files);
 
                             filesArr.forEach(function(file, index) {
-
                                 var reader = new FileReader();
+
                                 reader.onload = function(e) {
-                                    let image = '';
-                                    if (file.type.match('image.*')) {
-                                        image = e.target.result;
-                                    } else if (file.type.match('application/pdf')) {
-                                        image =
-                                            "{{ asset('dist/img/pdf.png') }}";
-                                    } else if (file.type.match('video.*')) {
-                                        image =
-                                            "{{ asset('dist/img/video.png') }}";
-                                    } else if (['application/vnd.ms-powerpoint',
-                                            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-                                        ].includes(file.type)) {
-                                        image =
-                                            "{{ asset('dist/img/ppt.png') }}";
-                                    } else if (['application/msword',
-                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                                        ].includes(file.type)) {
-                                        image =
-                                            "{{ asset('dist/img/doc.png') }}";
-                                    }
-                                    var html =
-                                        `<div class="upload__img-wrap">
-                                            <div class='upload__img-box'>
-                                                <div style='background-image: url(${image})'
-                                                    data-toggle='tooltip' data-placement='top'
-                                                    title='${file.name}' class='img-bg'>
-                                                </div>
-                                            </div>
-                                        </div>`;
+                                    let image = getImageByMimeType(file, e);
+                                    var html = imagePreview(image, file.name);
                                     html = html +
-                                        '<button type="button" class="btn btn-danger remove_upload_row"><i class="fas fa-times"></i></button>';
-                                    // console.log(html);
-                                    // console.log($(this).attr("id"));
+                                        '<button type="button" class="btn btn-danger btn-sm remove_upload_row"><i class="fas fa-times"></i></button>';
                                     img_wrap.find(
                                         '.upload__img-wrap, .remove_upload_row, .delete_upload_row'
                                     ).remove();
                                     img_wrap.append(html);
-
                                 }
                                 reader.readAsDataURL(file);
-
                             });
-                            // let validation = $(target).attr('data-validations');
-                            // if (validation) {
-                            //     validation = JSON.parse(validation);
-                            //     $(`#${check_id}`).rules("add", validation);
-                            // }
-
                         });
-
-                        // console.log(validator.settings.rules);
-                        // updateTopicCount();
                     }
                     reinitCKIntances()
-
-                    // console.log(validator.form());
                 });
 
                 /*
                  * This function sets the name updates the id of topic input and textarea.
                  */
-                function updateTopicCount(is_validate = true) {
+                function setTopicFieldsName(is_validate = true) {
                     // Check the number of topics exists in document
                     let topic_count = $(".topic_html").length;
 
@@ -798,33 +797,27 @@
                                     // Make id attribute of element
                                     find_element.attr('id', input_id);
 
-                                    // Get the validation JSON from element
-                                    let validation = $(find_element).attr('data-validations');
-
-                                    // If validation found
-                                    if (validation != undefined) {
-                                        // Convert the string into JSON
-                                        validation = JSON.parse(validation);
-                                        // Add rule into jquery validator
-                                        $(`#${input_id}`).rules("add", validation);
-                                    }
+                                    addValidation(find_element);
                                 });
                             }
                         }
                     }
+                    // console.log(validator.settings.rules);
                 }
 
+                // Add new topic html into form
                 $(document).on("click", "#add_topic", function() {
                     // $("#quickForm").validate();
                     if (validator.form()) {
                         $("#topics_container").append(`<?php echo $action; ?>`);
-                        updateTopicCount();
+                        setTopicFieldsName();
                         reinitCKIntances();
                     }
                 });
 
-                $(document).on("click", ".remove_html", function() {
-                    updateTopicCount();
+                // Remove the topic from form
+                $(document).on("click", ".remove_topic", function() {
+                    setTopicFieldsName();
 
                     /*
                      * Remove rules from the jquery validator for the topic going to be removed from DOM
@@ -842,41 +835,64 @@
                     $(this).closest('.topic_html').remove();
                 });
 
-                function disableEnableAddFileButton(element) {
-                    let button = $(element).closest('.upload-file').find('.add-file');
-                    // console.log(button);
-                    // console.log($(element).closest('.upload-file').find('.upload-row').length);
-                    if ($(element).closest('.upload-file').find('.upload-row').length == 2) {
-                        button.prop('disabled', true);
-                    } else {
-                        button.prop('disabled', false);
-                    }
+                function countUploadRows(element) {
+                    let file_box = $(element).closest('.form-group').find('.upload-row');
+                    return !(file_box.length > 2);
                 }
 
+                function disableEnableAddFileButton(element) {
+                    let button = $(element).closest('.upload-file').find('.add-file');
+                    button.prop('disabled', ($(element).closest('.upload-file').find('.upload-row').length == 2));
+                }
+
+                // Check if this is last upload_row
+                function checkHasLastUploadHtml(element) {
+                    let upload_row_html = '';
+                    if (element.find('.upload-row').length == 1) {
+                        let input_file = element.find(
+                                '.upload-row input[type=file]')
+                            .removeAttr('data-files');
+                        let html = document.getElementById($(input_file[0])
+                            .attr(
+                                'id')).outerHTML;
+                        upload_row_html = createUploadRow(html);
+                    }
+                    return upload_row_html;
+                }
+
+                function createUploadRow(html, button = null) {
+                    let button_html = '';
+                    if (button) {
+                        if (button == 'remove') {
+                            button_html = `<button type="button" class="btn btn-danger btn-sm remove_upload_row">
+                                <i class="fas fa-times"></i>
+                            </button>`;
+                        }
+                    }
+                    return `<div class="upload-row mp-1 flex-wrap">
+                            ${html}${button_html}
+                        </div>`;
+                }
+
+                // Add new input element to upload file
                 $(document).on("click", ".add-file", function() {
                     let html = $(this).closest(".upload-file")
                         .find('div.upload-row:eq(0) input[type=file]').clone();
-                    // console.log(html[0].id);
-                    // console.log(validator.element(`#${html[0].id}`));
                     if (validator.element(`#${html[0].id}`) === false) {
                         return;
                     }
                     html.removeAttr('data-files data-id name');
                     var el = html[0];
-                    let upload_row =
-                        `<div class="upload-row mp-1 flex-wrap">
-                            ${el.outerHTML}
-                            <button type="button" class="btn btn-danger remove_upload_row">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>`
+                    let upload_row = createUploadRow(el.outerHTML, 'remove');
                     $(this).closest(".upload-file").find('.form-group').append(upload_row);
-                    updateTopicCount();
+                    setTopicFieldsName();
                     disableEnableAddFileButton($(this));
                 });
 
-                $(document).on("click", ".remove_upload_row", function() {
+                // Remove upload file row
+                $(document).on("click", ".remove_upload_row", function(e) {
                     let input_file = $(this).siblings('input[type=file]');
+
                     // Check if file is already uploaded
                     if (id = input_file.attr('data-id')) {
                         AddRemoveReplacedMediaId(id);
@@ -884,41 +900,41 @@
                         let delete_url = `${window.location.origin}/ajax/media/${id}/delete`;
                         var fileBuffer = new DataTransfer();
                         document.getElementById(input_file.attr('id')).files = fileBuffer.files;
-                        let image_div = $(this).siblings('.upload__img-wrap').find(
-                            '.upload__img-box .img-bg')
+                        let image_div = $(this).siblings('.upload__img-wrap')
+                            .find('.upload__img-box .img-bg')
                         image_div.attr('title', file_data.original_name);
-                        if (file_data.file_mime_type.match('image.*')) {
-                            // background-image: url(${image})
-                            let image_path = `${window.location.origin}/storage/${file_data.file_path.replace(
-                                        /\\/g, "/")}`;
+
+                        let image_path = getImageByMimeType(file_data, e);
+                        // if (file_data.file_mime_type.match('image.*')) {
+                        if (image_path) {
+                            // let image_path = `${window.location.origin}/storage/${file_data.file_path.replace(/\\/g, "/")}`;
                             image_div.css("background-image", `url(${image_path})`);
                         }
-                        $(this).removeClass('remove_upload_row').addClass('delete_upload_row').attr(
-                            'data-route', delete_url);
-                        $(this).find('i').removeClass('fa-times').addClass('fa-trash')
-                        $(this).closest('.upload-file').find('.error').remove();
+                        $(this).removeClass('remove_upload_row')
+                            .addClass('delete_upload_row')
+                            .attr('data-route', delete_url);
+
+                        $(this).find('i')
+                            .removeClass('fa-times')
+                            .addClass('fa-trash')
+
+                        $(this).closest('.upload-file')
+                            .find('.error')
+                            .remove();
                     } else {
                         let that = $(this).closest('.form-group');
                         let first_input_field = $(this).closest('.form-group').find(
                             'div.upload-row:eq(0) input[type=file]');
-                        // console.log(countUploadRows(first_input_field));
-                        let id = $(this).closest('.form-group').find(
-                                'div.upload-row:eq(0) input[type=file]')
+
+                        let id = $(this).closest('.form-group')
+                            .find('div.upload-row:eq(0) input[type=file]')
                             .attr('id');
-                        // console.log(id);
-                        updateTopicCount();
+
+                        setTopicFieldsName();
                         let element = $(this);
 
                         // Check if this is last upload_row
-                        let upload_row_html = '';
-                        if (that.find('.upload-row').length == 1) {
-                            let input_file = that.find('.upload-row input[type=file]')
-                                .removeAttr('data-files').removeClass('valid').removeClass('error');
-                            let html = document.getElementById($(input_file[0]).attr(
-                                'id')).outerHTML;
-                            upload_row_html =
-                                `<div class="upload-row mp-1 flex-wrap">${html}</div>`;
-                        }
+                        let upload_row_html = checkHasLastUploadHtml(that)
 
                         element.closest('.upload-row').remove();
                         // $("#quickForm").data('validator').element('#' + id);
@@ -929,10 +945,13 @@
                         if (upload_row_html != '') {
                             that.prepend(upload_row_html);
                         }
-                        $(that).closest('.upload-file').find('label.error').remove();
+                        $(that).closest('.upload-file')
+                            .find('label.error')
+                            .remove();
                     }
                 });
 
+                // Delete Uploaded file by ajax
                 $(document).on("click", ".delete_upload_row", function() {
                     let that = $(this).closest('.form-group');
                     const route = $(this).attr('data-route');
@@ -957,17 +976,7 @@
                                     });
 
                                     // Check if this is last upload_row
-                                    let upload_row_html = '';
-                                    if (that.find('.upload-row').length == 1) {
-                                        let input_file = that.find(
-                                                '.upload-row input[type=file]')
-                                            .removeAttr('data-files');
-                                        let html = document.getElementById($(input_file[0])
-                                            .attr(
-                                                'id')).outerHTML;
-                                        upload_row_html =
-                                            `<div class="upload-row mp-1 flex-wrap">${html}</div>`;
-                                    }
+                                    let upload_row_html = checkHasLastUploadHtml(that);
                                     image_box.remove();
                                     disableEnableAddFileButton(that);
 
@@ -983,8 +992,8 @@
                     }
                 });
 
+                // Delete Whole topic by ajax
                 $(document).on("click", ".delete_topic", function() {
-                    console.log('here');
                     let that = $(this);
                     let confirmation = confirm('Do you really want to delete this topic?');
                     const route = $(this).attr('data-route');
@@ -1005,7 +1014,7 @@
                                         title: data.message
                                     });
                                     that.closest('.topic_html').remove();
-                                    updateTopicCount();
+                                    setTopicFieldsName();
                                 }
                             },
                             error: function(xhr, status, error) {
@@ -1017,7 +1026,6 @@
 
                 $(document).on("click", ".add-remark", function(e) {
                     e.preventDefault();
-                    console.log("here");
                 });
             });
         </script>

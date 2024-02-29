@@ -7,16 +7,17 @@
                         {{ $title }}
                     </h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <button type="button" class="btn btn-tool bg-info" data-card-widget="collapse" title="Collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                     </div>
                 </div>
-
-                @if ($showmessage)
-                    <x-flash-message />
-                    <x-auth-validation-errors />
-                @endif
+                <div>
+                    @if ($showmessage)
+                        <x-flash-message />
+                        <x-auth-validation-errors />
+                    @endif
+                </div>
                 {{ $slot }}
             </div>
         </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Traits\Admined;
 use App\Http\Traits\Encryptable;
+use App\Http\Traits\HasStatus;
 use App\Http\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ class CourseConfiguration extends Model
     use Admined;
     use Encryptable;
     use Loggable;
+    use HasStatus;
 
     protected $table = 'tbl_course_configurations';
     protected $fillable = [

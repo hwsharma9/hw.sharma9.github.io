@@ -33,229 +33,232 @@
                 action="{{ route('manage.course_configurations.edit', ['course_configuration' => $course_configuration->id]) }}"
                 id="quickForm">
                 @csrf
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="course_category_id">Course Category <span
-                                    class="text-danger">*</span></x-label>
-                            <select name="course_category_id" id="course_category_id" class="form-control"
-                                style="width: 100%;">
-                                <option value="">Select Course Category</option>
-                                @if ($course_categories)
-                                    @foreach ($course_categories as $course_category)
-                                        <option value="{{ $course_category->id }}"
-                                            {{ old('course_category_id', $course_configuration->fk_course_category_id) == $course_category->id ? 'selected' : '' }}>
-                                            {{ $course_category->category_name_en }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="course_category_courses_id">Course <span
-                                    class="text-danger">*</span></x-label>
-                            <select name="course_category_courses_id" id="course_category_courses_id"
-                                class="form-control" style="width: 100%;">
-                                <option value="">Select Course</option>
-                                @if (old('course_category_id', $course_configuration->fk_course_category_id) && $course_categories)
-                                    @php
-                                        $cc = $course_categories->where('id', old('course_category_id', $course_configuration->fk_course_category_id))->first();
-                                    @endphp
-                                    @if ($cc)
-                                        @foreach ($cc->courses as $course_category)
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="course_category_id">Course Category <span
+                                        class="text-danger">*</span></x-label>
+                                <select name="course_category_id" id="course_category_id" class="form-control"
+                                    style="width: 100%;">
+                                    <option value="">Select Course Category</option>
+                                    @if ($course_categories)
+                                        @foreach ($course_categories as $course_category)
                                             <option value="{{ $course_category->id }}"
-                                                {{ old('course_category_courses_id', $course_configuration->fk_course_category_courses_id) == $course_category->id ? 'selected' : '' }}>
-                                                {{ $course_category->course_name_en }}</option>
+                                                {{ old('course_category_id', $course_configuration->fk_course_category_id) == $course_category->id ? 'selected' : '' }}>
+                                                {{ $course_category->category_name_en }}</option>
                                         @endforeach
                                     @endif
-                                @endif
-                            </select>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="course_category_courses_id">Course <span
+                                        class="text-danger">*</span></x-label>
+                                <select name="course_category_courses_id" id="course_category_courses_id"
+                                    class="form-control" style="width: 100%;">
+                                    <option value="">Select Course</option>
+                                    @if (old('course_category_id', $course_configuration->fk_course_category_id) && $course_categories)
+                                        @php
+                                            $cc = $course_categories->where('id', old('course_category_id', $course_configuration->fk_course_category_id))->first();
+                                        @endphp
+                                        @if ($cc)
+                                            @foreach ($cc->courses as $course_category)
+                                                <option value="{{ $course_category->id }}"
+                                                    {{ old('course_category_courses_id', $course_configuration->fk_course_category_courses_id) == $course_category->id ? 'selected' : '' }}>
+                                                    {{ $course_category->course_name_en }}</option>
+                                            @endforeach
+                                        @endif
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <x-label>Please select the course contents as madatory fields</x-label>
-                            <div class="form-control" style="height: 110px;">
-                                <div class="d-flex flex-column justify-content-around">
-                                    @php
-                                        $is_upload_pdf = old('is_upload_pdf', $course_configuration->is_upload_pdf) && in_array(old('is_upload_pdf', $course_configuration->is_upload_pdf), ['on', 1]);
-                                        $is_upload_video = old('is_upload_video', $course_configuration->is_upload_video) && in_array(old('is_upload_video', $course_configuration->is_upload_video), ['on', 1]);
-                                        $is_upload_ppt = old('is_upload_ppt', $course_configuration->is_upload_ppt) && in_array(old('is_upload_ppt', $course_configuration->is_upload_ppt), ['on', 1]);
-                                        $is_upload_doc = old('is_upload_doc', $course_configuration->is_upload_doc) && in_array(old('is_upload_doc', $course_configuration->is_upload_doc), ['on', 1]);
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <x-label>Please select the course contents as madatory fields</x-label>
+                                <div class="form-control" style="height: 110px;">
+                                    <div class="d-flex flex-column justify-content-around">
+                                        @php
+                                            $is_upload_pdf = old('is_upload_pdf', $course_configuration->is_upload_pdf) && in_array(old('is_upload_pdf', $course_configuration->is_upload_pdf), ['on', 1]);
+                                            $is_upload_video = old('is_upload_video', $course_configuration->is_upload_video) && in_array(old('is_upload_video', $course_configuration->is_upload_video), ['on', 1]);
+                                            $is_upload_ppt = old('is_upload_ppt', $course_configuration->is_upload_ppt) && in_array(old('is_upload_ppt', $course_configuration->is_upload_ppt), ['on', 1]);
+                                            $is_upload_doc = old('is_upload_doc', $course_configuration->is_upload_doc) && in_array(old('is_upload_doc', $course_configuration->is_upload_doc), ['on', 1]);
 
-                                        $is_upload_pdf_required = old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required) && in_array(old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required), ['on', 1]);
-                                        $is_upload_video_required = old('is_upload_video_required', $course_configuration->is_upload_video_required) && in_array(old('is_upload_video_required', $course_configuration->is_upload_video_required), ['on', 1]);
-                                        $is_upload_ppt_required = old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required) && in_array(old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required), ['on', 1]);
-                                        $is_upload_doc_required = old('is_upload_doc_required', $course_configuration->is_upload_doc_required) && in_array(old('is_upload_doc_required', $course_configuration->is_upload_doc_required), ['on', 1]);
-                                    @endphp
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" name="is_upload_pdf" class="is_upload"
-                                                {{ (int) $is_upload_pdf == 1 ? 'checked' : '' }} />
-                                            Upload content in pdf file
+                                            $is_upload_pdf_required = old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required) && in_array(old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required), ['on', 1]);
+                                            $is_upload_video_required = old('is_upload_video_required', $course_configuration->is_upload_video_required) && in_array(old('is_upload_video_required', $course_configuration->is_upload_video_required), ['on', 1]);
+                                            $is_upload_ppt_required = old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required) && in_array(old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required), ['on', 1]);
+                                            $is_upload_doc_required = old('is_upload_doc_required', $course_configuration->is_upload_doc_required) && in_array(old('is_upload_doc_required', $course_configuration->is_upload_doc_required), ['on', 1]);
+                                        @endphp
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" name="is_upload_pdf" class="is_upload"
+                                                    {{ (int) $is_upload_pdf == 1 ? 'checked' : '' }} />
+                                                Upload content in pdf file
+                                            </span>
+                                            <span
+                                                style="{{ $is_upload_pdf || $is_upload_pdf_required ? '' : 'display:none' }}">
+                                                <input type="checkbox" name="is_upload_pdf_required"
+                                                    data-ischeck="{{ (int) $is_upload_pdf_required }}"
+                                                    {{ (int) $is_upload_pdf_required == 1 ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                        <span
-                                            style="{{ $is_upload_pdf || $is_upload_pdf_required ? '' : 'display:none' }}">
-                                            <input type="checkbox" name="is_upload_pdf_required"
-                                                data-ischeck="{{ (int) $is_upload_pdf_required }}"
-                                                {{ (int) $is_upload_pdf_required == 1 ? 'checked' : '' }} />
-                                            Is Mandatory
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" name="is_upload_video" class="is_upload"
+                                                    {{ (int) $is_upload_video == 1 ? 'checked' : '' }} />
+                                                Upload video content
+                                            </span>
+                                            <span
+                                                style="{{ $is_upload_video || $is_upload_video_required ? '' : 'display:none' }}">
+                                                <input type="checkbox" name="is_upload_video_required"
+                                                    data-ischeck="{{ (int) $is_upload_video_required }}"
+                                                    {{ (int) $is_upload_video_required == 1 ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" name="is_upload_video" class="is_upload"
-                                                {{ (int) $is_upload_video == 1 ? 'checked' : '' }} />
-                                            Upload video content
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" name="is_upload_ppt" class="is_upload"
+                                                    {{ (int) $is_upload_ppt == 1 ? 'checked' : '' }} />
+                                                Upload ppt contents
+                                            </span>
+                                            <span
+                                                style="{{ $is_upload_ppt || $is_upload_ppt_required ? '' : 'display:none' }}">
+                                                <input type="checkbox" name="is_upload_ppt_required"
+                                                    data-ischeck="{{ (int) $is_upload_ppt_required }}"
+                                                    {{ (int) $is_upload_ppt_required == 1 ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                        <span
-                                            style="{{ $is_upload_video || $is_upload_video_required ? '' : 'display:none' }}">
-                                            <input type="checkbox" name="is_upload_video_required"
-                                                data-ischeck="{{ (int) $is_upload_video_required }}"
-                                                {{ (int) $is_upload_video_required == 1 ? 'checked' : '' }} />
-                                            Is Mandatory
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" name="is_upload_doc" class="is_upload"
+                                                    {{ (int) $is_upload_doc == 1 ? 'checked' : '' }} />
+                                                Upload contents in doc file
+                                            </span>
+                                            <span
+                                                style="{{ $is_upload_doc || $is_upload_doc_required ? '' : 'display:none' }}">
+                                                <input type="checkbox" name="is_upload_doc_required"
+                                                    data-ischeck="{{ (int) $is_upload_doc_required }}"
+                                                    {{ (int) $is_upload_doc_required == 1 ? 'checked' : '' }} />
+                                                Mandatory
+                                            </span>
                                         </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" name="is_upload_ppt" class="is_upload"
-                                                {{ (int) $is_upload_ppt == 1 ? 'checked' : '' }} />
-                                            Upload ppt contents
-                                        </span>
-                                        <span
-                                            style="{{ $is_upload_ppt || $is_upload_ppt_required ? '' : 'display:none' }}">
-                                            <input type="checkbox" name="is_upload_ppt_required"
-                                                data-ischeck="{{ (int) $is_upload_ppt_required }}"
-                                                {{ (int) $is_upload_ppt_required == 1 ? 'checked' : '' }} />
-                                            Is Mandatory
-                                        </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" name="is_upload_doc" class="is_upload"
-                                                {{ (int) $is_upload_doc == 1 ? 'checked' : '' }} />
-                                            Upload contents in doc file
-                                        </span>
-                                        <span
-                                            style="{{ $is_upload_doc || $is_upload_doc_required ? '' : 'display:none' }}">
-                                            <input type="checkbox" name="is_upload_doc_required"
-                                                data-ischeck="{{ (int) $is_upload_doc_required }}"
-                                                {{ (int) $is_upload_doc_required == 1 ? 'checked' : '' }} />
-                                            Mandatory
-                                        </span>
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="is_visible">Course Visibility</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_visible"
-                                            {{ old('is_visible', $course_configuration->is_visible) && old('is_visible', $course_configuration->is_visible) == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_visible', $course_configuration->is_visible)) checked @endif />
-                                        Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_visible"
-                                            {{ old('is_visible', $course_configuration->is_visible) == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="is_visible">Course Visibility</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_visible"
+                                                {{ old('is_visible', $course_configuration->is_visible) && old('is_visible', $course_configuration->is_visible) == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_visible', $course_configuration->is_visible)) checked @endif />
+                                            Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_visible"
+                                                {{ old('is_visible', $course_configuration->is_visible) == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="is_active">Course Active Duration <span
+                                        class="text-danger">*</span></x-label>
+                                <div id="ValidateCourseActiveDuration">
+                                    <input type="hidden" name="validate_course_active_duration" value="0">
+                                    <div class="d-flex justify-content-between">
+                                        <span>
+                                            <input type="text" name="active_from" class="form-control datepicker"
+                                                autocomplete="off" placeholder="From Date"
+                                                value="{{ date_convert(old('active_from', $course_configuration->active_from), 'd-m-Y') }}"
+                                                @if (old('is_active', $course_configuration->is_active) &&
+                                                        in_array(old('is_active', $course_configuration->is_active), ['on', 1])) disabled @endif />
+                                        </span>
+                                        <span>
+                                            <input type="text" name="active_to" class="form-control datepicker"
+                                                autocomplete="off" placeholder="To Date"
+                                                value="{{ date_convert(old('active_to', $course_configuration->active_to), 'd-m-Y') }}"
+                                                @if (old('is_active', $course_configuration->is_active) &&
+                                                        in_array(old('is_active', $course_configuration->is_active), ['on', 1])) disabled @endif />
+                                        </span>
+                                        <span>
+                                            <input type="checkbox" name="is_active"
+                                                @if (old('is_active', $course_configuration->is_active) &&
+                                                        in_array(old('is_active', $course_configuration->is_active), ['on', 1])) checked @endif
+                                                @if (
+                                                    (old('active_from', $course_configuration->active_from) &&
+                                                        old('active_from', $course_configuration->active_from) !== '') ||
+                                                        (old('active_to', $course_configuration->active_to) &&
+                                                            old('active_to', $course_configuration->active_to) !== '')) disabled @endif /> Always
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="is_active">Course Active Duration <span class="text-danger">*</span></x-label>
-                            <div id="ValidateCourseActiveDuration">
-                                <input type="hidden" name="validate_course_active_duration" value="0">
-                                <div class="d-flex justify-content-between">
-                                    <span>
-                                        <input type="text" name="active_from" class="form-control datepicker"
-                                            autocomplete="off" placeholder="From Date"
-                                            value="{{ date_convert(old('active_from', $course_configuration->active_from), 'd-m-Y') }}"
-                                            @if (old('is_active', $course_configuration->is_active) &&
-                                                    in_array(old('is_active', $course_configuration->is_active), ['on', 1])) disabled @endif />
-                                    </span>
-                                    <span>
-                                        <input type="text" name="active_to" class="form-control datepicker"
-                                            autocomplete="off" placeholder="To Date"
-                                            value="{{ date_convert(old('active_to', $course_configuration->active_to), 'd-m-Y') }}"
-                                            @if (old('is_active', $course_configuration->is_active) &&
-                                                    in_array(old('is_active', $course_configuration->is_active), ['on', 1])) disabled @endif />
-                                    </span>
-                                    <span>
-                                        <input type="checkbox" name="is_active"
-                                            @if (old('is_active', $course_configuration->is_active) &&
-                                                    in_array(old('is_active', $course_configuration->is_active), ['on', 1])) checked @endif
-                                            @if (
-                                                (old('active_from', $course_configuration->active_from) &&
-                                                    old('active_from', $course_configuration->active_from) !== '') ||
-                                                    (old('active_to', $course_configuration->active_to) &&
-                                                        old('active_to', $course_configuration->active_to) !== '')) disabled @endif /> Always
-                                    </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_hi">Enable download course content</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_downloadable"
+                                                {{ old('is_downloadable', $course_configuration->is_downloadable) && old('is_downloadable', $course_configuration->is_downloadable) == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_downloadable', $course_configuration->is_downloadable)) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_downloadable"
+                                                {{ old('is_downloadable', $course_configuration->is_downloadable) == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_en">Course Completion Tracking</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_course_completion_trackable"
+                                                {{ old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) && old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable)) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_course_completion_trackable"
+                                                {{ old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="title_hi">Enable download course content</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_downloadable"
-                                            {{ old('is_downloadable', $course_configuration->is_downloadable) && old('is_downloadable', $course_configuration->is_downloadable) == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_downloadable', $course_configuration->is_downloadable)) checked @endif /> Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_downloadable"
-                                            {{ old('is_downloadable', $course_configuration->is_downloadable) == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-admin.status-dropdown :selected="$course_configuration->status" />
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="title_en">Course Completion Tracking</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_course_completion_trackable"
-                                            {{ old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) && old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable)) checked @endif /> Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_course_completion_trackable"
-                                            {{ old('is_course_completion_trackable', $course_configuration->is_course_completion_trackable) == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-admin.captcha />
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.status-dropdown :selected="$course_configuration->status" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.captcha />
                     </div>
                 </div>
                 <div class="card-footer">

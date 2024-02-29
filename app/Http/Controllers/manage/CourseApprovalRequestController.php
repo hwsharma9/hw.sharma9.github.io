@@ -68,7 +68,13 @@ class CourseApprovalRequestController extends Controller
                     return $topics;
                 })
                 ->editColumn('status', function ($row) {
-                    return $row->status == 0 ? 'Submitted for Approval' : ($row->status == 1 ? 'Received for Correction' : 'Approved');
+                    if ($row->status == 0) {
+                        return ((session('role_name') == 'Content Manager' ? 'Submitted' : 'Received') .  ' for Approval');
+                    } else if ($row->status == 1) {
+                        return ((session('role_name') == 'Content Manager' ? 'Received' : 'Sent') . ' for Correction');
+                    } else {
+                        return 'Approved';
+                    }
                 })
                 ->make(true);
         }

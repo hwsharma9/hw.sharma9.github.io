@@ -37,197 +37,201 @@
             <form method="POST" action="{{ route('manage.course_configurations.create') }}" id="quickForm"
                 enctype="multipart/form-data">
                 @csrf
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="course_category_id">Course Category <span
-                                    class="text-danger">*</span></x-label>
-                            <select name="course_category_id" id="course_category_id" class="form-control"
-                                style="width: 100%;">
-                                <option value="">Select Course Category</option>
-                                @if ($course_categories)
-                                    @foreach ($course_categories as $course_category)
-                                        <option value="{{ $course_category->id }}"
-                                            {{ old('course_category_id') == $course_category->id ? 'selected' : '' }}>
-                                            {{ $course_category->category_name_en }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="course_category_courses_id">Course <span
-                                    class="text-danger">*</span></x-label>
-                            <select name="course_category_courses_id" id="course_category_courses_id"
-                                class="form-control" style="width: 100%;">
-                                <option value="">Select Course</option>
-                                @if (old('course_category_id') && $course_categories)
-                                    @php
-                                        $cc = $course_categories->where('id', old('course_category_id'))->first();
-                                    @endphp
-                                    @if ($cc)
-                                        @foreach ($cc->courses as $course_category)
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="course_category_id">Course Category <span
+                                        class="text-danger">*</span></x-label>
+                                <select name="course_category_id" id="course_category_id" class="form-control"
+                                    style="width: 100%;">
+                                    <option value="">Select Course Category</option>
+                                    @if ($course_categories)
+                                        @foreach ($course_categories as $course_category)
                                             <option value="{{ $course_category->id }}"
-                                                {{ old('course_category_courses_id') == $course_category->id ? 'selected' : '' }}>
-                                                {{ $course_category->course_name_en }}</option>
+                                                {{ old('course_category_id') == $course_category->id ? 'selected' : '' }}>
+                                                {{ $course_category->category_name_en }}</option>
                                         @endforeach
                                     @endif
-                                @endif
-                            </select>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="course_category_courses_id">Course <span
+                                        class="text-danger">*</span></x-label>
+                                <select name="course_category_courses_id" id="course_category_courses_id"
+                                    class="form-control" style="width: 100%;">
+                                    <option value="">Select Course</option>
+                                    @if (old('course_category_id') && $course_categories)
+                                        @php
+                                            $cc = $course_categories->where('id', old('course_category_id'))->first();
+                                        @endphp
+                                        @if ($cc)
+                                            @foreach ($cc->courses as $course_category)
+                                                <option value="{{ $course_category->id }}"
+                                                    {{ old('course_category_courses_id') == $course_category->id ? 'selected' : '' }}>
+                                                    {{ $course_category->course_name_en }}</option>
+                                            @endforeach
+                                        @endif
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <x-label>Please select the course contents as madatory fields</x-label>
-                            <div class="form-control" style="height: 110px;">
-                                <div class="d-flex flex-column justify-content-around">
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" class="is_upload" name="is_upload_pdf"
-                                                {{ old('is_upload_pdf') && old('is_upload_pdf') == 'on' ? 'checked' : '' }} />
-                                            Upload content in pdf file
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <x-label>Please select the course contents as madatory fields</x-label>
+                                <div class="form-control" style="height: 110px;">
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" class="is_upload" name="is_upload_pdf"
+                                                    {{ old('is_upload_pdf') && old('is_upload_pdf') == 'on' ? 'checked' : '' }} />
+                                                Upload content in pdf file
+                                            </span>
+                                            <span style="display:none">
+                                                <input type="checkbox" name="is_upload_pdf_required"
+                                                    {{ old('is_upload_pdf_required') && old('is_upload_pdf_required') == 'on' ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                        <span style="display:none">
-                                            <input type="checkbox" name="is_upload_pdf_required"
-                                                {{ old('is_upload_pdf_required') && old('is_upload_pdf_required') == 'on' ? 'checked' : '' }} />
-                                            Is Mandatory
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" class="is_upload" name="is_upload_video"
+                                                    {{ old('is_upload_video') && old('is_upload_video') == 'on' ? 'checked' : '' }} />
+                                                Upload video content
+                                            </span>
+                                            <span style="display:none">
+                                                <input type="checkbox" name="is_upload_video_required"
+                                                    {{ old('is_upload_video_required') && old('is_upload_video_required') == 'on' ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" class="is_upload" name="is_upload_video"
-                                                {{ old('is_upload_video') && old('is_upload_video') == 'on' ? 'checked' : '' }} />
-                                            Upload video content
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" class="is_upload" name="is_upload_ppt"
+                                                    {{ old('is_upload_ppt') && old('is_upload_ppt') == 'on' ? 'checked' : '' }} />
+                                                Upload ppt contents
+                                            </span>
+                                            <span style="display:none">
+                                                <input type="checkbox" name="is_upload_ppt_required"
+                                                    {{ old('is_upload_ppt_required') && old('is_upload_ppt_required') == 'on' ? 'checked' : '' }} />
+                                                Is Mandatory
+                                            </span>
                                         </span>
-                                        <span style="display:none">
-                                            <input type="checkbox" name="is_upload_video_required"
-                                                {{ old('is_upload_video_required') && old('is_upload_video_required') == 'on' ? 'checked' : '' }} />
-                                            Is Mandatory
+                                        <span>
+                                            <span class="w-25">
+                                                <input type="checkbox" class="is_upload" name="is_upload_doc"
+                                                    {{ old('is_upload_doc') && old('is_upload_doc') == 'on' ? 'checked' : '' }} />
+                                                Upload contents in doc file
+                                            </span>
+                                            <span style="display:none">
+                                                <input type="checkbox" name="is_upload_doc_required"
+                                                    {{ old('is_upload_doc_required') && old('is_upload_doc_required') == 'on' ? 'checked' : '' }} />
+                                                Mandatory
+                                            </span>
                                         </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" class="is_upload" name="is_upload_ppt"
-                                                {{ old('is_upload_ppt') && old('is_upload_ppt') == 'on' ? 'checked' : '' }} />
-                                            Upload ppt contents
-                                        </span>
-                                        <span style="display:none">
-                                            <input type="checkbox" name="is_upload_ppt_required"
-                                                {{ old('is_upload_ppt_required') && old('is_upload_ppt_required') == 'on' ? 'checked' : '' }} />
-                                            Is Mandatory
-                                        </span>
-                                    </span>
-                                    <span>
-                                        <span class="w-25">
-                                            <input type="checkbox" class="is_upload" name="is_upload_doc"
-                                                {{ old('is_upload_doc') && old('is_upload_doc') == 'on' ? 'checked' : '' }} />
-                                            Upload contents in doc file
-                                        </span>
-                                        <span style="display:none">
-                                            <input type="checkbox" name="is_upload_doc_required"
-                                                {{ old('is_upload_doc_required') && old('is_upload_doc_required') == 'on' ? 'checked' : '' }} />
-                                            Mandatory
-                                        </span>
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="is_visible">Course Visibility</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_visible"
-                                            {{ old('is_visible') && old('is_visible') == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_visible')) checked @endif />
-                                        Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_visible"
-                                            {{ old('is_visible') && old('is_visible') == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="is_visible">Course Visibility</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_visible"
+                                                {{ old('is_visible') && old('is_visible') == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_visible')) checked @endif />
+                                            Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_visible"
+                                                {{ old('is_visible') && old('is_visible') == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="is_active">Course Active Duration <span
+                                        class="text-danger">*</span></x-label>
+                                <div id="ValidateCourseActiveDuration">
+                                    <input type="hidden" name="validate_course_active_duration" value="0">
+                                    <div class="d-flex justify-content-between">
+                                        <span>
+                                            <input type="text" name="active_from" class="form-control datepicker"
+                                                autocomplete="off" placeholder="From Date"
+                                                value="{{ old('active_from') }}"
+                                                @if (old('is_active') && old('is_active') == 'on') disabled @endif />
+                                        </span>
+                                        <span>
+                                            <input type="text" name="active_to" class="form-control datepicker"
+                                                autocomplete="off" placeholder="To Date"
+                                                value="{{ old('active_to') }}"
+                                                @if (old('is_active') && old('is_active') == 'on') disabled @endif />
+                                        </span>
+                                        <span>
+                                            <input type="checkbox" name="is_active"
+                                                @if (old('is_active') && old('is_active') == 'on') checked @endif
+                                                @if ((old('active_from') && old('active_from') !== '') || (old('active_to') && old('active_to') !== '')) disabled @endif /> Always
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="is_active">Course Active Duration <span class="text-danger">*</span></x-label>
-                            <div id="ValidateCourseActiveDuration">
-                                <input type="hidden" name="validate_course_active_duration" value="0">
-                                <div class="d-flex justify-content-between">
-                                    <span>
-                                        <input type="text" name="active_from" class="form-control datepicker"
-                                            autocomplete="off" placeholder="From Date"
-                                            value="{{ old('active_from') }}"
-                                            @if (old('is_active') && old('is_active') == 'on') disabled @endif />
-                                    </span>
-                                    <span>
-                                        <input type="text" name="active_to" class="form-control datepicker"
-                                            autocomplete="off" placeholder="To Date" value="{{ old('active_to') }}"
-                                            @if (old('is_active') && old('is_active') == 'on') disabled @endif />
-                                    </span>
-                                    <span>
-                                        <input type="checkbox" name="is_active"
-                                            @if (old('is_active') && old('is_active') == 'on') checked @endif
-                                            @if ((old('active_from') && old('active_from') !== '') || (old('active_to') && old('active_to') !== '')) disabled @endif /> Always
-                                    </span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_hi">Enable download course content</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_downloadable"
+                                                {{ old('is_downloadable') && old('is_downloadable') == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_downloadable')) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_downloadable"
+                                                {{ old('is_downloadable') && old('is_downloadable') == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_en">Course Completion Tracking</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_course_completion_trackable"
+                                                {{ old('is_course_completion_trackable') && old('is_course_completion_trackable') == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_course_completion_trackable')) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_course_completion_trackable"
+                                                {{ old('is_course_completion_trackable') && old('is_course_completion_trackable') == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="title_hi">Enable download course content</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_downloadable"
-                                            {{ old('is_downloadable') && old('is_downloadable') == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_downloadable')) checked @endif /> Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_downloadable"
-                                            {{ old('is_downloadable') && old('is_downloadable') == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-admin.captcha />
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <x-label for="title_en">Course Completion Tracking</x-label>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-around">
-                                    <span>
-                                        <input type="radio" name="is_course_completion_trackable"
-                                            {{ old('is_course_completion_trackable') && old('is_course_completion_trackable') == 1 ? 'checked' : '' }}
-                                            value="1" @if (!old('is_course_completion_trackable')) checked @endif /> Yes
-                                    </span>
-                                    <span>
-                                        <input type="radio" name="is_course_completion_trackable"
-                                            {{ old('is_course_completion_trackable') && old('is_course_completion_trackable') == 0 ? 'checked' : '' }}
-                                            value="0" /> No
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-admin.captcha />
                     </div>
                 </div>
                 <div class="card-footer">

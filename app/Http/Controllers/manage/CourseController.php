@@ -13,6 +13,7 @@ use App\Models\ErrorLog;
 use App\Models\MAdminCourse;
 use App\Models\MCourseCategory;
 use App\Notifications\Admin\RequestToApproveCourse;
+use App\View\Components\Admin\Course\Topic;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -509,7 +510,15 @@ class CourseController extends Controller
             ->where('fk_course_category_courses_id', decrypt($request->fk_course_category_courses_id))
             ->with([
                 'courseCategory:id,category_name_en',
-                'categoryCourse:id,course_name_en',
+                'categoryCourse' => function ($query) {
+                    $query->active()
+                        ->with([
+                            'configuration' => function ($query) {
+                                $query->active();
+                            }
+                        ])
+                        ->select(['id', 'course_name_en']);
+                },
             ])
             ->first();
         $course_categories = MCourseCategory::query()
@@ -519,7 +528,8 @@ class CourseController extends Controller
             ->active()
             ->get();
         $configuration = $alloted_admin?->categoryCourse?->configuration;
-        return view('admin.courses.edit', compact('course', 'course_categories', 'alloted_admin', 'configuration'));
+        $action = (new Topic($configuration, null, null))->render();
+        return view('admin.courses.edit', compact('course', 'course_categories', 'alloted_admin', 'configuration', 'action'));
     }
 
     /**

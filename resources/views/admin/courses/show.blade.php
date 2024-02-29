@@ -8,9 +8,8 @@
             }
 
             .upload__img-box {
-                width: 70px;
+                width: 50px;
                 padding: 0 10px;
-                margin-bottom: 10px;
             }
 
             .img-bg {
@@ -25,10 +24,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border: 1px solid gray;
-                margin-top: 1px;
-                padding-left: 2px;
-                padding-right: 2px;
+                border: 1px solid #ced4da;
+                margin-bottom: 10px;
+                padding: 10px 10px;
             }
         </style>
         <link rel="stylesheet" href="{{ asset('webroot/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
@@ -76,233 +74,258 @@
                 {{ __('View Course') }}
             </x-slot>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <x-label for="fk_course_category_id">Category <span class="text-danger">*</span></x-label>
-                        <input class="form-control"
-                            value="{{ $course->assignedAdmin->courseCategory->category_name_en }}" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <x-label for="fk_course_category_id">Category <span class="text-danger">*</span></x-label>
+                            <input class="form-control"
+                                value="{{ $course->assignedAdmin->courseCategory->category_name_en }}" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <x-label for="fk_course_category_id">Course</x-label>
+                            <input class="form-control"
+                                value="{{ $course->assignedAdmin->categoryCourse->course_name_en }}" />
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <x-label for="fk_course_category_id">Course</x-label>
-                        <input class="form-control"
-                            value="{{ $course->assignedAdmin->categoryCourse->course_name_en }}" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <x-label for="description">Course Description <span class="text-danger">*</span>
-                            {{ $course->checkDiff('description') }}
-                        </x-label>
-                        {{-- <textarea type="text" name="description" class="form-control" id="description"
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <x-label for="description">Course Description <span class="text-danger">*</span>
+                                {{ $course->checkDiff('description') }}
+                            </x-label>
+                            {{-- <textarea type="text" name="description" class="form-control" id="description"
                             placeholder="Enter Course Description">{{ old('description', $course->description) }}</textarea> --}}
-                        <div class="form-control" style="height: auto;">
-                            {!! $course->update_description ? $course->update_description : $course->description !!}
+                            <div class="form-control" style="height: auto;">
+                                {!! $course->update_description ? $course->update_description : $course->description !!}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 upload-file">
-                    <div class="d-flex">
-                        <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                            <legend>Course Thumbnail @if ($course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
-                                    {!! $course->upload->checkCourseDiff($course->uploads, 'course_thumbnail') !!}
-                                @endif
-                            </legend>
-                            <div class="form-group">
-                                @if ($course_media)
-                                    <div class="upload-row mp-1">
-                                        <div class="upload__img-wrap">
-                                            <div class="upload__img-box">
-                                                <a
-                                                    href="{{ route('manage.download-media', ['media' => encrypt($course_media->id)]) }}">
-                                                    <div style="background-image: url({{ asset('storage/' . str_replace('\\', '/', $course_media->file_path)) }})"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="{{ $course_media->original_name }}" class="img-bg">
+                    <div class="col-md-6 upload-file">
+                        <div class="d-flex">
+                            <div class="col-md-12 upload-file">
+                                <label>Course Thumbnail @if ($course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
+                                        {!! $course->upload->checkCourseDiff($course->uploads, 'course_thumbnail') !!}
+                                    @endif
+                                </label>
+                                <div class="form-group">
+                                    @if ($course_media)
+                                        <a
+                                            href="{{ route('manage.download-media', ['media' => encrypt($course_media->id)]) }}">
+                                            <div class="upload-row mp-1">
+                                                <div class="upload__img-wrap">
+                                                    <div class="upload__img-box">
+                                                        <div style="background-image: url({{ asset('storage/' . str_replace('\\', '/', $course_media->file_path)) }})"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="{{ $course_media->original_name }}" class="img-bg">
+                                                        </div>
                                                     </div>
-                                                </a>
+                                                </div>
+                                                {{ $course_media->original_name }}
                                             </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-            </div>
-            <div class="row" id="topics_container">
-                @if ($course->topics)
-                    @foreach ($course->topics as $topic)
-                        @php
-                            $course_pdfs = $topic->uploads->where('field_name', 'course_pdf')->all();
-                            $course_ppts = $topic->uploads->where('field_name', 'course_ppt')->all();
-                            $course_docs = $topic->uploads->where('field_name', 'course_doc')->all();
-                            $course_video = $topic->uploads->where('field_name', 'course_video')->first();
-                        @endphp
-                        <div class="col-md-12 topic_html">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
-                                            title="Collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="topic_title">Topic Title <span class="text-danger">*</span>
-                                                    {!! $topic->checkDiff('title') !!}
-                                                </label>
-                                                <input type="text"
-                                                    value="{{ $topic->update_title ? $topic->update_title : $topic->title }}"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="topic_summary">Topic Summary {!! $topic->checkDiff('summary') !!}
-                                                </label>
-                                                <div class="form-control">{!! $topic->update_summary ? $topic->update_summary : $topic->summary !!}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <fieldset class="col-md-12" style="border: solid; 1px;">
-                                                <legend>Video URL
-                                                    {!! $course_video?->checkCourseVideoDiff() !!}
-                                                </legend>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control"
-                                                        value="{{ $course_video?->update_file_path ? $course_video?->update_file_path : $course_video?->file_path }}"
-                                                        placeholder="upload video on youtube and type the youtube video link here">
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                                <legend>Upload PDF @if (
-                                                    $course_pdfs &&
-                                                        $topic->course_status == 2 &&
-                                                        (collect($course_pdfs)->where('course_status', '!=', 2)->count() ||
-                                                            collect($course_pdfs)->whereNotNull('deleted_at')->count()))
-                                                        {!! $topic->upload->checkCourseDiff(collect($course_pdfs), 'course_pdf') !!}
-                                                    @endif
-                                                </legend>
-                                                <div class="form-group">
-                                                    @if ($course_pdfs)
-                                                        @foreach ($course_pdfs as $course_pdf)
-                                                            @if (!$course_pdf->trashed())
-                                                                <div class="upload-row mp-1">
-                                                                    <div class="upload__img-wrap">
-                                                                        <div class="upload__img-box">
-                                                                            <a
-                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_pdf->id)]) }}">
-                                                                                <div style="background-image: url({{ asset('dist/img/pdf.png') }})"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top"
-                                                                                    title="{{ $course_pdf->original_name }}"
-                                                                                    class="img-bg">
-                                                                                </div>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </fieldset>
-                                        </div>
-
-
-                                        <div class="col-md-6">
-                                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                                <legend>Upload PPT @if (
-                                                    $course_ppts &&
-                                                        $topic->course_status == 2 &&
-                                                        (collect($course_ppts)->where('course_status', '!=', 2)->count() ||
-                                                            collect($course_ppts)->whereNotNull('deleted_at')->count()))
-                                                        {!! $topic->upload->checkCourseDiff(collect($course_ppts), 'course_ppt') !!}
-                                                    @endif
-                                                </legend>
-                                                <div class="form-group">
-                                                    @if ($course_ppts)
-                                                        @foreach ($course_ppts as $course_ppt)
-                                                            @if (!$course_ppt->trashed())
-                                                                <div class="upload-row mp-1">
-                                                                    <div class="upload__img-wrap">
-                                                                        <div class="upload__img-box">
-                                                                            <a
-                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_ppt->id)]) }}">
-                                                                                <div style="background-image: url({{ asset('dist/img/ppt.png') }})"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top"
-                                                                                    title="{{ $course_ppt->original_name }}"
-                                                                                    class="img-bg">
-                                                                                </div>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                    </button>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </fieldset>
-                                        </div>
-
-
-                                        <div class="col-md-6">
-                                            <fieldset class="col-md-12 upload-file" style="border: solid; 1px;">
-                                                <legend>Upload DOC @if (
-                                                    $course_docs &&
-                                                        $topic->course_status == 2 &&
-                                                        (collect($course_docs)->where('course_status', '!=', 2)->count() ||
-                                                            collect($course_docs)->whereNotNull('deleted_at')->count()))
-                                                        {!! $topic->upload->checkCourseDiff(collect($course_docs), 'course_doc') !!}
-                                                    @endif
-                                                </legend>
-                                                <div class="form-group">
-                                                    @if ($course_docs)
-                                                        @foreach ($course_docs as $course_doc)
-                                                            @if (!$course_doc->trashed())
-                                                                <div class="upload-row mp-1">
-                                                                    <div class="upload__img-wrap">
-                                                                        <div class="upload__img-box">
-                                                                            <a
-                                                                                href="{{ route('manage.download-media', ['media' => encrypt($course_doc->id)]) }}">
-                                                                                <div style="background-image: url({{ asset('dist/img/doc.png') }})"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="top"
-                                                                                    title="{{ $course_doc->original_name }}"
-                                                                                    class="img-bg">
-                                                                                </div>
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </fieldset>
-                                        </div>
-
-                                    </div>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                @endif
+                    </div>
+                </div>
+                <div class="row" id="topics_container">
+                    @if ($course->topics)
+                        @foreach ($course->topics as $topic)
+                            @php
+                                $course_pdfs = $topic->uploads->where('field_name', 'course_pdf')->all();
+                                $course_ppts = $topic->uploads->where('field_name', 'course_ppt')->all();
+                                $course_docs = $topic->uploads->where('field_name', 'course_doc')->all();
+                                $course_video = $topic->uploads->where('field_name', 'course_video')->first();
+                            @endphp
+                            <div class="col-md-12 topic_html">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                                title="Collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Topic Title Start -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="topic_title">Topic Title <span
+                                                            class="text-danger">*</span>
+                                                        {!! $topic->checkDiff('title') !!}
+                                                    </label>
+                                                    <input type="text"
+                                                        value="{{ $topic->update_title ? $topic->update_title : $topic->title }}"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <!-- Topic Title End -->
+                                            <!-- Video URL Start -->
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <label>Video URL
+                                                        {!! $course_video?->checkCourseVideoDiff() !!}
+                                                    </label>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $course_video?->update_file_path ? $course_video?->update_file_path : $course_video?->file_path }}"
+                                                            placeholder="upload video on youtube and type the youtube video link here">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Video URL End -->
+                                            <!-- Topic Summary Start -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="topic_summary">Topic Summary {!! $topic->checkDiff('summary') !!}
+                                                    </label>
+                                                    <div class="form-control">{!! $topic->update_summary ? $topic->update_summary : $topic->summary !!}</div>
+                                                </div>
+                                            </div>
+                                            <!-- Topic Summary End -->
+                                            <!-- Download PDF Start -->
+                                            <div class="col-md-6">
+                                                <div class="col-md-12 upload-file">
+                                                    <label>Download PDF @if (
+                                                        $course_pdfs &&
+                                                            $topic->course_status == 2 &&
+                                                            (collect($course_pdfs)->where('course_status', '!=', 2)->count() ||
+                                                                collect($course_pdfs)->whereNotNull('deleted_at')->count()))
+                                                            {!! $topic->upload->checkCourseDiff(collect($course_pdfs), 'course_pdf') !!}
+                                                        @endif
+                                                    </label>
+                                                    <div class="form-group">
+                                                        @if ($course_pdfs)
+                                                            @foreach ($course_pdfs as $course_pdf)
+                                                                @if (!$course_pdf->trashed())
+                                                                    <a
+                                                                        href="{{ route('manage.download-media', ['media' => encrypt($course_pdf->id)]) }}">
+                                                                        <div class="upload-row mp-1">
+                                                                            <div class="upload__img-wrap">
+                                                                                <div class="upload__img-box">
+                                                                                    <div style="background-image: url({{ asset('dist/img/pdf.png') }})"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="{{ $course_pdf->original_name }}"
+                                                                                        class="img-bg">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{ $course_pdf->original_name }}
+                                                                        </div>
+                                                                    </a>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        @if (collect($course_pdfs)->whereNull('deleted_at')->count() == 0)
+                                                            <div class="upload-row mp-1">
+                                                                <h5>No File uploaded!</h5>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Download PDF End -->
+                                            <!-- Download PPT Start -->
+                                            <div class="col-md-6">
+                                                <div class="col-md-12 upload-file">
+                                                    <label>Download PPT @if (
+                                                        $course_ppts &&
+                                                            $topic->course_status == 2 &&
+                                                            (collect($course_ppts)->where('course_status', '!=', 2)->count() ||
+                                                                collect($course_ppts)->whereNotNull('deleted_at')->count()))
+                                                            {!! $topic->upload->checkCourseDiff(collect($course_ppts), 'course_ppt') !!}
+                                                        @endif
+                                                    </label>
+                                                    <div class="form-group">
+                                                        @if ($course_ppts)
+                                                            @foreach ($course_ppts as $course_ppt)
+                                                                @if (!$course_ppt->trashed())
+                                                                    <a
+                                                                        href="{{ route('manage.download-media', ['media' => encrypt($course_ppt->id)]) }}">
+                                                                        <div class="upload-row mp-1">
+                                                                            <div class="upload__img-wrap">
+                                                                                <div class="upload__img-box">
+                                                                                    <div style="background-image: url({{ asset('dist/img/ppt.png') }})"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="{{ $course_ppt->original_name }}"
+                                                                                        class="img-bg">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{ $course_ppt->original_name }}
+                                                                        </div>
+                                                                    </a>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        @if (collect($course_ppts)->whereNull('deleted_at')->count() == 0)
+                                                            <div class="upload-row mp-1">
+                                                                <h5>No File uploaded!</h5>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Download PDF End -->
+                                            <!-- Download DOC Start -->
+                                            <div class="col-md-6">
+                                                <div class="col-md-12 upload-file">
+                                                    <label>Download DOC @if (
+                                                        $course_docs &&
+                                                            $topic->course_status == 2 &&
+                                                            (collect($course_docs)->where('course_status', '!=', 2)->count() ||
+                                                                collect($course_docs)->whereNotNull('deleted_at')->count()))
+                                                            {!! $topic->upload->checkCourseDiff(collect($course_docs), 'course_doc') !!}
+                                                        @endif
+                                                    </label>
+                                                    <div class="form-group">
+                                                        @if ($course_docs)
+                                                            @foreach ($course_docs as $course_doc)
+                                                                @if (!$course_doc->trashed())
+                                                                    <a
+                                                                        href="{{ route('manage.download-media', ['media' => encrypt($course_doc->id)]) }}">
+                                                                        <div class="upload-row mp-1">
+                                                                            <div class="upload__img-wrap">
+                                                                                <div class="upload__img-box">
+                                                                                    <div style="background-image: url({{ asset('dist/img/doc.png') }})"
+                                                                                        data-toggle="tooltip"
+                                                                                        data-placement="top"
+                                                                                        title="{{ $course_doc->original_name }}"
+                                                                                        class="img-bg">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {{ $course_doc->original_name }}
+                                                                        </div>
+                                                                    </a>
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                        @if (collect($course_docs)->whereNull('deleted_at')->count() == 0)
+                                                            <div class="upload-row mp-1">
+                                                                <h5>No File uploaded!</h5>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Download DOC End -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
             <div class="card-footer d-flex justify-content-between">
                 @if (Gate::allows('check-auth', 'manage.course.request.index'))
@@ -331,7 +354,7 @@
                                             <th>S. No.</th>
                                             <th>Course</th>
                                             <th>Status</th>
-                                            <th>Updated Topics</th>
+                                            {{-- <th>Updated Topics</th> --}}
                                             <th>Last Modified By</th>
                                             <th>Last Modified On</th>
                                             <th>Action</th>
@@ -478,10 +501,10 @@
                                 data: 'status',
                                 name: 'status'
                             },
-                            {
-                                data: 'updated_topics',
-                                name: 'updated_topics'
-                            },
+                            // {
+                            //     data: 'updated_topics',
+                            //     name: 'updated_topics'
+                            // },
                             {
                                 data: 'editor_name',
                                 name: 'editor.first_name',
@@ -647,10 +670,10 @@
                                 image =
                                     "{{ asset('dist/img/doc.png') }}";
                             }
-                            return String(`<div class="border">
-                                <label>${file.deleted_at ? 'Deleted' : ''}</label>
+                            return String(`<div class="border p-2">
+                                ${file.deleted_at ? '<label>Deleted</label>' : ''}
                                 <div>
-                                    <img src="${image}" height="100px" />
+                                    <img src="${image}" width="50px" />
                                     ${file.original_name}
                                 </div>
                             </div>`);
