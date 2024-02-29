@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('webroot/plugins/ionicons-2.0.1/css/ionicons.min.css') }}" />
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}" />
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         label.error {
             color: red;

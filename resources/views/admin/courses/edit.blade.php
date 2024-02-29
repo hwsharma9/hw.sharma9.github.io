@@ -86,13 +86,20 @@
                 padding-bottom: 100%;
             }
 
-            .upload-row {
+            .media-container {
+                border: 1px solid #ced4da;
+                margin-bottom: 10px;
+            }
+
+            .media-container .upload-row {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border: 1px solid #ced4da;
-                margin-bottom: 10px;
                 padding: 10px 10px;
+            }
+
+            .media-container .media-error {
+                margin-left: 10px;
             }
         </style>
     @endpush
@@ -130,7 +137,7 @@
             <x-slot name="title">
                 {{ __('Edit Course') }}
             </x-slot>
-            <div class="card-body p-0">
+            <div class="card-body p-0" x-data="{{ $course }}">
                 <form method="POST"
                     action="{{ route('manage.courses.edit', ['course' => encrypt($course->id), 'fk_course_category_courses_id' => encrypt($course->assignedAdmin->fk_course_category_courses_id)]) }}"
                     enctype="multipart/form-data" id="quickForm">
@@ -170,24 +177,30 @@
                                         <label>Course Thumbnail</label>
                                         <div class="form-group">
                                             @if ($course->upload)
-                                                <div class="upload-row mp-1 flex-wrap">
-                                                    <input type="file" name="course_thumbnail"
-                                                        class="course_thumbnail" id="course_thumbnail"
-                                                        data-files="{{ $course->upload }}"
-                                                        data-id="{{ encrypt($course->upload->id) }}"
-                                                        accept="image/png, image/jpeg" />
-                                                    <div class="upload__img-wrap"></div>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-sm delete_upload_row"
-                                                        data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                <div class="media-container mp-1">
+                                                    <div class="upload-row flex-wrap">
+                                                        <input type="file" name="course_thumbnail"
+                                                            class="course_thumbnail" id="course_thumbnail"
+                                                            data-files="{{ $course->upload }}"
+                                                            data-id="{{ encrypt($course->upload->id) }}"
+                                                            accept="image/png, image/jpeg" />
+                                                        <div class="upload__img-wrap"></div>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm delete_upload_row"
+                                                            data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course->upload->id)]) }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="media-error"></div>
                                                 </div>
                                             @else
-                                                <div class="upload-row mp-1 flex-wrap">
-                                                    <input type="file" name="course_thumbnail"
-                                                        class="course_thumbnail" id="course_thumbnail"
-                                                        accept="image/png, image/jpeg" />
+                                                <div class="media-container mp-1">
+                                                    <div class="upload-row flex-wrap">
+                                                        <input type="file" name="course_thumbnail"
+                                                            class="course_thumbnail" id="course_thumbnail"
+                                                            accept="image/png, image/jpeg" />
+                                                    </div>
+                                                    <div class="media-error"></div>
                                                 </div>
                                             @endif
                                         </div>
@@ -199,14 +212,6 @@
                             @if ($course->topics->count())
                                 @foreach ($course->topics as $topic)
                                     <x-admin.course.topic :configuration="$configuration" :topic="$topic" :loop="$loop" />
-                                    {{-- @php
-                                    $html = view('components.admin.course.topic', [
-                                        'configuration' => $configuration ?? null,
-                                        'topic' => $topic,
-                                        'loop' => $loop,
-                                    ])->render();
-                                    echo $html;
-                                @endphp --}}
                                 @endforeach
                             @else
                                 @php
@@ -507,8 +512,7 @@
                     },
                     messages: {
                         description: {
-                            ckrequired: 'Description is required.',
-                            maxlength: 250
+                            ckrequired: 'Description is required.'
                         },
                         // captcha: {
                         //     required: 'Security Code is required.',
@@ -516,11 +520,12 @@
                     },
                     errorPlacement: function(error, element) {
                         if (
-                            element.attr("name").includes('[course_pdf][]') ||
-                            element.attr("name").includes('[course_ppt][]') ||
-                            element.attr("name").includes('[course_doc][]')
+                            element.attr("name").includes('[course_pdf]') ||
+                            element.attr("name").includes('[course_ppt]') ||
+                            element.attr("name").includes('[course_doc]') ||
+                            element.attr("name").includes('course_thumbnail')
                         ) {
-                            error.insertAfter($(element).closest('.form-group'));
+                            error.appendTo($(element).closest('.media-container').find('.media-error'));
                         } else if (element.prop('localName') === 'textarea') {
                             error.insertAfter($('#cke_' + element.attr('id')));
                         } else {
@@ -544,50 +549,53 @@
                                     }
                                 });
 
-                                // Save all data by ajax
-                                $.ajax({
-                                    type: "POST",
-                                    url: $(form).attr('action'),
-                                    data: form_data,
-                                    cache: false,
-                                    dataType: 'json',
-                                    processData: false,
-                                    contentType: false,
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                            'content')
-                                    },
-                                    success: function(data) {
-                                        // Hide the server side validation errors
-                                        $(".ss-validation").remove();
-                                        // if (data.captcha) {
-                                        //     $('input[name=captcha]').val('');
-                                        //     $('.captcha-image').attr('src', data.captcha);
-                                        // }
-                                        if (data.status == true) {
-                                            Toast.fire({
-                                                icon: 'success',
-                                                title: data.message
-                                            });
+                                if (validator.form()) {
+                                    // Save all data by ajax
+                                    $.ajax({
+                                        type: "POST",
+                                        url: $(form).attr('action'),
+                                        data: form_data,
+                                        cache: false,
+                                        dataType: 'json',
+                                        processData: false,
+                                        contentType: false,
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                                .attr(
+                                                    'content')
+                                        },
+                                        success: function(data) {
+                                            // Hide the server side validation errors
+                                            $(".ss-validation").remove();
+                                            // if (data.captcha) {
+                                            //     $('input[name=captcha]').val('');
+                                            //     $('.captcha-image').attr('src', data.captcha);
+                                            // }
+                                            if (data.status == true) {
+                                                Toast.fire({
+                                                    icon: 'success',
+                                                    title: data.message
+                                                });
 
-                                            // If any file is uploaded reload the page.
-                                            // Issue is we will need to update course_video_id of each topic
-                                            location.reload();
-                                        } else {
-                                            // Show server side validation errors
-                                            $("#quickForm .card-body:first")
-                                                .prepend(data.errors);
+                                                // If any file is uploaded reload the page.
+                                                // Issue is we will need to update course_video_id of each topic
+                                                location.reload();
+                                            } else {
+                                                // Show server side validation errors
+                                                $("#quickForm")
+                                                    .prepend(data.errors);
 
-                                            // Scroll the page on top
-                                            $("html, body").animate({
-                                                scrollTop: 0
-                                            }, 500);
+                                                // Scroll the page on top
+                                                $("html, body").animate({
+                                                    scrollTop: 0
+                                                }, 500);
+                                            }
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.log(error);
                                         }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.log(error);
-                                    }
-                                });
+                                    });
+                                }
                             } else {
                                 // Take confirmation before submit course content for approval to Nodal Officer
                                 let confirmation = confirm(
@@ -624,11 +632,11 @@
                 // Create image preview
                 function imagePreview(image, name) {
                     return `<div class='upload__img-box'>
-                                    <div style='background-image: url(${image})'
-                                        data-toggle='tooltip' data-placement='top'
-                                        title='${name}' class='img-bg'>
-                                    </div>
-                                </div>`;
+                        <div style='background-image: url(${image})'
+                            data-toggle='tooltip' data-placement='top'
+                            title='${name}' class='img-bg'>
+                        </div>
+                    </div>`;
                 }
 
                 // Return image path fetch from DB Object or recent Uploaded file
@@ -728,7 +736,8 @@
                                 reader.onload = function(e) {
                                     let image = getImageByMimeType(file, e);
                                     var html = imagePreview(image, file.name);
-                                    html = html +
+
+                                    html = `<div class="upload__img-wrap">${html}</div>` +
                                         '<button type="button" class="btn btn-danger btn-sm remove_upload_row"><i class="fas fa-times"></i></button>';
                                     img_wrap.find(
                                         '.upload__img-wrap, .remove_upload_row, .delete_upload_row'
@@ -780,7 +789,7 @@
                                     // create the name of element
                                     let input_name = `topic[${index}][${e.data_name}]` + (e.type ==
                                         'file' ?
-                                        '[]' : '');
+                                        `[${i}]` : '');
 
                                     // create the id of element
                                     let input_id =
@@ -846,7 +855,8 @@
                     if (element.find('.upload-row').length == 1) {
                         let input_file = element.find(
                                 '.upload-row input[type=file]')
-                            .removeAttr('data-files');
+                            .removeAttr('data-files')
+                            .removeAttr('data-id');
                         let html = document.getElementById($(input_file[0])
                             .attr(
                                 'id')).outerHTML;
@@ -864,9 +874,11 @@
                             </button>`;
                         }
                     }
-                    return `<div class="upload-row mp-1 flex-wrap">
+                    return `<div class="media-container mp-1">
+                        <div class="upload-row flex-wrap">
                             ${html}${button_html}
-                        </div>`;
+                        </div>
+                    </div>`;
                 }
 
                 // Add new input element to upload file
@@ -913,8 +925,8 @@
                             .removeClass('fa-times')
                             .addClass('fa-trash')
 
-                        $(this).closest('.upload-file')
-                            .find('.error')
+                        $(this).closest('.media-container')
+                            .find('label.error')
                             .remove();
                     } else {
                         let that = $(this).closest('.form-group');
@@ -931,10 +943,12 @@
                         // Check if this is last upload_row
                         let upload_row_html = checkHasLastUploadHtml(that)
 
-                        element.closest('.upload-row').remove();
+                        element.closest('.media-container').remove();
                         // $("#quickForm").data('validator').element('#' + id);
                         if (countUploadRows(first_input_field)) {
-                            $(first_input_field).closest('.upload-file').find('label.error').remove();
+                            $(first_input_field).closest('.upload-file')
+                                .find('label.error')
+                                .remove();
                         }
                         disableEnableAddFileButton($(that));
                         if (upload_row_html != '') {

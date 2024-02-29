@@ -48,7 +48,7 @@
             }
 
             .upload__img-box {
-                width: 70px;
+                width: 50px;
                 padding: 0 10px;
             }
 
@@ -80,13 +80,20 @@
                 padding-bottom: 100%;
             }
 
-            .upload-row {
+            .media-container {
+                border: 1px solid #ced4da;
+                margin-bottom: 10px;
+            }
+
+            .media-container .upload-row {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border: 1px solid #ced4da;
-                margin-bottom: 10px;
-                padding: 22px 10px;
+                padding: 10px 10px;
+            }
+
+            .media-container .media-error {
+                margin-left: 10px;
             }
         </style>
     @endpush
@@ -150,17 +157,18 @@
                         </div>
                         <div class="col-md-6 upload-file">
                             <div class="col-md-12 upload-file">
-                                <label>Course Thumbnail</label>
+                                <x-label>Course Thumbnail</x-label>
                                 <div class="form-group">
-                                    <div class="upload-row mp-1">
-                                        <input type="file" name="course_thumbnail" class="course_thumbnail"
-                                            id="course_thumbnail" accept="image/png, image/jpeg" />
+                                    <div class="media-container mp-1">
+                                        <div class="upload-row flex-wrap">
+                                            <input type="file" name="course_thumbnail" class="course_thumbnail"
+                                                id="course_thumbnail" accept="image/png, image/jpeg" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="topics_container"></div>
                     <div class="row">
                         <div class="col-md-6">
                             <x-admin.captcha />
@@ -168,22 +176,12 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    {{-- <x-admin.form-actions :actions="[
-                        'create' => true,
-                    ]" /> --}}
                     <button type="submit" class="btn btn-primary" name="action" value="draft">Save as
                         Draft</button>
                 </div>
             </form>
         </x-admin.container-card>
     </x-slot>
-    @php
-        $action = view('components.admin.course.topic', [
-            'configuration' => $configuration ?? null,
-            'topic' => null,
-            'loop' => null,
-        ])->render();
-    @endphp
     @push('scripts')
         <script type="text/javascript" src="{{ asset('webroot/validation/dist/jquery.validate.js') }}"></script>
         <script type="text/javascript" src="{{ asset('webroot/validation/dist/additional-methods.js') }}"></script>
@@ -296,6 +294,46 @@
                     ImgUpload();
                 });
 
+                // Return image path fetch from DB Object or recent Uploaded file
+                function getImageByMimeType(file, e) {
+                    let image = '';
+                    let mime_type = file.hasOwnProperty('file_mime_type') ? file.file_mime_type : file.type;
+                    let asset = '{{ asset('') }}';
+                    if (mime_type.match('image.*')) {
+                        if (file.hasOwnProperty('file_mime_type')) {
+                            image = asset + 'storage/' + file
+                                .file_path.replace(
+                                    /\\/g, "/");
+                        } else {
+                            image = e.target.result;
+                        }
+                    } else if (mime_type.match('application/pdf')) {
+                        image = asset + 'dist/img/pdf.png';
+                    } else if (mime_type.match('video.*')) {
+                        image = asset + 'dist/img/video.png';
+                    } else if (['application/vnd.ms-powerpoint',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                        ].includes(mime_type)) {
+                        image = asset + 'dist/img/ppt.png';
+                    } else if (['application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                        ].includes(mime_type)) {
+                        image = asset + 'dist/img/doc.png';
+                    }
+                    return image;
+                }
+
+
+                // Create image preview
+                function imagePreview(image, name) {
+                    return `<div class='upload__img-box'>
+                        <div style='background-image: url(${image})'
+                            data-toggle='tooltip' data-placement='top'
+                            title='${name}' class='img-bg'>
+                        </div>
+                    </div>`;
+                }
+
                 function ImgUpload() {
                     var imgWrap = "";
                     var imgArray = [];
@@ -327,37 +365,11 @@
 
                                     var reader = new FileReader();
                                     reader.onload = function(e) {
-                                        let image = '';
-                                        if (f.type.match('image.*')) {
-                                            image = e.target.result;
-                                        } else if (f.type.match('application/pdf')) {
-                                            image =
-                                                "{{ asset('dist/img/pdf.png') }}";
-                                        } else if (f.type.match('video.*')) {
-                                            image =
-                                                "{{ asset('dist/img/video.png') }}";
-                                        } else if (['application/vnd.ms-powerpoint',
-                                                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-                                            ].includes(f.type)) {
-                                            image =
-                                                "{{ asset('dist/img/ppt.png') }}";
-                                        } else if (['application/msword',
-                                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                                            ].includes(f.type)) {
-                                            image =
-                                                "{{ asset('dist/img/doc.png') }}";
-                                        }
-                                        var html =
-                                            `<div class="upload__img-wrap">
-                                            <div class='upload__img-box'>
-                                                <div style='background-image: url(${image})'
-                                                    data-toggle='tooltip' data-placement='top'
-                                                    title='${f.name}' class='img-bg'>
-                                                </div>
-                                            </div>
-                                        </div>`;
-                                        html = html +
-                                            '<button type="button" class="btn btn-danger remove_upload_row"><i class="fas fa-times"></i></button>';
+                                        let image = getImageByMimeType(f, e);
+
+                                        var html = imagePreview(image, f.name);
+                                        html = `<div class="upload__img-wrap">${html}</div>` +
+                                            '<button type="button" class="btn btn-danger btn-sm remove_upload_row"><i class="fas fa-times"></i></button>';
 
                                         img_wrap.append(html);
                                         iterator++;
@@ -369,30 +381,55 @@
                     });
                 }
 
+                function createUploadRow(html, button = null) {
+                    let button_html = '';
+                    if (button) {
+                        if (button == 'remove') {
+                            button_html = `<button type="button" class="btn btn-danger btn-sm remove_upload_row">
+                                <i class="fas fa-times"></i>
+                            </button>`;
+                        }
+                    }
+                    return `<div class="media-container mp-1">
+                        <div class="upload-row flex-wrap">
+                            ${html}${button_html}
+                        </div>
+                    </div>`;
+                }
+
+                // Check if this is last upload_row
+                function checkHasLastUploadHtml(element) {
+                    let upload_row_html = '';
+                    if (element.find('.upload-row').length == 1) {
+                        let input_file = element.find(
+                                '.upload-row input[type=file]')
+                            .removeAttr('data-files')
+                            .removeAttr('data-id');
+                        let html = document.getElementById($(input_file[0])
+                            .attr(
+                                'id')).outerHTML;
+                        upload_row_html = createUploadRow(html);
+                    }
+                    return upload_row_html;
+                }
+
                 $(document).on("click", ".remove_upload_row", function() {
                     let input_file = $(this).siblings('input[type=file]');
 
                     let that = $(this).closest('.form-group');
-                    let first_input_field = $(this).closest('.form-group').find(
-                        'div.upload-row:eq(0) input[type=file]');
+                    let first_input_field = $(this).closest('.form-group')
+                        .find('div.upload-row:eq(0) input[type=file]');
 
-                    let id = $(this).closest('.form-group').find('div.upload-row:eq(0) input[type=file]')
+                    let id = $(this).closest('.form-group')
+                        .find('div.upload-row:eq(0) input[type=file]')
                         .attr('id');
 
                     let element = $(this);
 
                     // Check if this is last upload_row
-                    let upload_row_html = '';
-                    if (that.find('.upload-row').length == 1) {
-                        let input_file = that.find('.upload-row input[type=file]')
-                            .removeAttr('data-files');
-                        let html = document.getElementById($(input_file[0]).attr(
-                            'id')).outerHTML;
-                        upload_row_html =
-                            `<div class="upload-row mp-1">${html}</div>`;
-                    }
+                    let upload_row_html = checkHasLastUploadHtml(that);
 
-                    $(this).closest('.upload-row').remove();
+                    $(this).closest('.media-container').remove();
                     if (countUploadRows(first_input_field)) {
                         $(first_input_field).closest('.upload-file').find('label.error').remove();
                     }
