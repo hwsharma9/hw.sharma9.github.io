@@ -72,12 +72,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <x-admin.status-dropdown :selected="$admin_course->status" />
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <x-admin.captcha />
                         </div>
                     </div>
