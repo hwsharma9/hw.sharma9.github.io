@@ -835,11 +835,6 @@
                     $(this).closest('.topic_html').remove();
                 });
 
-                function countUploadRows(element) {
-                    let file_box = $(element).closest('.form-group').find('.upload-row');
-                    return !(file_box.length > 2);
-                }
-
                 function disableEnableAddFileButton(element) {
                     let button = $(element).closest('.upload-file').find('.add-file');
                     button.prop('disabled', ($(element).closest('.upload-file').find('.upload-row').length == 2));
