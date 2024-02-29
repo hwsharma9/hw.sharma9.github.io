@@ -137,7 +137,7 @@
             <x-slot name="title">
                 {{ __('Edit Course') }}
             </x-slot>
-            <div class="card-body p-0" x-data="{{ $course }}">
+            <div class="card-body p-0">
                 <form method="POST"
                     action="{{ route('manage.courses.edit', ['course' => encrypt($course->id), 'fk_course_category_courses_id' => encrypt($course->assignedAdmin->fk_course_category_courses_id)]) }}"
                     enctype="multipart/form-data" id="quickForm">
