@@ -95,7 +95,9 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <x-label for="description">Course Description <span class="text-danger">*</span>
-                                {{ $course->checkDiff('description') }}
+                                @if ($course->requests)
+                                    {{ $course->checkDiff('description') }}
+                                @endif
                             </x-label>
                             {{-- <textarea type="text" name="description" class="form-control" id="description"
                             placeholder="Enter Course Description">{{ old('description', $course->description) }}</textarea> --}}
@@ -107,7 +109,7 @@
                     <div class="col-md-6 upload-file">
                         <div class="d-flex">
                             <div class="col-md-12 upload-file">
-                                <label>Course Thumbnail @if ($course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
+                                <label>Course Thumbnail @if ($course->requests && $course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
                                         {!! $course->upload->checkCourseDiff($course->uploads, 'course_thumbnail') !!}
                                     @endif
                                 </label>
@@ -159,7 +161,9 @@
                                                 <div class="form-group">
                                                     <label for="topic_title">Topic Title <span
                                                             class="text-danger">*</span>
-                                                        {!! $topic->checkDiff('title') !!}
+                                                        @if ($course->requests)
+                                                            {!! $topic->checkDiff('title') !!}
+                                                        @endif
                                                     </label>
                                                     <input type="text"
                                                         value="{{ $topic->update_title ? $topic->update_title : $topic->title }}"
@@ -171,7 +175,9 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12">
                                                     <label>Video URL
-                                                        {!! $course_video?->checkCourseVideoDiff() !!}
+                                                        @if ($course->requests)
+                                                            {!! $course_video?->checkCourseVideoDiff() !!}
+                                                        @endif
                                                     </label>
                                                     <div class="form-group">
                                                         <input type="text" class="form-control"
@@ -194,7 +200,8 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download PDF @if (
-                                                        $course_pdfs &&
+                                                        $course->requests &&
+                                                            $course_pdfs &&
                                                             $topic->course_status == 2 &&
                                                             (collect($course_pdfs)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_pdfs)->whereNotNull('deleted_at')->count()))
@@ -237,7 +244,8 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download PPT @if (
-                                                        $course_ppts &&
+                                                        $course->requests &&
+                                                            $course_ppts &&
                                                             $topic->course_status == 2 &&
                                                             (collect($course_ppts)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_ppts)->whereNotNull('deleted_at')->count()))
@@ -280,7 +288,8 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download DOC @if (
-                                                        $course_docs &&
+                                                        $course->requests &&
+                                                            $course_docs &&
                                                             $topic->course_status == 2 &&
                                                             (collect($course_docs)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_docs)->whereNotNull('deleted_at')->count()))
