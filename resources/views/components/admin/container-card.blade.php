@@ -12,7 +12,7 @@
                         </button>
                     </div>
                 </div>
-                <div>
+                <div style="padding: 1.25rem;">
                     @if ($showmessage)
                         <x-flash-message />
                         <x-auth-validation-errors />
