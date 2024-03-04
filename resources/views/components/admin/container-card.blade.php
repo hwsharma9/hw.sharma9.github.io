@@ -12,12 +12,10 @@
                         </button>
                     </div>
                 </div>
-                <div style="padding: 1.25rem;">
-                    @if ($showmessage)
-                        <x-flash-message />
-                        <x-auth-validation-errors />
-                    @endif
-                </div>
+                @if ($showmessage)
+                    <x-flash-message />
+                    <x-auth-validation-errors />
+                @endif
                 {{ $slot }}
             </div>
         </div>
