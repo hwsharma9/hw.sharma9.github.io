@@ -12,13 +12,15 @@ class CreateCourseTopic extends Component
     public $alloted_admin;
     public $topic;
     public $configuration;
+    public $parent_loop;
 
-    public function mount(Course $course, $alloted_admin, $topic = null)
+    public function mount(Course $course, $alloted_admin, $topic = null, $parent_loop = null)
     {
         $this->course = $course;
         $this->alloted_admin = $alloted_admin;
         $this->topic = $topic;
         $this->configuration = $course->configuration;
+        $this->parent_loop = $parent_loop;
     }
 
     public function render()

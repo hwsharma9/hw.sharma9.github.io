@@ -55,7 +55,8 @@
     <div class="row" id="topics_container">
         @if ($course_topics->count())
             @foreach ($course_topics as $topic)
-                <livewire:create-course :course="$course" :alloted_admin="$alloted_admin" :topic="$topic" />
+                <livewire:create-course-topic :course="$course" :alloted_admin="$alloted_admin" :topic="$topic" :parent_loop="(array) $loop"
+                    :wire:key="$topic->id" />
             @endforeach
         @else
             <livewire:create-course-topic :course="$course" :alloted_admin="$alloted_admin" />
