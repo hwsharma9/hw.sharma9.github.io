@@ -29,11 +29,14 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'email' => ['required', 'string', 'email', 'exists:tbl_admins'],
-            'password' => ['required', 'string'],
-            // 'captcha' => 'required|captcha'
         ];
+        if (!request()->has('otp')) {
+            $rules['password'] = ['required', 'string'];
+            $rules['captcha'] = 'required|captcha';
+        }
+        return $rules;
     }
 
     /**

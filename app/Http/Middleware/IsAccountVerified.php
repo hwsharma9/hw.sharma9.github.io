@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\Services\RouteService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class IsAccountVerified
 {
@@ -50,6 +51,23 @@ class IsAccountVerified
             // redirect user to profile page to fill the profile details
             return redirect()->route('manage.profile', encrypt(auth('admin')->id()))
                 ->with('update_profile', 'Please update your profile first!');
+        }
+
+        // Check if user has verification code
+        // if not verified
+        $verificationCode = auth('admin')->user()->hasActiveVerificationCode();
+        if ($verificationCode) {
+            if (config('app.env') == 'production') {
+                $message = "Your OTP To Login is - " . $verificationCode->otp;
+                // $this->sendSMS($verificationCode->phone, $message);
+            } else {
+                $message = 'Your OTP sent to your mobile number.';
+            }
+            // info($verificationCode->verifiable_id);
+            // redirect user to profile page to verify mobile
+            return redirect()->route('manage.otp.verification', [
+                'admin' => encrypt($verificationCode->verifiable_id)
+            ])->with('success', $message);
         }
 
         $admin_roles = auth('admin')->user()->admin_roles()->where('status', 1)->get();

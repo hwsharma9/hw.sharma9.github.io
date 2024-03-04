@@ -140,6 +140,11 @@ class Admin extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(VerificationCode::class, 'verifiable');
     }
 
+    public function hasActiveVerificationCode()
+    {
+        return $this->verificationCode()->active()->latest('id')->first();
+    }
+
     /**
      * Get the designation that owns the Admin
      *

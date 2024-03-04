@@ -19,7 +19,11 @@ class VerifyOTPController extends Controller
      */
     public function create(Admin $admin)
     {
-        return view('admin.auth.verify-otp', compact('admin'));
+        $otp = $admin->verificationCode()->latest('id')->first();
+        if (!$otp) {
+            return redirect()->route('manage.login');
+        }
+        return view('admin.auth.verify-otp', compact('admin', 'otp'));
     }
 
     /**
@@ -32,19 +36,22 @@ class VerifyOTPController extends Controller
     {
         $verificationCode = $admin->verificationCode->where(['otp' => $request->otp, 'for' => 'login'])->latest('id')->first();
 
-        $now = Carbon::now();
         if (!$verificationCode) {
             return redirect()->back()->with('status', 'Your OTP is not correct');
-        } elseif ($verificationCode && $now->isAfter($verificationCode->expire_at)) {
+        } elseif ($verificationCode && $verificationCode->isExpired()) {
+            $verificationCode->delete();
+            Auth::guard('admin')->logout();
+            session('role_name', '');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return redirect()->route('manage.login')->with('status', 'Your OTP has been expired');
         }
-
-        $request->authenticate();
-        $request->session()->regenerate();
+        $verificationCode->delete();
+        // $request->authenticate();
+        // $request->session()->regenerate();
 
         // Create necessary session for user roles and permissions
-        PermissionSessions::setPermissionSessions();
-        $verificationCode->delete();
+        // PermissionSessions::setPermissionSessions();
 
         // $this->authenticated($request);
         return redirect()->route('manage.home');

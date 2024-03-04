@@ -53,6 +53,9 @@ class AuthenticatedSessionController extends Controller
             $message = 'Your OTP sent to your mobile number.';
         }
         # Return With OTP
+        $request->authenticate();
+        $request->session()->regenerate();
+        PermissionSessions::setPermissionSessions();
 
         return redirect()->route('manage.otp.verification', [
             'admin' => encrypt($verificationCode->id)
@@ -75,9 +78,7 @@ class AuthenticatedSessionController extends Controller
         # Admin Does not Have Any Existing OTP
         $verificationCode = $admin->verificationCode;
 
-        $now = Carbon::now();
-
-        if ($verificationCode && $now->isBefore($verificationCode->expire_at)) {
+        if ($verificationCode && $verificationCode->isExpired()) {
             $verificationCode->delete();
             // return $verificationCode;
         }

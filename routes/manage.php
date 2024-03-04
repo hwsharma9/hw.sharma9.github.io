@@ -58,9 +58,6 @@ Route::prefix('manage')->group(static function () {
         // Auth routes
         Route::get('login', [\App\Http\Controllers\manage\Auth\AuthenticatedSessionController::class, 'create'])->name('manage.login');
         Route::post('login', [\App\Http\Controllers\manage\Auth\AuthenticatedSessionController::class, 'store'])->name('manage.login');
-        // OTP Verification
-        Route::get('verify/otp/{admin}', [\App\Http\Controllers\manage\Auth\VerifyOTPController::class, 'create'])->name('manage.otp.verification');
-        Route::post('verify/otp/{admin}', [\App\Http\Controllers\manage\Auth\VerifyOTPController::class, 'store'])->name('manage.otp.verification');
         // Forgot password
         Route::get('forgot-password', [\App\Http\Controllers\manage\Auth\PasswordResetLinkController::class, 'create'])->name('manage.password.request');
         Route::post('forgot-password', [\App\Http\Controllers\manage\Auth\PasswordResetLinkController::class, 'store'])->name('manage.password.email');
@@ -68,6 +65,12 @@ Route::prefix('manage')->group(static function () {
         Route::get('reset-password/{token}', [\App\Http\Controllers\manage\Auth\NewPasswordController::class, 'create'])->name('admin.password.reset');
         Route::post('reset-password', [\App\Http\Controllers\manage\Auth\NewPasswordController::class, 'store'])->name('manage.password.update');
     });
+
+    // Route::middleware('auth')->group(static function () {
+    // OTP Verification
+    Route::get('verify/otp/{admin}', [\App\Http\Controllers\manage\Auth\VerifyOTPController::class, 'create'])->name('manage.otp.verification');
+    Route::post('verify/otp/{admin}', [\App\Http\Controllers\manage\Auth\VerifyOTPController::class, 'store'])->name('manage.otp.verification');
+    // });
 
     // Verify email routes
     Route::middleware(['auth:admin'])->group(static function () {

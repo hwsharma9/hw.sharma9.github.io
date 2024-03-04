@@ -29,7 +29,7 @@
                 @endif
             @else
                 <div class="alert alert-success alert-dismissible">
-                    Your OTP is <strong>{{ $admin->verificationCode->latest('id')->first()->otp }}</strong>
+                    Your OTP is <strong>{{ $otp->otp }}</strong>
                 </div>
             @endif
 
@@ -41,15 +41,15 @@
             </div>
 
             <!-- Password -->
-            <div class="mt-4" @if (request()->has('check_otp')) style="display:none" @endif>
+            {{-- <div class="mt-4" @if (request()->has('check_otp')) style="display:none" @endif>
                 <x-label for="password" :value="__('Password')" />
 
                 <x-input id="password" class="" type="password" name="password"
                     autocomplete="current-password" />
-            </div>
-            <div class="mt-4">
+            </div> --}}
+            {{-- <div class="mt-4">
                 <x-admin.captcha />
-            </div>
+            </div> --}}
 
             <!-- Remember Me -->
             <div class="mt-3 form-check">
@@ -76,23 +76,23 @@
                         otp: {
                             required: true,
                         },
-                        password: {
-                            required: true,
-                        },
-                        captcha: {
-                            required: false,
-                        },
+                        // password: {
+                        //     required: true,
+                        // },
+                        // captcha: {
+                        //     required: false,
+                        // },
                     },
                     messages: {
                         email: {
                             required: 'OTP is required.',
                         },
-                        password: {
-                            required: 'Password is required.',
-                        },
-                        captcha: {
-                            required: 'Security Code is required.',
-                        },
+                        // password: {
+                        //     required: 'Password is required.',
+                        // },
+                        // captcha: {
+                        //     required: 'Security Code is required.',
+                        // },
                     },
                     submitHandler: function(form) {
                         loader.show();
