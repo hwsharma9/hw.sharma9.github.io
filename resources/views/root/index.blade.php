@@ -269,73 +269,24 @@
                 <h1 class="mb-5">Our Courses</h1>
             </div>
             <div class="owl-carousel courses-carousel position-relative">
-                <div class="owl-item active">
-                    <div class="wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="course-item bg-light">
-                            <div class="position-relative overflow-hidden">
-                                <img class="img-fluid" src="{{ asset('frontend/img/course-1.jpg') }}"
-                                    alt="">
-                                <div
-                                    class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                        style="border-radius: 30px 0 0 30px;">View</a>
-                                    <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3"
-                                        style="border-radius: 0 30px 30px 0;">Enroll Now</a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4 pb-0 min-h">
-
-
-                                <h5 class="mb-4">Advance Oracle Apex Training</h5>
-                            </div>
-                            <div class="d-flex border-top">
-
-                                <small class="flex-fill text-center border-end py-2">
-                                    <i class="fa fa-clock text-primary me-2"></i> Duration - 10 Hrs</small>
-
+                @if ($courses)
+                    @foreach ($courses as $course)
+                        <div class="owl-item @if ($loop->index < 3) active @endif">
+                            <div class="wow fadeInUp" data-wow-delay="0.1s">
+                                <x-front.courses.CourseItem :course="$course" />
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="owl-item active">
-                    <div class="wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="course-item bg-light">
-                            <div class="position-relative overflow-hidden">
-                                <img class="img-fluid" src="{{ asset('frontend/img/course-2.jpg') }}"
-                                    alt="">
-                                <div
-                                    class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                        style="border-radius: 30px 0 0 30px;">View</a>
-                                    <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3"
-                                        style="border-radius: 0 30px 30px 0;">Enroll Now</a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4 pb-0 min-h">
-
-                                <h5 class="mb-4">Solar Technician (Electrical) - (Trade Code-560)</h5>
-                            </div>
-                            <div class="d-flex border-top">
-
-                                <small class="flex-fill text-center border-end py-2"><i
-                                        class="fa fa-clock text-primary me-2"></i>Duration - 1.49 Hrs</small>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @endforeach
+                @endif
             </div>
             <div class="col-12 text-center">
-                <a class="btn btn-primary py-2 px-4 mt-4" href="" style=" border-radius: 40px; ">Find out more
+                <a class="btn btn-primary py-2 px-4 mt-4" href="{{ route('root.courses.index') }}"
+                    style=" border-radius: 40px; ">Find out more
                     <i class="fas fa-arrow-alt-circle-right" style="margin-left: 10px; "></i></a>
             </div>
         </div>
     </div>
     <!-- Courses End -->
-
-
-
-
 
     <!-- footer logos Start -->
 

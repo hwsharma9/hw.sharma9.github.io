@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 Route::group(['middleware' => [Localization::class]], function () {
-    Route::name(config('constents.resides_at.root') . '.')->group(
+    Route::prefix('root/')->name(config('constents.resides_at.root') . '.')->group(
         function () {
             if (Schema::hasTable('tbl_acl_controller_routes')) {
                 // Fetch only routes created for the controller files resides at

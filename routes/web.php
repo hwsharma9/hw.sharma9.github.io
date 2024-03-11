@@ -37,5 +37,4 @@ Route::group([LogsQueries::class], function () {
     require __DIR__ . '/manage.php';
     require __DIR__ . '/user.php';
     require __DIR__ . '/root.php';
-    require __DIR__ . '/api.php';
 });
