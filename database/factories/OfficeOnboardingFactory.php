@@ -18,7 +18,7 @@ class OfficeOnboardingFactory extends Factory
     {
         return [
             'fk_department_id' => 53,
-            'fk_office_id' => 53,
+            'fk_office_id' => 55,
             'nodal_name' => fake()->name(),
             'nodal_contact_number' => fake()->phoneNumber(),
             'nodal_email' => fake()->email(),

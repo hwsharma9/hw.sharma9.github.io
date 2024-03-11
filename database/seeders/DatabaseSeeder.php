@@ -65,6 +65,9 @@ class DatabaseSeeder extends Seeder
             MCourseCategorySeeder::class,
             MCourseCategoryCourseSeeder::class,
             MAdditionalChargeReasonSeeder::class,
+
+            OfficeOnboardingSeeder::class,
+            CourseSeeder::class
         ]);
         Admin::whereNull('created_by')
             ->whereNull('created_by')

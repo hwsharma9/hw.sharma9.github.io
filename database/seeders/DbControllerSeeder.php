@@ -1380,6 +1380,45 @@ class DbControllerSeeder extends Seeder
                         'created_at' => '2024-01-17 07:49:24',
                         'updated_at' => '2024-02-06 11:38:19'
                     ],
+                ],
+            ],
+            [
+                'id' => 27,
+                'title' => 'Manage Courses',
+                'resides_at' => 'root',
+                'controller_name' => 'CourseController',
+                'status' => 1,
+                'created_by' => 1,
+                'updated_by' => 1,
+                'created_at' => '2024-03-05 12:46:00',
+                'updated_at' => '2024-03-05 12:46:23',
+                'routes' => [
+                    [
+                        'id' => 79,
+                        'route' => 'courses/index',
+                        'named_route' => 'courses.index',
+                        'method' => 'get',
+                        'function_name' => 'index',
+                        'fk_controller_id' => 27,
+                        'status' => 0,
+                        'created_by' => 1,
+                        'updated_by' => 1,
+                        'created_at' => '2024-03-05 12:46:00',
+                        'updated_at' => '2024-03-05 14:54:19'
+                    ],
+                    [
+                        'id' => 80,
+                        'route' => 'courses/{course}/view',
+                        'named_route' => 'courses.show',
+                        'method' => 'get',
+                        'function_name' => 'show',
+                        'fk_controller_id' => 27,
+                        'status' => 0,
+                        'created_by' => 1,
+                        'updated_by' => 1,
+                        'created_at' => '2024-03-05 12:52:08',
+                        'updated_at' => '2024-03-05 14:56:09'
+                    ],
                 ]
             ],
         ];
