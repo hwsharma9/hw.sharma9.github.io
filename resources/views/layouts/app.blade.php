@@ -9,9 +9,8 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/img/apple-touch-icon.png') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/img/favicon-32x32.png') }}" />
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,7 +395,7 @@
                     <li class="px-0">
                         <div class="theme-switch" data-toggle="tooltip" title="Change Theme">
                             <input class="theme-switch_toggle" id="themeSwitchToggle" type="checkbox">
-                            <x-label class="theme-switch_label" for="themeSwitchToggle"></x-label>
+                            <label class="theme-switch_label" for="themeSwitchToggle"></label>
                         </div>
                     </li>
                     <li class="px-0">
