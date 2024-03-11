@@ -19,6 +19,7 @@ use App\Http\Controllers\manage\CourseCategoryController;
 use App\Http\Controllers\manage\CourseController;
 use App\Http\Controllers\manage\CourseMediaController;
 use App\Http\Controllers\manage\ErrorLogController;
+use App\Models\DbControllerRoute;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,7 +109,40 @@ Route::prefix('manage')->group(static function () {
                 Route::get('download-media/{media}', CourseMediaController::class)->name('download-media');
 
                 Route::group(['middleware' => [Localization::class, RoutePermission::class]], function () {
-                    $db_controller_routes = JsonService::getJson('admin_menu');
+                    $db_controller_routes =  DbControllerRoute::whereHas('dbController', function ($query) {
+                        $query->where('resides_at', 'manage');
+                    })->with(['dbController' => function ($query) {
+                        $query->where('resides_at', 'manage');
+                    }])->get();
+
+                    if ($db_controller_routes) {
+                        foreach ($db_controller_routes as $db_controller_route) {
+                            // print_r($db_controller_route->dbController->resides_at);
+                            // Create the controllers path
+                            $controller = trim("app\\Http\\Controllers\\manage\\" . $db_controller_route->dbController->controller_name);
+                            // Check if the controller exists in the app/Http/Controllers Folder
+                            // If exists then create the route
+                            // Else ignore the route
+                            if (file_exists(str_replace('\\', '/', base_path($controller . ".php")))) {
+                                // Create the object of the controller class
+                                $ccp = str_replace('app', 'App', $controller);
+                                $controller_path = new $ccp();
+                                if ($db_controller_route->method === 'get') {
+                                    // Create the route
+                                    // The Match accepts the method provided by the add access list method
+                                    // all the get method accepts post method too so we used match
+                                    Route::match([$db_controller_route->method, 'post'], $db_controller_route->route, [get_class($controller_path), $db_controller_route->function_name])->name($db_controller_route->named_route);
+                                } else {
+                                    // If Controller not found return view controller-not-found view
+                                    Route::{$db_controller_route->method}($db_controller_route->route, function () use ($db_controller_route) {
+                                        return view('admin.errors.controller-not-found')->with(['db_controller_route' => $db_controller_route]);
+                                    })->name($db_controller_route->named_route);
+                                }
+                            }
+                        }
+                    }
+
+                    /*$db_controller_routes = JsonService::getJson('admin_menu');
                     if ($db_controller_routes) {
                         if ($db_controller_routes) {
                             foreach ($db_controller_routes as $db_controller_route) {
@@ -129,7 +163,7 @@ Route::prefix('manage')->group(static function () {
                                 }
                             }
                         }
-                    }
+                    }*/
                 });
             });
         });

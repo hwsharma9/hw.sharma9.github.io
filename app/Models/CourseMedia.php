@@ -6,6 +6,7 @@ use App\Http\Traits\Admined;
 use App\Http\Traits\Encryptable;
 use App\Http\Traits\HasStatus;
 use App\Http\Traits\CourseLoggable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,6 +46,15 @@ class CourseMedia extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'preview',
+    ];
+
+    /**
      * Get the parent uploadable model (Admin, User or media).
      */
     public function uploadable()
@@ -77,7 +87,7 @@ class CourseMedia extends Model
         }
         return '<a href="javascript:void(0)" class="text-red content-changed"
             data-file="1"
-         data-approved="' . htmlspecialchars(json_encode(array_values($approved)), ENT_QUOTES, 'UTF-8') . '" 
+         data-approved="' . htmlspecialchars(json_encode(array_values($approved)), ENT_QUOTES, 'UTF-8') . '"
          data-changed="' . htmlspecialchars(json_encode(array_values($new_upload)), ENT_QUOTES, 'UTF-8') . '">View Changes</a>';
     }
 
@@ -91,9 +101,9 @@ class CourseMedia extends Model
         if (isset($this->$update_column)) {
             // echo $this->$column . '!=' . $this->$update_column;
             if ($this->$column != $this->$update_column) {
-                return '<a href="javascript:void(0)" class="text-red content-changed" 
-                data-column="' . $column . '" 
-                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '" 
+                return '<a href="javascript:void(0)" class="text-red content-changed"
+                data-column="' . $column . '"
+                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '"
                 data-changed="' . htmlspecialchars($this->$update_column, ENT_QUOTES, 'UTF-8') . '">View Changes</a>';
             }
         }
@@ -159,5 +169,37 @@ class CourseMedia extends Model
             // Delete file from storage folder too
             Storage::disk('public')->delete($upload->file_path);
         });
+    }
+
+    /**
+     * Interact with the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function filePath(): Attribute
+    {
+        return new Attribute(
+            get: function ($value) {
+                if ($this->file_mime_type != 'application/video') {
+                    return asset('storage/' . str_replace('\\', '/', $value));
+                } else {
+                    return $value;
+                }
+            }
+        );
+        // get: fn ($value) => asset('storage/' . str_replace('\\', '/', $value))
+    }
+
+    public function preview(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                if ($this->file_mime_type == 'image/jpeg') {
+                    return 'image';
+                } else if ($this->file_mime_type == 'application/pdf') {
+                    return 'pdf';
+                }
+            },
+        );
     }
 }

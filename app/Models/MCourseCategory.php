@@ -6,12 +6,14 @@ use App\Http\Traits\Admined;
 use App\Http\Traits\Encryptable;
 use App\Http\Traits\HasStatus;
 use App\Http\Traits\Loggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MCourseCategory extends Model
 {
+    use HasFactory;
     use Admined;
     use Loggable;
     use Encryptable;

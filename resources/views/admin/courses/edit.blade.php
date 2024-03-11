@@ -318,6 +318,13 @@
             function initCK(id) {
                 CKEDITOR.replace(id, {
                     toolbar: [{
+                            name: 'document',
+                            groups: ['mode', 'document', 'doctools'],
+                            items: ['Source', '-', 'Save', 'NewPage', 'ExportPdf', 'Preview', 'Print', '-',
+                                'Templates'
+                            ]
+                        },
+                        {
                             name: "basicstyles",
                             items: [
                                 "Bold",
@@ -346,7 +353,17 @@
                                 "JustifyCenter",
                                 "JustifyRight",
                                 "JustifyBlock",
+                                '-',
+                                'font'
                             ],
+                        },
+                        {
+                            name: 'styles',
+                            items: ['Styles', 'Format', 'Font', 'FontSize']
+                        },
+                        {
+                            name: 'tools',
+                            items: ['Maximize', 'ShowBlocks']
                         },
                     ],
                     language: "en",
@@ -646,9 +663,7 @@
                     let asset = '{{ asset('') }}';
                     if (mime_type.match('image.*')) {
                         if (file.hasOwnProperty('file_mime_type')) {
-                            image = asset + 'storage/' + file
-                                .file_path.replace(
-                                    /\\/g, "/");
+                            image = file.file_path;
                         } else {
                             image = e.target.result;
                         }

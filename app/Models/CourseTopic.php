@@ -6,12 +6,14 @@ use App\Http\Traits\Admined;
 use App\Http\Traits\CourseUploadable;
 use App\Http\Traits\Encryptable;
 use App\Http\Traits\CourseLoggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Schema;
 
 class CourseTopic extends Model
 {
+    use HasFactory;
     use Admined;
     use CourseUploadable;
     use Encryptable;
@@ -83,9 +85,9 @@ class CourseTopic extends Model
         if (isset($this->$update_column)) {
             // echo $this->$column . '!=' . $this->$update_column;
             if ($this->$column != $this->$update_column) {
-                return '<a href="javascript:void(0)" class="text-red content-changed" 
-                data-column="' . $column . '" 
-                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '" 
+                return '<a href="javascript:void(0)" class="text-red content-changed"
+                data-column="' . $column . '"
+                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '"
                 data-changed="' . htmlspecialchars($this->$update_column, ENT_QUOTES, 'UTF-8') . '">View Changes</a>';
             }
         }

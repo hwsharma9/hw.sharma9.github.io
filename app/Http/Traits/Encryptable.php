@@ -4,6 +4,16 @@ namespace App\Http\Traits;
 
 trait Encryptable
 {
+    public function initializeEncryptable()
+    {
+        $this->append('encr_id');
+    }
+
+    public function getEncrIdAttribute()
+    {
+        return encrypt($this->getKey());
+    }
+
     /**
      * Retrieve the model for a bound value.
      *

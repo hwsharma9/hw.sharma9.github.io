@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
@@ -76,6 +77,21 @@ class Course extends Model
     }
 
     /**
+     * Get all of the topicsUploads for the Course
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function topicsUploads(): HasManyThrough
+    {
+        return $this->hasManyThrough(CourseMedia::class, CourseTopic::class, 'fk_course_id', 'uploadable_id', 'id', 'id');
+    }
+
+    public function getTopicUploads()
+    {
+        return $this->topics()->has('uploads')->with(['uploads']);
+    }
+
+    /**
      * Get all of the requests for the Course
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -109,9 +125,9 @@ class Course extends Model
         $update_column = 'update_' . $column;
         if (isset($this->$update_column)) {
             if ($this->$column != $this->$update_column) {
-                return '<a href="javascript:void(0)" class="text-red content-changed" 
-                data-column="' . $column . '" 
-                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '" 
+                return '<a href="javascript:void(0)" class="text-red content-changed"
+                data-column="' . $column . '"
+                data-approved="' . htmlspecialchars($this->$column, ENT_QUOTES, 'UTF-8') . '"
                 data-changed="' . htmlspecialchars($this->$update_column, ENT_QUOTES, 'UTF-8') . '">View Changes</a>';
             }
         }
@@ -129,6 +145,7 @@ class Course extends Model
     public function scopeFilter($query)
     {
         $filter = (array) request()->get('filter');
+        // print_r($filter);
         $query->where(function ($query) use ($filter) {
             $query->when((isset($filter['category']) && !empty($filter['category'])), function ($query) use ($filter) {
                 $query->whereHas('assignedAdmin', function ($query)  use ($filter) {
@@ -147,6 +164,21 @@ class Course extends Model
                 })
                 ->when((isset($filter['course_status'])), function ($query) use ($filter) {
                     $query->where('course_status', $filter['course_status']);
+                })
+                ->when((isset($filter['department']) && !empty($filter['department'])), function ($query) use ($filter) {
+                    $query->whereHas('assignedAdmin', function ($query) use ($filter) {
+                        $query->whereHas('courseCategory', function ($query) use ($filter) {
+                            $department_id = is_integer($filter['department']) ? $filter['department'] : decrypt($filter['department']);
+                            $query->where('fk_department_id', $department_id);
+                        });
+                    });
+                })
+                ->when((isset($filter['course_name']) && !empty($filter['course_name'])), function ($query) use ($filter) {
+                    $query->whereHas('assignedAdmin', function ($query) use ($filter) {
+                        $query->whereHas('categoryCourse', function ($query) use ($filter) {
+                            $query->where('course_name_en', 'like', '%' . $filter['course_name'] . '%');
+                        });
+                    });
                 });
         });
     }

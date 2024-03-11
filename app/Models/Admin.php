@@ -177,6 +177,16 @@ class Admin extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get all of the assignCourses for the Admin
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assignCourses(): HasMany
+    {
+        return $this->hasMany(MAdminCourse::class, 'fk_admin_id', 'id');
+    }
+
+    /**
      * Check if username is valid or not
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

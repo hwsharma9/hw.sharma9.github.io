@@ -51,6 +51,7 @@ class AssignedCourseController extends Controller
                         });
                     });
                 })
+                ->where('fk_admin_id', auth()->id())
                 ->active()
                 ->filter();
             return DataTables::of($data)
