@@ -18,7 +18,12 @@ class HomeController extends Controller
     {
         $registered_users = User::count();
         $courses_enrolled = Course::active()->count();
-        $department_onboarded = OfficeOnboarding::with(['department'])->active()->latest()->take(8)->get();
+        $department_onboarded = OfficeOnboarding::with(['office'])
+            ->has('office')
+            ->active()
+            ->latest()
+            ->take(8)
+            ->get();
         $sliders = Slider::select([
             'id',
             'title_hi',
@@ -28,15 +33,29 @@ class HomeController extends Controller
             'fk_page_id',
             'custom_url',
             'menu_type'
-        ])->active()->with(['upload'])->get();
+        ])
+            ->active()
+            ->with(['upload'])
+            ->get();
+        $courses = Course::with([
+            'upload',
+            'assignedAdmin' => function ($query) {
+                $query->select('id', 'fk_course_category_courses_id')->with(['categoryCourse:id,course_name_hi,course_name_en']);
+            }
+        ])
+            ->where('course_status', 4)
+            ->latest()
+            ->take(10)
+            ->get();
         return response()->json([
             'status' => 200,
             'data' => [
                 'registered_users' => $registered_users,
                 'courses_enrolled' => $courses_enrolled,
-                'department_onboarded' => $department_onboarded->pluck('department'),
+                'department_onboarded' => $department_onboarded->pluck('office'),
                 'department_onboarded_count' => $department_onboarded->count(),
                 'sliders' => $sliders,
+                'courses' => $courses,
             ]
         ]);
     }
