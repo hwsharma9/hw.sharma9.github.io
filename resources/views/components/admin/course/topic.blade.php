@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <x-label for="topic_summary">Topic Summary <span class="text-danger">*</span></x-label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control editor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 10000]) }}" class="form-control editor"
                                 placeholder="Enter Topic Summary" name="{{ 'topic[' . $loop->index . '][summary]' }}"
                                 id="{{ 'topic_' . $loop->index . '_summary' }}">{{ old('topic[' . $loop->index . '][summary]', $topic->update_summary ? $topic->update_summary : $topic->summary) }}</textarea>
                         </div>
@@ -233,31 +233,35 @@
                                     <div class="form-group">
                                         @if ($course_pdfs)
                                             @foreach ($course_pdfs as $course_pdf)
-                                                <div class="upload-row mp-1 flex-wrap">
+                                                <div class="media-container mp-1">
+                                                    <div class="upload-row flex-wrap">
+                                                        <input type="file" data-name="course_pdf"
+                                                            name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
+                                                            id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
+                                                            class="course_pdf"
+                                                            data-files="{{ json_encode(mysql_escape_mimic($course_pdf)) }}"
+                                                            data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 && !$course_pdf->id ? true : false]) }}"
+                                                            accept="application/pdf"
+                                                            data-id="{{ encrypt($course_pdf->id) }}" />
+                                                        <div class="upload__img-wrap"></div>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm delete_upload_row"
+                                                            data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_pdf->id)]) }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="media-container mp-1">
+                                                <div class="upload-row flex-wrap">
                                                     <input type="file" data-name="course_pdf"
                                                         name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
                                                         class="course_pdf"
-                                                        data-files="{{ json_encode(mysql_escape_mimic($course_pdf)) }}"
-                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 && !$course_pdf->id ? true : false]) }}"
-                                                        accept="application/pdf"
-                                                        data-id="{{ encrypt($course_pdf->id) }}" />
-                                                    <div class="upload__img-wrap"></div>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-sm delete_upload_row"
-                                                        data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_pdf->id)]) }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 ? true : false]) }}"
+                                                        accept="application/pdf" />
                                                 </div>
-                                            @endforeach
-                                        @else
-                                            <div class="upload-row mp-1 flex-wrap">
-                                                <input type="file" data-name="course_pdf"
-                                                    name="{{ 'topic[' . $loop->index . '][course_pdf][]' }}"
-                                                    id="{{ 'topic_' . $loop->index . '_course_pdf' }}"
-                                                    class="course_pdf"
-                                                    data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 ? true : false]) }}"
-                                                    accept="application/pdf" />
                                             </div>
                                         @endif
                                     </div>
@@ -277,31 +281,35 @@
                                     <div class="form-group">
                                         @if ($course_ppts)
                                             @foreach ($course_ppts as $course_ppt)
-                                                <div class="upload-row mp-1 flex-wrap">
+                                                <div class="media-container mp-1">
+                                                    <div class="upload-row flex-wrap">
+                                                        <input type="file" data-name="course_ppt"
+                                                            name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
+                                                            id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
+                                                            class="course_ppt"
+                                                            data-files="{{ json_encode(mysql_escape_mimic($course_ppt)) }}"
+                                                            data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 && !$course_ppt ? true : false]) }}"
+                                                            accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                                                            data-id="{{ encrypt($course_ppt->id) }}" />
+                                                        <div class="upload__img-wrap"></div>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm delete_upload_row"
+                                                            data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_ppt->id)]) }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="media-container mp-1">
+                                                <div class="upload-row flex-wrap">
                                                     <input type="file" data-name="course_ppt"
                                                         name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
                                                         class="course_ppt"
-                                                        data-files="{{ json_encode(mysql_escape_mimic($course_ppt)) }}"
-                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 && !$course_ppt ? true : false]) }}"
-                                                        accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                                                        data-id="{{ encrypt($course_ppt->id) }}" />
-                                                    <div class="upload__img-wrap"></div>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-sm delete_upload_row"
-                                                        data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_ppt->id)]) }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 ? true : false]) }}"
+                                                        accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                                                 </div>
-                                            @endforeach
-                                        @else
-                                            <div class="upload-row mp-1 flex-wrap">
-                                                <input type="file" data-name="course_ppt"
-                                                    name="{{ 'topic[' . $loop->index . '][course_ppt][]' }}"
-                                                    id="{{ 'topic_' . $loop->index . '_course_ppt' }}"
-                                                    class="course_ppt"
-                                                    data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 ? true : false]) }}"
-                                                    accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                                             </div>
                                         @endif
                                     </div>
@@ -321,31 +329,35 @@
                                     <div class="form-group">
                                         @if ($course_docs)
                                             @foreach ($course_docs as $course_doc)
-                                                <div class="upload-row mp-1 flex-wrap">
+                                                <div class="media-container mp-1">
+                                                    <div class="upload-row flex-wrap">
+                                                        <input type="file" data-name="course_doc"
+                                                            name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
+                                                            id="{{ 'topic_' . $loop->index . '_course_doc' }}"
+                                                            class="course_doc"
+                                                            data-files="{{ json_encode(mysql_escape_mimic($course_doc)) }}"
+                                                            data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 && !$course_doc->id ? true : false]) }}"
+                                                            accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                                            data-id="{{ encrypt($course_doc->id) }}" />
+                                                        <div class="upload__img-wrap"></div>
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm delete_upload_row"
+                                                            data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_doc->id)]) }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="media-container mp-1">
+                                                <div class="upload-row flex-wrap">
                                                     <input type="file" data-name="course_doc"
                                                         name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
                                                         id="{{ 'topic_' . $loop->index . '_course_doc' }}"
                                                         class="course_doc"
-                                                        data-files="{{ json_encode(mysql_escape_mimic($course_doc)) }}"
-                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 && !$course_doc->id ? true : false]) }}"
-                                                        accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                                        data-id="{{ encrypt($course_doc->id) }}" />
-                                                    <div class="upload__img-wrap"></div>
-                                                    <button type="button"
-                                                        class="btn btn-danger btn-sm delete_upload_row"
-                                                        data-route="{{ route('ajax.course.media.destroy', ['course_media' => encrypt($course_doc->id)]) }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                        data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 ? true : false]) }}"
+                                                        accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                                                 </div>
-                                            @endforeach
-                                        @else
-                                            <div class="upload-row mp-1 flex-wrap">
-                                                <input type="file" data-name="course_doc"
-                                                    name="{{ 'topic[' . $loop->index . '][course_doc][]' }}"
-                                                    id="{{ 'topic_' . $loop->index . '_course_doc' }}"
-                                                    class="course_doc"
-                                                    data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 ? true : false]) }}"
-                                                    accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                                             </div>
                                         @endif
                                     </div>
@@ -402,7 +414,7 @@
                         <div class="form-group">
                             <x-label for="topic_summary">Topic Summary <span class="text-danger">*</span></x-label>
                             <textarea type="text" data-name="summary"
-                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 250]) }}" class="form-control editor"
+                                data-validations="{{ json_encode(['ckrequired' => true, 'maxlength' => 10000]) }}" class="form-control editor"
                                 placeholder="Enter Topic Summary">{{ old('summary') }}</textarea>
                         </div>
                     </div>
