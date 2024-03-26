@@ -32,6 +32,10 @@ class Notifications extends Component
     public function groupNotifications()
     {
         $this->group_notifications = $this->unread_notifications->groupBy('type');
+        // echo "<pre>";
+        // print_r($this->group_notifications->toArray());
+        // echo "</pre>";
+        // dd('wait');
         $notifications_html = [];
         if ($this->group_notifications) {
             foreach ($this->group_notifications as $key => $group_notification) {
@@ -64,6 +68,15 @@ class Notifications extends Component
                                         class="float-right text-muted text-sm">' . $time . '</span>
                             </a>';
                         }
+                    }
+                } else if ($key === 'App\Notifications\Admin\RequestToApproveCourseEnrollment') {
+                    foreach ($group_notification as $key => $notification) {
+                        // print_r($notification->data);
+                        $notifications_html[] = '<a href="" class="dropdown-item">
+                                    <i class="fas fa-users mr-2"></i> ' . $notification->data['message'] . '
+                                    <span
+                                            class="float-right text-muted text-sm">' . $notification->created_at->diffForHumans() . '</span>
+                                </a>';
                     }
                 }
             }
