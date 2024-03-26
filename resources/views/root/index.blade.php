@@ -64,19 +64,19 @@
         <div class="row">
             <div class="four col-md-6 col-lg-3  wow fadeInUp" data-wow-delay="0.1s">
                 <div class="counter-box ">
-                    <span class="counter">20</span>
+                    <span class="counter">{{ $department_onboarded_count }}</span>
                     <p>Total Departments Onboarded</p>
                 </div>
             </div>
             <div class="four col-md-6 col-lg-3 wow zoomIn" data-wow-delay="0.3s">
                 <div class="counter-box">
-                    <span class="counter">400</span>
+                    <span class="counter">{{ $courses_enrolled }}</span>
                     <p>Courses Enrolled </p>
                 </div>
             </div>
             <div class="four col-md-6 col-lg-3 wow zoomIn" data-wow-delay="0.3s">
                 <div class="counter-box">
-                    <span class="counter">1300</span>
+                    <span class="counter">{{ $registered_users }}</span>
                     <p>Total Users Registered</p>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                             analyze and report extensive data, while making your institutes management "A cashless and
                             paperless management". </p> --}}
                         {!! config('app.locale') == 'hi' ? $page->description_hi : $page->description_en !!}
-
+                        <br>
                         <a class="btn btn-primary py-2 px-4 mt-2" href="" style=" border-radius: 40px; ">Find out
                             more
                             <i class="fas fa-arrow-alt-circle-right" style="margin-left: 10px; "></i></a>

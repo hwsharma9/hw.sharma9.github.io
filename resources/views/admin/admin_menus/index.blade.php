@@ -349,7 +349,7 @@
                     };
 
                     $.ajax({
-                        type: "PATCH",
+                        type: "GET",
                         url: '{{ route('manage.menus.update-all') }}',
                         data: dataString,
                         cache: false,

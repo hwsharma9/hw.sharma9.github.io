@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-lg-12 wow fadeInUp " style="background-color: #06bbcc;">
                     <div class="search-title">
-                        <form action="{{ route('root.courses.index') }}" method="get">
+                        <form action="{{ route('root.courses.index') }}" method="get" id="search-courses">
                             @php
                                 $filter = request()->get('filter');
                             @endphp
@@ -85,11 +85,11 @@
                                         <br>
                                         <button type="submit"
                                             class="btn btn-dark py-md-2 px-md-4 animated slideInRight"
-                                            style=" border-radius: 40px; margin-right:20px" id="search">
+                                            style="border-radius: 40px; margin-right:20px" id="search">
                                             Search</button>
-                                        <button class="btn btn-light py-md-2 px-md-4 animated slideInRight"
-                                            style=" border-radius: 40px; " onclick="searchFilter(0,1);"
-                                            id="search-all"><i class="fas fa-refresh"></i>
+                                        <button type="reset"
+                                            class="btn btn-light py-md-2 px-md-4 animated slideInRight"
+                                            style="border-radius: 40px;" id="search-all"><i class="fas fa-refresh"></i>
                                             Reset</button>
                                     </div>
                                 </div>
@@ -139,4 +139,11 @@
         </div>
     </div>
     <!-- About End -->
+    @push('scripts')
+        <script>
+            $('button[type="reset"]').on("click", function() {
+                location.href = $("#search-courses").attr('action');
+            });
+        </script>
+    @endpush
 </x-app-layout>

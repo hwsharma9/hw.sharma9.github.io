@@ -230,6 +230,25 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_hi">Course Enrolment Required</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_enrolment_required"
+                                                {{ old('is_enrolment_required') && old('is_enrolment_required') == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_enrolment_required')) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_enrolment_required"
+                                                {{ old('is_enrolment_required') && old('is_enrolment_required') == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <x-admin.captcha />
                         </div>
                     </div>

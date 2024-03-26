@@ -126,11 +126,11 @@
         </div>
     </x-slot>
     @php
-        // $action = view('components.admin.course.topic', [
-        //     'configuration' => $configuration,
-        //     'topic' => null,
-        //     'loop' => null,
-        // ])->render();
+        $action = view('components.admin.course.topic', [
+            'configuration' => $configuration,
+            'topic' => null,
+            'loop' => null,
+        ])->render();
     @endphp
     <x-slot name="content">
         <x-admin.container-card>
@@ -826,7 +826,7 @@
                             }
                         }
                     }
-                    // console.log(validator.settings.rules);
+                    console.log(validator.settings.rules);
                 }
 
                 // Add new topic html into form
@@ -893,6 +893,7 @@
                         <div class="upload-row flex-wrap">
                             ${html}${button_html}
                         </div>
+                        <div class="media-error"></div>
                     </div>`;
                 }
 

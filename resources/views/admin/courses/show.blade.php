@@ -59,7 +59,9 @@
     <x-slot name="content">
         @php
             $course_media = $course->uploads->whereNull('deleted_at')->first();
+            $has_request = $course->requests->count() > 0;
             // echo '<pre>';
+            // print_r($course->requests->toArray());
             // print_r($course->uploads->whereNull('deleted_at')->first());
             // echo '</pre>';
             // $log = '';
@@ -95,8 +97,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <x-label for="description">Course Description <span class="text-danger">*</span>
-                                @if ($course->requests)
-                                    {{ $course->checkDiff('description') }}
+                                @if ($has_request && $course->course_status >= 2)
+                                    {!! $course->checkDiff('description') !!}
                                 @endif
                             </x-label>
                             {{-- <textarea type="text" name="description" class="form-control" id="description"
@@ -109,7 +111,7 @@
                     <div class="col-md-6 upload-file">
                         <div class="d-flex">
                             <div class="col-md-12 upload-file">
-                                <label>Course Thumbnail @if ($course->requests && $course->course_status == 2 && $course->uploads->where('course_status', '!=', 2)->count())
+                                <label>Course Thumbnail @if ($has_request && $course->course_status >= 2 && $course->uploads->where('course_status', '!=', 2)->count())
                                         {!! $course->upload->checkCourseDiff($course->uploads, 'course_thumbnail') !!}
                                     @endif
                                 </label>
@@ -120,7 +122,7 @@
                                             <div class="upload-row mp-1">
                                                 <div class="upload__img-wrap">
                                                     <div class="upload__img-box">
-                                                        <div style="background-image: url({{ asset('storage/' . str_replace('\\', '/', $course_media->file_path)) }})"
+                                                        <div style="background-image: url({{ $course_media->file_path }})"
                                                             data-toggle="tooltip" data-placement="top"
                                                             title="{{ $course_media->original_name }}" class="img-bg">
                                                         </div>
@@ -161,7 +163,7 @@
                                                 <div class="form-group">
                                                     <label for="topic_title">Topic Title <span
                                                             class="text-danger">*</span>
-                                                        @if ($course->requests)
+                                                        @if ($has_request && $topic->course_status >= 2)
                                                             {!! $topic->checkDiff('title') !!}
                                                         @endif
                                                     </label>
@@ -175,7 +177,7 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12">
                                                     <label>Video URL
-                                                        @if ($course->requests)
+                                                        @if ($has_request && $topic->course_status >= 2)
                                                             {!! $course_video?->checkCourseVideoDiff() !!}
                                                         @endif
                                                     </label>
@@ -190,7 +192,9 @@
                                             <!-- Topic Summary Start -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="topic_summary">Topic Summary {!! $topic->checkDiff('summary') !!}
+                                                    <label for="topic_summary">Topic Summary @if ($has_request && $topic->course_status >= 2)
+                                                            {!! $topic->checkDiff('summary') !!}
+                                                        @endif
                                                     </label>
                                                     <div class="form-control">{!! $topic->update_summary ? $topic->update_summary : $topic->summary !!}</div>
                                                 </div>
@@ -200,9 +204,9 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download PDF @if (
-                                                        $course->requests &&
+                                                        $has_request &&
                                                             $course_pdfs &&
-                                                            $topic->course_status == 2 &&
+                                                            $topic->course_status >= 2 &&
                                                             (collect($course_pdfs)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_pdfs)->whereNotNull('deleted_at')->count()))
                                                             {!! $topic->upload->checkCourseDiff(collect($course_pdfs), 'course_pdf') !!}
@@ -244,9 +248,9 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download PPT @if (
-                                                        $course->requests &&
+                                                        $has_request &&
                                                             $course_ppts &&
-                                                            $topic->course_status == 2 &&
+                                                            $topic->course_status >= 2 &&
                                                             (collect($course_ppts)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_ppts)->whereNotNull('deleted_at')->count()))
                                                             {!! $topic->upload->checkCourseDiff(collect($course_ppts), 'course_ppt') !!}
@@ -288,9 +292,9 @@
                                             <div class="col-md-6">
                                                 <div class="col-md-12 upload-file">
                                                     <label>Download DOC @if (
-                                                        $course->requests &&
+                                                        $has_request &&
                                                             $course_docs &&
-                                                            $topic->course_status == 2 &&
+                                                            $topic->course_status >= 2 &&
                                                             (collect($course_docs)->where('course_status', '!=', 2)->count() ||
                                                                 collect($course_docs)->whereNotNull('deleted_at')->count()))
                                                             {!! $topic->upload->checkCourseDiff(collect($course_docs), 'course_doc') !!}
@@ -373,7 +377,7 @@
                                 </table>
                             </div>
                         </div>
-                        @if ($course->requests->count())
+                        @if ($has_request)
                             <form
                                 action="{{ route('manage.course.request.edit', ['course' => $course->id, 'approval_request' => $course->requests[0]->id]) }}"
                                 data-action="{{ route('manage.course.request.edit', ['course' => $course->id, 'approval_request' => $course->requests[0]->id]) }}"
@@ -655,29 +659,27 @@
                 if (files.length) {
                     result = files.map(file => {
                         if (file) {
-                            // let image = window.location.origin + '/storage/' + obj.file_path.replace(/\\/g, "/");
-                            let image = ''
+                            let image = '';
+                            let mime_type = file.hasOwnProperty('file_mime_type') ? file.file_mime_type : file.type;
                             let asset = '{{ asset('') }}';
-                            if (file.file_mime_type.match('image.*')) {
-                                image = asset + 'storage/' + file
-                                    .file_path.replace(
-                                        /\\/g, "/");
-                            } else if (file.file_mime_type.match('application/pdf')) {
-                                image =
-                                    "{{ asset('dist/img/pdf.png') }}";
-                            } else if (file.file_mime_type.match('video.*')) {
-                                image =
-                                    "{{ asset('dist/img/video.png') }}";
+                            if (mime_type.match('image.*')) {
+                                if (file.hasOwnProperty('file_mime_type')) {
+                                    image = file.file_path;
+                                } else {
+                                    image = e.target.result;
+                                }
+                            } else if (mime_type.match('application/pdf')) {
+                                image = asset + 'dist/img/pdf.png';
+                            } else if (mime_type.match('video.*')) {
+                                image = asset + 'dist/img/video.png';
                             } else if (['application/vnd.ms-powerpoint',
                                     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-                                ].includes(file.file_mime_type)) {
-                                image =
-                                    "{{ asset('dist/img/ppt.png') }}";
+                                ].includes(mime_type)) {
+                                image = asset + 'dist/img/ppt.png';
                             } else if (['application/msword',
                                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                                ].includes(file.file_mime_type)) {
-                                image =
-                                    "{{ asset('dist/img/doc.png') }}";
+                                ].includes(mime_type)) {
+                                image = asset + 'dist/img/doc.png';
                             }
                             return String(`<div class="border p-2">
                                 ${file.deleted_at ? '<label>Deleted</label>' : ''}

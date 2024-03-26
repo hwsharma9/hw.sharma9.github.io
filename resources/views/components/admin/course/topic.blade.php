@@ -250,6 +250,7 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </div>
+                                                    <div class="media-error"></div>
                                                 </div>
                                             @endforeach
                                         @else
@@ -262,6 +263,7 @@
                                                         data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 ? true : false]) }}"
                                                         accept="application/pdf" />
                                                 </div>
+                                                <div class="media-error"></div>
                                             </div>
                                         @endif
                                     </div>
@@ -298,6 +300,7 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </div>
+                                                    <div class="media-error"></div>
                                                 </div>
                                             @endforeach
                                         @else
@@ -310,6 +313,7 @@
                                                         data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 ? true : false]) }}"
                                                         accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                                                 </div>
+                                                <div class="media-error"></div>
                                             </div>
                                         @endif
                                     </div>
@@ -346,6 +350,7 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </div>
+                                                    <div class="media-error"></div>
                                                 </div>
                                             @endforeach
                                         @else
@@ -358,6 +363,7 @@
                                                         data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 ? true : false]) }}"
                                                         accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                                                 </div>
+                                                <div class="media-error"></div>
                                             </div>
                                         @endif
                                     </div>
@@ -429,6 +435,7 @@
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                                 accept="application/pdf" />
                                         </div>
+                                        <div class="media-error"></div>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i
@@ -445,6 +452,7 @@
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                                 accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                                         </div>
+                                        <div class="media-error"></div>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i
@@ -461,6 +469,7 @@
                                                 data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true]) }}"
                                                 accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                                         </div>
+                                        <div class="media-error"></div>
                                     </div>
                                 </div>
                                 <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i
@@ -477,11 +486,12 @@
                                     </x-label>
                                     <div class="form-group">
                                         <div class="media-container mp-1">
-                                            <div class="upload-row mp-1 flex-wrap">
+                                            <div class="upload-row flex-wrap">
                                                 <input type="file" data-name="course_pdf" class="course_pdf"
                                                     data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_pdf_required == 1 ? true : false]) }}"
                                                     accept="application/pdf" />
                                             </div>
+                                            <div class="media-error"></div>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i
@@ -503,6 +513,7 @@
                                                     data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_ppt_required == 1 ? true : false]) }}"
                                                     accept="application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                                             </div>
+                                            <div class="media-error"></div>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i
@@ -524,6 +535,7 @@
                                                     data-validations="{{ json_encode(['limit_file_upload' => true, 'validate_file_size' => true, 'required' => $configuration->is_upload_doc_required == 1 ? true : false]) }}"
                                                     accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                                             </div>
+                                            <div class="media-error"></div>
                                         </div>
                                     </div>
                                     <button class="btn btn-primary btn-block mt-2 mb-2 add-file" type="button"><i

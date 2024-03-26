@@ -51,14 +51,6 @@
                 <x-admin.captcha />
             </div> --}}
 
-            <!-- Remember Me -->
-            <div class="mt-3 form-check">
-                <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                <x-label for="remember_me" class="form-check-label text-sm">
-                    {{ __('Remember me') }}
-                </x-label>
-            </div>
-
             <div class="d-flex justify-content-end mt-4">
                 <x-button class="ml-3">
                     {{ __('Verify') }}

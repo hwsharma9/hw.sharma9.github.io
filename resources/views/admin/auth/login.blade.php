@@ -19,18 +19,26 @@
         <form method="POST" action="{{ route('manage.login') }}" id="quickForm">
             @csrf
             <!-- Email Address -->
-            <div @if (request()->has('check_otp')) style="display:none" @endif>
+            <div>
                 <x-label for="email" :value="__('Email')" />
 
                 <x-input id="email" class="" type="email" name="email" :value="old('email')" autofocus />
             </div>
 
             <!-- Password -->
-            <div class="mt-4" @if (request()->has('check_otp')) style="display:none" @endif>
+            <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
 
                 <x-input id="password" class="" type="password" name="password"
                     autocomplete="current-password" />
+            </div>
+
+            <!-- Remember Me -->
+            <div class="mt-3 form-check">
+                <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+                <x-label for="remember_me" class="form-check-label text-sm">
+                    {{ __('Remember me') }}
+                </x-label>
             </div>
 
             <!-- Password -->

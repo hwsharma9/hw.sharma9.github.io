@@ -376,6 +376,7 @@
             e.Modernizr = Modernizr
         }(window, document);
     </script>
+    @stack('styles')
 </head>
 
 <body>
@@ -418,7 +419,8 @@
                     </li>
                 </ul>
                 <div class="contact-info d-flex align-items-center">
-                    <a href="#" class="d-sm-hide"><i class="fa fa-book px-2"></i> <span class="d-none-head">Screen
+                    <a href="{{ route('root.page.show', ['page' => 'screen-reader']) }}" class="d-sm-hide"><i
+                            class="fa fa-book px-2"></i> <span class="d-none-head">Screen
                             Reader</span></a>
                     <a href="#" class="d-sm-hide">
                         <i class="fa fa-fast-forward font-13 px-2"></i> <span class="d-none-head">Skip to Nav
@@ -460,7 +462,8 @@
                         data-hs-cos-general-type="widget" data-hs-cos-type="module">
                         <x-Front.menus />
                         <div class="navbar-2">
-                            <a href="#" class="navbar-brand d-flex align-items-center px-4 p-4">
+                            <a href="{{ route('dashboard') }}"
+                                class="navbar-brand d-flex align-items-center px-4 p-4">
                                 <img src="{{ asset('frontend/img/logo.png') }}" alt="" />
                                 <div class="ml-2" style="margin-left: 10px">
                                     <p class="name">e-Shiksha</p>
@@ -581,6 +584,7 @@
 
         });
     </script>
+    @stack('scripts')
 </body>
 
 </html>

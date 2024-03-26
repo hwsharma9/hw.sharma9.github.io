@@ -61,7 +61,15 @@
                                     <option value="">Select Course</option>
                                     @if (old('course_category_id', $course_configuration->fk_course_category_id) && $course_categories)
                                         @php
-                                            $cc = $course_categories->where('id', old('course_category_id', $course_configuration->fk_course_category_id))->first();
+                                            $cc = $course_categories
+                                                ->where(
+                                                    'id',
+                                                    old(
+                                                        'course_category_id',
+                                                        $course_configuration->fk_course_category_id,
+                                                    ),
+                                                )
+                                                ->first();
                                         @endphp
                                         @if ($cc)
                                             @foreach ($cc->courses as $course_category)
@@ -82,15 +90,79 @@
                                 <div class="form-control" style="height: 110px;">
                                     <div class="d-flex flex-column justify-content-around">
                                         @php
-                                            $is_upload_pdf = old('is_upload_pdf', $course_configuration->is_upload_pdf) && in_array(old('is_upload_pdf', $course_configuration->is_upload_pdf), ['on', 1]);
-                                            $is_upload_video = old('is_upload_video', $course_configuration->is_upload_video) && in_array(old('is_upload_video', $course_configuration->is_upload_video), ['on', 1]);
-                                            $is_upload_ppt = old('is_upload_ppt', $course_configuration->is_upload_ppt) && in_array(old('is_upload_ppt', $course_configuration->is_upload_ppt), ['on', 1]);
-                                            $is_upload_doc = old('is_upload_doc', $course_configuration->is_upload_doc) && in_array(old('is_upload_doc', $course_configuration->is_upload_doc), ['on', 1]);
+                                            $is_upload_pdf =
+                                                old('is_upload_pdf', $course_configuration->is_upload_pdf) &&
+                                                in_array(old('is_upload_pdf', $course_configuration->is_upload_pdf), [
+                                                    'on',
+                                                    1,
+                                                ]);
+                                            $is_upload_video =
+                                                old('is_upload_video', $course_configuration->is_upload_video) &&
+                                                in_array(
+                                                    old('is_upload_video', $course_configuration->is_upload_video),
+                                                    ['on', 1],
+                                                );
+                                            $is_upload_ppt =
+                                                old('is_upload_ppt', $course_configuration->is_upload_ppt) &&
+                                                in_array(old('is_upload_ppt', $course_configuration->is_upload_ppt), [
+                                                    'on',
+                                                    1,
+                                                ]);
+                                            $is_upload_doc =
+                                                old('is_upload_doc', $course_configuration->is_upload_doc) &&
+                                                in_array(old('is_upload_doc', $course_configuration->is_upload_doc), [
+                                                    'on',
+                                                    1,
+                                                ]);
 
-                                            $is_upload_pdf_required = old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required) && in_array(old('is_upload_pdf_required', $course_configuration->is_upload_pdf_required), ['on', 1]);
-                                            $is_upload_video_required = old('is_upload_video_required', $course_configuration->is_upload_video_required) && in_array(old('is_upload_video_required', $course_configuration->is_upload_video_required), ['on', 1]);
-                                            $is_upload_ppt_required = old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required) && in_array(old('is_upload_ppt_required', $course_configuration->is_upload_ppt_required), ['on', 1]);
-                                            $is_upload_doc_required = old('is_upload_doc_required', $course_configuration->is_upload_doc_required) && in_array(old('is_upload_doc_required', $course_configuration->is_upload_doc_required), ['on', 1]);
+                                            $is_upload_pdf_required =
+                                                old(
+                                                    'is_upload_pdf_required',
+                                                    $course_configuration->is_upload_pdf_required,
+                                                ) &&
+                                                in_array(
+                                                    old(
+                                                        'is_upload_pdf_required',
+                                                        $course_configuration->is_upload_pdf_required,
+                                                    ),
+                                                    ['on', 1],
+                                                );
+                                            $is_upload_video_required =
+                                                old(
+                                                    'is_upload_video_required',
+                                                    $course_configuration->is_upload_video_required,
+                                                ) &&
+                                                in_array(
+                                                    old(
+                                                        'is_upload_video_required',
+                                                        $course_configuration->is_upload_video_required,
+                                                    ),
+                                                    ['on', 1],
+                                                );
+                                            $is_upload_ppt_required =
+                                                old(
+                                                    'is_upload_ppt_required',
+                                                    $course_configuration->is_upload_ppt_required,
+                                                ) &&
+                                                in_array(
+                                                    old(
+                                                        'is_upload_ppt_required',
+                                                        $course_configuration->is_upload_ppt_required,
+                                                    ),
+                                                    ['on', 1],
+                                                );
+                                            $is_upload_doc_required =
+                                                old(
+                                                    'is_upload_doc_required',
+                                                    $course_configuration->is_upload_doc_required,
+                                                ) &&
+                                                in_array(
+                                                    old(
+                                                        'is_upload_doc_required',
+                                                        $course_configuration->is_upload_doc_required,
+                                                    ),
+                                                    ['on', 1],
+                                                );
                                         @endphp
                                         <span>
                                             <span class="w-25">
@@ -251,6 +323,25 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <x-label for="title_hi">Course Enrolment Required</x-label>
+                                <div class="form-control">
+                                    <div class="d-flex justify-content-around">
+                                        <span>
+                                            <input type="radio" name="is_enrolment_required"
+                                                {{ old('is_enrolment_required', $course_configuration->is_enrolment_required) && old('is_enrolment_required', $course_configuration->is_enrolment_required) == 1 ? 'checked' : '' }}
+                                                value="1" @if (!old('is_enrolment_required', $course_configuration->is_enrolment_required)) checked @endif /> Yes
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="is_enrolment_required"
+                                                {{ old('is_enrolment_required', $course_configuration->is_enrolment_required) == 0 ? 'checked' : '' }}
+                                                value="0" /> No
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <x-admin.status-dropdown :selected="$course_configuration->status" />
                         </div>

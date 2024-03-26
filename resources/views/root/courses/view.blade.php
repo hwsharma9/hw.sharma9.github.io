@@ -1,6 +1,6 @@
 <x-app-layout>
     <!-- Header Start -->
-    <div class="container-fluid bg-primary py-4 mb-4 " style="min-height: 380px; background-color: #343747 !important;">
+    <div class="container-fluid py-4 mb-4 " style="min-height: 380px; background-color: #343747;">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -8,10 +8,10 @@
                         <ol class="breadcrumb ">
                             <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
                             <li class="breadcrumb-item"><a class="text-white"
-                                    href="#">{{ $course->assignedAdmin->courseCategory->category_name_en }}</a>
+                                    href="#">{{ $course->assignedAdmin?->courseCategory?->category_name_en }}</a>
                             </li>
                             <li class="breadcrumb-item text-white active" aria-current="page">
-                                {{ $course->assignedAdmin->categoryCourse->course_name_en }}</li>
+                                {{ $course->assignedAdmin?->categoryCourse?->course_name_en }}</li>
                         </ol>
                     </nav>
                     <p class="display-6 text-white animated slideInDown mb-4">
