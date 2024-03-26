@@ -27,7 +27,7 @@ class CourseController extends Controller
             }
         ])
             ->filter()
-            // ->where('course_status', 4)
+            ->where('course_status', 3)
             ->latest()
             ->paginate()
             ->withQueryString();
@@ -64,9 +64,17 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $course->load(['assignedAdmin' => function ($query) {
-            $query->select('id', 'fk_course_category_courses_id')->with(['categoryCourse:id,course_name_hi,course_name_en']);
-        }])->loadCount(['uploads', 'topicsUploads']);
+        $course->load([
+            'upload',
+            'assignedAdmin' => function ($query) {
+                $query->select('id', 'fk_course_category_id', 'fk_course_category_courses_id')
+                    ->with([
+                        'courseCategory:id,fk_department_id,category_name_hi,category_name_en',
+                        'categoryCourse:id,course_name_hi,course_name_en'
+                    ]);
+            },
+            'topics.uploads'
+        ])->loadCount(['uploads', 'topicsUploads']);
         return view('root.courses.view', compact('course'));
     }
 
