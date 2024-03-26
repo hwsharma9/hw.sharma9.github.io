@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Traits\Admined;
+use App\Observers\CourseEnrollmentObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CourseEnrollment extends Model
 {
     use HasFactory;
+    use Admined;
 
-    protected $table = 'tbl_course_enrollments';
+    protected $table = 'tbl_course_enrolments';
 
     protected $fillable = [
         'id',
@@ -41,5 +44,17 @@ class CourseEnrollment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'fk_user_id', 'id');
+    }
+
+    /**
+     * Register any events for your application.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        CourseEnrollment::observe(CourseEnrollmentObserver::class);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Traits\Uploadable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -115,6 +116,16 @@ class User extends Authenticatable
     public function designation(): BelongsTo
     {
         return $this->belongsTo(MDesignation::class, 'fk_designation_id', 'id');
+    }
+
+    /**
+     * Get all of the enrolledCourses for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enroledCourses(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class, 'fk_user_id', 'id');
     }
 
     protected static function booted()

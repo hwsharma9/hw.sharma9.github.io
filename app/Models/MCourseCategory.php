@@ -50,6 +50,16 @@ class MCourseCategory extends Model
         return $this->hasMany(MCourseCategoryCourse::class, 'fk_course_category_id', 'id');
     }
 
+    /**
+     * Get all of the courses for the MCourseCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categoryCourses(): HasMany
+    {
+        return $this->hasMany(MCourseCategoryCourse::class, 'fk_course_category_id', 'id');
+    }
+
     public function scopeFilter($query)
     {
         $filter = (array) request()->get('filter');

@@ -168,7 +168,7 @@ class Course extends Model
                 ->when((isset($filter['department']) && !empty($filter['department'])), function ($query) use ($filter) {
                     $query->whereHas('assignedAdmin', function ($query) use ($filter) {
                         $query->whereHas('courseCategory', function ($query) use ($filter) {
-                            $department_id = is_integer($filter['department']) ? $filter['department'] : decrypt($filter['department']);
+                            $department_id = strlen($filter['department']) > 150 ? decrypt($filter['department']) : $filter['department'];
                             $query->where('fk_department_id', $department_id);
                         });
                     });

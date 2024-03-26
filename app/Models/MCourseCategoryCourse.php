@@ -42,6 +42,16 @@ class MCourseCategoryCourse extends Model
     }
 
     /**
+     * Get the assignedAdmin associated with the MCourseCategoryCourse
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function assignedAdmin(): HasOne
+    {
+        return $this->hasOne(MAdminCourse::class, 'fk_course_category_courses_id', 'id');
+    }
+
+    /**
      * Get the course associated with the MCourseCategoryCourse
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough

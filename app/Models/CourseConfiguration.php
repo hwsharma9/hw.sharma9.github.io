@@ -28,6 +28,7 @@ class CourseConfiguration extends Model
         'is_upload_video_required',
         'is_upload_ppt_required',
         'is_upload_doc_required',
+        'is_enrolment_required',
         'is_visible',
         'active_from',
         'active_to',
