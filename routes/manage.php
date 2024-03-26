@@ -132,6 +132,13 @@ Route::prefix('manage')->group(static function () {
                                     // The Match accepts the method provided by the add access list method
                                     // all the get method accepts post method too so we used match
                                     Route::match([$db_controller_route->method, 'post'], $db_controller_route->route, [get_class($controller_path), $db_controller_route->function_name])->name($db_controller_route->named_route);
+                                } else if (in_array($db_controller_route->method, ['post', 'delete'])) {
+                                    Route::{$db_controller_route->method}(
+                                        $db_controller_route->route,
+                                        [
+                                            get_class($controller_path), $db_controller_route->function_name
+                                        ]
+                                    )->name($db_controller_route->named_route);
                                 } else {
                                     // If Controller not found return view controller-not-found view
                                     Route::{$db_controller_route->method}($db_controller_route->route, function () use ($db_controller_route) {
