@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_course_enrollments', function (Blueprint $table) {
+        Schema::create('tbl_course_enrolments', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('fk_course_id')->index();
             $table->unsignedInteger('fk_user_id')->index();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_course_enrollments');
+        Schema::dropIfExists('tbl_course_enrolments');
     }
 };
