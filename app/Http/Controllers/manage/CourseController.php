@@ -260,7 +260,7 @@ class CourseController extends Controller
             'requests' => function ($query) {
                 $query->with(['requestNotification' => function ($query) {
                     $query->whereNull('read_at');
-                }])->latest()->first();
+                }])->where('status', 0)->latest()->first();
             },
             // 'logs' => function ($query) {
             //     $query
@@ -322,13 +322,26 @@ class CourseController extends Controller
             try {
                 // return $request->all();
                 $validated = $validator->validated();
-                if ($request->has('saved_as') && $request->saved_as == 'request' && $course->course_status != 2) {
-                    $validated['course_status'] = 1;
+                if ($request->has('saved_as') && $request->saved_as == 'request') {
+                    if ($course->course_status == 0) {
+                        $validated['course_status'] = 1;
+                    }
                 }
                 // return $validated;
                 $course->fill($validated);
                 $course->save();
+
+                // Upload Latest course media
                 $course->uploadModelFile($course, $request->file('course_thumbnail'), 'course_thumbnail');
+
+                // If course has draft media submit it for approval
+                if ($request->has('saved_as') && $request->saved_as == 'request') {
+                    $draft_course_media = CourseMedia::where(['uploadable_type' => "App\Models\Course", 'course_status' => 0, 'uploadable_id' => $course->id]);
+                    if ($draft_course_media->count() == 1) {
+                        $draft_course_media->first()->course_status = 1;
+                    }
+                }
+
                 if ($request->filled('replaced_media_id')) {
                     $ids = explode(',', $request->replaced_media_id);
                     for ($i = 0; $i < count($ids); $i++) {
@@ -356,27 +369,40 @@ class CourseController extends Controller
                                 'title' => $value['title'],
                                 'summary' => $value['summary'],
                             ]);
-                            $is_dirty = $topic->isDirty();
+                            // $is_dirty = $topic->isDirty();
                             if (isset($request->file('topic')[$key])) {
                                 $topic->uploadModelFile($topic, $request->file('topic')[$key], 'topic');
-                                $is_dirty = true;
+                                // $is_dirty = true;
                             }
                             if ($request->has('saved_as') && $request->saved_as == 'request') {
-                                if ($topic->is_edited == 0) {
-                                    if ($topic->course_status != 2) {
-                                        $topic->course_status = 1;
-                                    }
-                                    if ($is_dirty || $topic->course_status == 1) {
-                                        $topic->is_edited = 1;
-                                        $is_dirty = true;
-                                    }
+                                if ($topic->course_status == 0) {
+                                    $topic->course_status = 1;
                                 }
-                            } else {
-                                $topic->is_edited = 1;
+                                $draft_course_topic_media = CourseMedia::where([
+                                    'uploadable_type' => "App\Models\CourseTopic",
+                                    'course_status' => 0,
+                                    'uploadable_id' => $topic->id
+                                ]);
+                                if ($draft_course_topic_media->count() == 1) {
+                                    $draft_course_topic_media->update(['course_status' => 1]);
+                                }
                             }
-                            if ($is_dirty) {
-                                array_push($topics_to_approve, $topic->id);
-                            }
+                            // if ($request->has('saved_as') && $request->saved_as == 'request') {
+                            //     if ($topic->is_edited == 0) {
+                            //         if ($topic->course_status != 2) {
+                            //             $topic->course_status = 1;
+                            //         }
+                            //         if ($is_dirty || $topic->course_status == 1) {
+                            //             $topic->is_edited = 1;
+                            //             $is_dirty = true;
+                            //         }
+                            //     }
+                            // } else {
+                            //     $topic->is_edited = 1;
+                            // }
+                            // if ($is_dirty) {
+                            //     array_push($topics_to_approve, $topic->id);
+                            // }
                             $topic->save();
                         } else {
                             // echo 'create topic';
@@ -387,14 +413,14 @@ class CourseController extends Controller
                                 'summary' => $value['summary'],
                             ]);
                             if ($request->has('saved_as') && $request->saved_as == 'request') {
-                                $topic->is_edited = 1;
+                                // $topic->is_edited = 1;
                                 $topic->course_status = 1;
                             }
                             $topic->save();
                             if (isset($request->file('topic')[$key])) {
                                 $topic->uploadModelFile($topic, $request->file('topic')[$key], 'topic');
                             }
-                            array_push($topics_to_approve, $topic->id);
+                            // array_push($topics_to_approve, $topic->id);
                         }
                         $where_video = [];
                         if (isset($value['course_video_id']) && !is_null($value['course_video_id'])) {
@@ -435,7 +461,7 @@ class CourseController extends Controller
                         // Create new request
                         $approval_request = CourseApprovalRequest::create([
                             'fk_course_id' => $course->id,
-                            'topic_ids' => implode(',', $topics_to_approve),
+                            // 'topic_ids' => implode(',', $topics_to_approve),
                         ]);
                         if (is_null($approval_request->fk_notification_id)) {
                             auth()->user()->creator->notify(new RequestToApproveCourse($approval_request->refresh()));
@@ -528,8 +554,8 @@ class CourseController extends Controller
             ->active()
             ->get();
         $configuration = $alloted_admin?->categoryCourse?->configuration;
-        $action = (new Topic($configuration, null, null))->render();
-        return view('admin.courses.edit', compact('course', 'course_categories', 'alloted_admin', 'configuration', 'action'));
+        // $action = (new Topic($configuration, null, null))->render();
+        return view('admin.courses.edit', compact('course', 'course_categories', 'alloted_admin', 'configuration'));
     }
 
     /**

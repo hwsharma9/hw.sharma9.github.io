@@ -58,6 +58,7 @@ trait CourseUploadable
                 'field_name' => $file_input_name,
                 'file_mime_type' => $file->getMimeType(),
                 'fk_course_id' => $fk_course_id,
+                'course_status' => (request()->has('saved_as') && request()->saved_as == 'request') ? 1 : 0
             ]);
         }
     }

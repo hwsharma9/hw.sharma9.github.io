@@ -150,7 +150,9 @@ class CourseApprovalRequestController extends Controller
                 $approval_request->saveQuietly();
                 if ($request->has('status') && $request->status > 0) {
                     Log::info('old course', $course->toArray());
-                    $course->fill(['course_status' => $request->status, 'is_edited' => 0]);
+                    if ($course->course_status < 2) {
+                        $course->fill(['course_status' => $request->status, 'is_edited' => 0]);
+                    }
                     $this->resetUpdateColumns($request, $course);
 
                     // if ($request->status == 2) {

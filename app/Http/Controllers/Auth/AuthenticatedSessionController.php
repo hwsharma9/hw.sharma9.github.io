@@ -29,6 +29,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Setting auth users token for login on react
+        $token = auth()->user()->createToken('auth_token')->plainTextToken;
+        setcookie('token', $token, time() + (86400 * 30), "/");
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -42,6 +46,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        setcookie('token', "", time() - 3600, "/");
 
         return redirect()->to(route('login'));
     }

@@ -44,7 +44,7 @@ class VerifyOTPController extends Controller
             session('role_name', '');
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            return redirect()->route('manage.login')->with('status', 'Your OTP has been expired');
+            return redirect()->route('manage.login')->withErrors(['Your OTP has been expired']);
         }
         $verificationCode->delete();
         // $request->authenticate();

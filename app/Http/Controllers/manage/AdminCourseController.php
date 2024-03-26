@@ -145,6 +145,13 @@ class AdminCourseController extends Controller
                     ->where('is_default', 1)
                     ->active();
             })
+            ->when($department_id, function ($query) use ($department_id) {
+                $query->whereHas('detail', function ($query) use ($department_id) {
+                    $query->whereHas('officeonboarding', function ($query) use ($department_id) {
+                        $query->where('fk_department_id', $department_id);
+                    });
+                });
+            })
             ->active()
             ->get();
         $course_categories = MCourseCategory::query()

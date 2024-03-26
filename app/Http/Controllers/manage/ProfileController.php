@@ -87,8 +87,8 @@ class ProfileController extends Controller
                 $message = 'OTP sent to your mobile number. ' . ((config('app.env') == 'production') ? '' : $otp);
             } else {
                 $message = 'OTP sent to your email. ' . ((config('app.env') == 'production') ? '' : $otp);
-                Mail::to($admin->email)
-                    ->send(new SendOTPToVerifyAccount($admin, $type, $otp));
+                // Mail::to($admin->email)
+                //     ->send(new SendOTPToVerifyAccount($admin, $type, $otp));
             }
             return redirect()->to(URL::previous() . "#otp_verification")
                 ->with('otp_verification', $message);
