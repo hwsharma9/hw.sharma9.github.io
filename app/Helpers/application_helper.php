@@ -22,6 +22,21 @@ if (!function_exists('DisplayStatus')) {
 
 } //end check DisplayStatus
 
+if (!function_exists('CourseEnrollmentStatus')) {
+
+    function CourseEnrollmentStatus($val)
+    {
+        $str = "";
+        if ($val == 0) {
+            $str = "<span class='badge badge-warning'>Pending</span>";
+        } elseif ($val == 1) {
+            $str = "<span class='badge badge-success'>Enrolled</span>";
+        }
+        return $str;
+    } //end CourseEnrollmentStatus function
+
+} //end check DisplayStatus
+
 if (!function_exists('PublishStatus')) {
 
     function PublishStatus($val)
