@@ -24,8 +24,7 @@ return new class extends Migration
             $table->dateTime('created_at')->nullable();
         });
 
-        DB::statement("ALTER TABLE `m_course_logs` CHANGE `prev_data` `prev_data` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, 
-        CHANGE `current_data` `current_data` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
+        DB::statement("ALTER TABLE `m_course_logs` CHANGE `prev_data` `prev_data` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, CHANGE `current_data` `current_data` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
     }
 
     /**

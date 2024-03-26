@@ -292,7 +292,7 @@ class DbControllerSeeder extends Seeder
                         'id' => 15,
                         'route' => 'menus/update-all',
                         'named_route' => 'menus.update-all',
-                        'method' => 'patch',
+                        'method' => 'get',
                         'function_name' => 'updateAll',
                         'fk_controller_id' => 6,
                         'status' => 1,

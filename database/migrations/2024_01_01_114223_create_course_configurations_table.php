@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('is_upload_video_required')->default(false);
             $table->boolean('is_upload_ppt_required')->default(false);
             $table->boolean('is_upload_doc_required')->default(false);
+            $table->boolean('is_enrolment_required')->default(true)->comment('1 => enrolment required, 0 => No');
             $table->boolean('is_visible')->default(false)->comment('0=Not Visible, 1=Visible');
             $table->date('active_from')->nullable();
             $table->date('active_to')->nullable();
