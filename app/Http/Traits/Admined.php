@@ -41,7 +41,7 @@ trait Admined
      */
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(Admin::class, 'created_by')->select(['id', 'first_name', 'last_name', 'username']);
+        return $this->belongsTo(Admin::class, 'created_by')->select(['id', 'first_name', 'last_name', 'username', 'created_by']);
     }
 
     /**
@@ -51,6 +51,6 @@ trait Admined
      */
     public function editor(): BelongsTo
     {
-        return $this->belongsTo(Admin::class, 'updated_by')->select(['id', 'first_name', 'last_name', 'username']);
+        return $this->belongsTo(Admin::class, 'updated_by')->select(['id', 'first_name', 'last_name', 'username', 'created_by']);
     }
 }
