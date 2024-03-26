@@ -33,7 +33,8 @@ class CourseController extends Controller
                         'categoryCourse:id,course_name_hi,course_name_en'
                     ]);
             },
-            'topics.uploads'
+            'topics.uploads',
+            'enrollments'
         ])
             ->filter()
             // ->where('course_status', 4)
@@ -49,6 +50,7 @@ class CourseController extends Controller
                 // 'departments' => $departments,
                 // 'query' => $query,
                 // 'post' => request()->all(),
+                // 'user' => auth('sanctum')->check() ? auth('sanctum')->user() : null,
             ]
         ]);
     }
@@ -92,7 +94,7 @@ class CourseController extends Controller
                     ]);
             },
             'topics.uploads'
-        ])->loadCount(['uploads', 'topicsUploads']);
+        ])->loadCount(['topicsUploads']);
         return response()->json([
             'status' => 200,
             'data' => [

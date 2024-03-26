@@ -7,6 +7,7 @@ use App\Http\Services\MenuTree;
 use App\Models\Course;
 use App\Models\FrontMenu;
 use App\Models\OfficeOnboarding;
+use App\Models\Page;
 use App\Models\Slider;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -47,6 +48,9 @@ class HomeController extends Controller
             ->latest()
             ->take(10)
             ->get();
+        $page = Page::where('is_default', 1)
+            ->where('status', 1)
+            ->firstOrFail();
         return response()->json([
             'status' => 200,
             'data' => [
@@ -56,6 +60,7 @@ class HomeController extends Controller
                 'department_onboarded_count' => $department_onboarded->count(),
                 'sliders' => $sliders,
                 'courses' => $courses,
+                'page' => $page,
             ]
         ]);
     }
