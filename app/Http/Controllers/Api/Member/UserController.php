@@ -20,9 +20,18 @@ class UserController extends Controller
     public function userCourses()
     {
         $my_courses = Course::query()
-            ->with(['enrollments' => function ($query) {
-                $query->where('fk_user_id', auth()->user()->id);
-            }])
+            ->with([
+                'enrollments' => function ($query) {
+                    $query->where('fk_user_id', auth()->user()->id);
+                },
+                'assignedAdmin' => function ($query) {
+                    $query->select('id', 'fk_course_category_id', 'fk_course_category_courses_id')
+                        ->with([
+                            'courseCategory:id,fk_department_id,category_name_hi,category_name_en',
+                            'categoryCourse:id,course_name_hi,course_name_en'
+                        ]);
+                },
+            ])
             ->whereHas('enrollments', function ($query) {
                 $query->where('fk_user_id', auth()->user()->id);
             })->get();
